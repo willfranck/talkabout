@@ -1,26 +1,87 @@
 {
   "name": "talkabout",
   "version": "0.1.0",
+  "description": "AI Powered NextJS Electron App",
+  "author": {
+    "name": "willfranckcodes"
+  },
+  "main": "build/main.js",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "next:dev": "next dev",
+    "next:build": "next build",
+    "next:start": "next start",
+    "lint": "next lint",
+    "electron:dev": "npm-run-all --parallel electron:build-watch electron:watch",
+    "electron:watch": "cross-env NODE_ENV='development' nodemon",
+    "electron:build": "tsup",
+    "electron:build-watch": "tsup --watch",
+    "electron:dist": "electron-builder --dir",
+    "dev": "npm-run-all --parallel electron:dev next:dev",
+    "build": "run-s next:build electron:build",
+    "dist": "run-s build electron:dist"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "next": "14.2.11",
+    "next-themes": "^0.3.0",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.11"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "electron": "^32.1.0",
+    "electron-builder": "^25.0.5",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.11",
+    "nodemon": "^3.1.4",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.11"
+    "tsup": "^8.2.4",
+    "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.willfranckcodes.talkabout",
+    "productName": "Talkabout",
+    "asar": true,
+    "asarUnpack": [
+      "**/*.node", 
+      "**/*.dll"
+    ],
+    "files": [
+      "build",
+      {
+        "from": ".next/standalone",
+        "to": "app",
+        "filter": [
+          "!**/.env",
+          "!**/package.json"
+        ]
+      },
+      {
+        "from": ".next/static",
+        "to": "app/.next/static"
+      },
+      {
+        "from": "public",
+        "to": "app/public"
+      }
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "extendInfo": {
+        "CFBundleName": "Talkabout"
+      }
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
   }
 }
