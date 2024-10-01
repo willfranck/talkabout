@@ -33,7 +33,7 @@ const createMainWindow = () => {
   const mainWindow = new BrowserWindow({
     title: 'Talkabout',
     width: 1600,
-    height: 1000,
+    height: 1024,
     center: true,
     backgroundColor: "#EDEDED",
     webPreferences: {
