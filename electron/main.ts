@@ -35,7 +35,7 @@ const createMainWindow = () => {
     width: 1600,
     height: 1000,
     center: true,
-    backgroundColor: "#000",
+    backgroundColor: "#EDEDED",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -70,7 +70,7 @@ const createMainWindow = () => {
     }
     return { action: 'deny' }
   })
-  
+
   mainWindow.webContents.on('will-navigate', (event, url) => {
     if (url.startsWith('http')) {
       shell.openExternal(url)

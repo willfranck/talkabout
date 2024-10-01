@@ -45,9 +45,9 @@
     "typescript": "^5"
   },
   "build": {
+    "asar": true,
     "appId": "com.willfranckcodes.talkabout",
     "productName": "Talkabout",
-    "asar": true,
     "files": [
       "build",
       {
