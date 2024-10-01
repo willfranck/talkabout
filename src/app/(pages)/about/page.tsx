@@ -1,6 +1,3 @@
-import Link from "next/link";
-
-
 export default function AboutPage() {
   return (
     <main className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-64px)]">

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import { createServer } from 'http'
 import path from 'path'
 import next from 'next'
@@ -10,7 +10,6 @@ const startNextApp = async () => {
   try {
     const nextPort = parseInt(process.env.NEXTJS_SERVER_PORT || '3033', 10)
     const webDir = path.join(app.getAppPath(), "app")
-    
     const nextApp = next({
       dev: false,
       dir: webDir,
@@ -61,21 +60,22 @@ const createMainWindow = () => {
   }
   loadURL()
 
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+  })
+  
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http')) {
       shell.openExternal(url)
     }
     return { action: 'deny' }
   })
+  
   mainWindow.webContents.on('will-navigate', (event, url) => {
     if (url.startsWith('http')) {
       shell.openExternal(url)
     }
     event.preventDefault()
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
   })
 
   return mainWindow
