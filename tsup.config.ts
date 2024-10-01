@@ -8,7 +8,7 @@ export default defineConfig({
   cjsInterop: true,
   skipNodeModulesBundle: true,
   treeshake: true,
-  outDir: "build",
+  outDir: "electron-build",
   external: ["electron"],
   format: ["cjs"],
   bundle: true,

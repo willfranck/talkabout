@@ -5,7 +5,7 @@
   "author": {
     "name": "willfranckcodes"
   },
-  "main": "build/main.js",
+  "main": "electron-build/main.js",
   "private": true,
   "scripts": {
     "next:dev": "next dev",
@@ -16,12 +16,13 @@
     "electron:watch": "cross-env NODE_ENV='development' nodemon",
     "electron:build": "tsup",
     "electron:build-watch": "tsup --watch",
-    "electron:dist": "electron-builder",
+    "electron:dist": "electron-builder --mac",
     "dev": "npm-run-all --parallel electron:dev next:dev",
     "build": "run-s next:build electron:build",
     "dist": "run-s build electron:dist"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.1.4",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "next": "14.2.11",
@@ -48,7 +49,7 @@
     "appId": "com.willfranckcodes.talkabout",
     "productName": "Talkabout",
     "files": [
-      "build",
+      "electron-build",
       {
         "from": ".next/standalone",
         "to": "app",
@@ -74,8 +75,7 @@
       }
     },
     "win": {
-      "target": "nsis",
-      "category": "apps.productivity"
+      "target": "nsis"
     }
   }
 }

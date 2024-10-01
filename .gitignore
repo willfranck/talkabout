@@ -17,6 +17,7 @@
 
 # production
 /build
+/electron-build
 /dist
 
 # misc
