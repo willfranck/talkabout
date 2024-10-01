@@ -1,6 +1,5 @@
 import "./globals.css"
 import type { Metadata } from "next"
-import { ThemeProvider } from "next-themes"
 import { Kumbh_Sans } from "next/font/google"
 import Header from "@/components/Header"
 
@@ -29,10 +28,8 @@ export default function RootLayout({
       <body 
         className={`${kumbhSans.variable} antialiased`}
       >
-        <ThemeProvider enableSystem={true} defaultTheme="system" attribute="class">
-          <Header />
-          {children}
-        </ThemeProvider>
+        <Header />
+        {children}
       </body>
     </html>
   )
