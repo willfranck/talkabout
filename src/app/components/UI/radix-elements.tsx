@@ -102,7 +102,7 @@ const Modal = ({
 const Dropdown = ({
   trigger,
 }: {
-  trigger: React.ReactNode
+  trigger: string
 }) => {
   return (
     <DropdownMenu.Root>

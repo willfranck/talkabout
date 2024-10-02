@@ -2,14 +2,15 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["./electron/main.ts", "./electron/preload.ts"],
-  splitting: false,
-  sourcemap: false,
-  clean: true,
-  cjsInterop: true,
-  skipNodeModulesBundle: true,
-  treeshake: true,
   outDir: "electron-build",
   external: ["electron"],
   format: ["cjs"],
+  cjsInterop: true,
+  target: "node18",
+  clean: true,
+  splitting: false,
+  sourcemap: false,
+  skipNodeModulesBundle: true,
+  treeshake: true,
   bundle: true,
 });

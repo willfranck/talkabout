@@ -19,7 +19,6 @@ const startNextApp = async () => {
       hostname: "localhost",
       port: nextPort,
     })
-    console.log(`Starting NextJS Server on port ${nextPort}`)
     const requestHandler = nextApp.getRequestHandler()
 
     await nextApp.prepare()
@@ -56,7 +55,6 @@ const createMainWindow = () => {
         await startNextApp()
         const nextServerURL = `http://localhost:${process.env.NEXTJS_SERVER_PORT || 3033}`
         mainWindow.loadURL(nextServerURL)
-        console.log(`Loading NextJS Server on port ${nextServerURL}`)
       } catch (error) {
         console.log(`Error initializing server: ${error}`)
       }
@@ -68,16 +66,16 @@ const createMainWindow = () => {
     mainWindow.show()
   })
   
+  const isInternalUrl = (url: string) => url.startsWith("http://localhost");
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http')) {
+    if (!isInternalUrl(url)) {
       shell.openExternal(url)
       return { action: "deny" }
     }
     return { action: "allow" }
   })
-
   mainWindow.webContents.on("will-navigate", (event, url) => {
-    if (url.startsWith("http")) {
+    if (!isInternalUrl(url)) {
       shell.openExternal(url)
       event.preventDefault()
     }
@@ -88,10 +86,8 @@ const createMainWindow = () => {
 
 app.whenReady().then(() => {
   createMainWindow()
-  app.on('activate', () => {
-    if (BrowserWindow.length === 0) createMainWindow()
-  })
-})
+  app.on('activate', createMainWindow)
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit()
