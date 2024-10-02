@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '@radix-ui/themes/styles.css';
 
 *,
 *::before,
@@ -46,16 +47,12 @@
   --font-weight-normal: 300;
   --font-weight-light: 200;
   --font-weight-extralight: 100;
-
-  --llama-icon: url("/Llama-Light.webp");
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground: #EDEDED;
     --background: #0A0A0A;
-
-    --llama-icon: url("/Llama-Dark.webp");
   }
 }
 
@@ -73,7 +70,7 @@ html {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: var(--background) !important;
   font-size: var(--font-size-large);
   font-weight: var(--font-weight-normal);
   text-underline-offset: 0.33em;

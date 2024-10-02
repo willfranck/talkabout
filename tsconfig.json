@@ -20,6 +20,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/app/components/*"],
+      "@/auth/*": ["./src/app/components/Auth/*"],
       "@/images/*": ["./public/images/*"]
     }
   },

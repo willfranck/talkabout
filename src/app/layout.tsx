@@ -1,6 +1,8 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { Kumbh_Sans } from "next/font/google"
+import { ThemeProvider } from "next-themes"
+import { Theme } from "@radix-ui/themes"
 import Header from "@/components/Header"
 
 const kumbhSans = Kumbh_Sans({
@@ -23,13 +25,16 @@ export default function RootLayout({
   return (
     <html 
       lang="en" 
-      suppressHydrationWarning
     >
       <body 
         className={`${kumbhSans.variable} antialiased`}
       >
-        <Header />
-        {children}
+        <ThemeProvider attribute="class">
+          <Theme accentColor="cyan" grayColor="slate" radius="medium" scaling="100%">
+            <Header />
+            {children}
+          </Theme>
+        </ThemeProvider>
       </body>
     </html>
   )
