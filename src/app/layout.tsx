@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes"
 import { Theme } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import "./globals.css"
-import Header from "@components/headery"
+import Header from "@header/index"
 
 const kumbhSans = Kumbh_Sans({
   subsets: ["latin"],
