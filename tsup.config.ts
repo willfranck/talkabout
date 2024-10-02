@@ -6,7 +6,7 @@ export default defineConfig({
   external: ["electron"],
   format: ["cjs"],
   cjsInterop: true,
-  target: "node18",
+  target: "node20",
   clean: true,
   splitting: false,
   sourcemap: false,
