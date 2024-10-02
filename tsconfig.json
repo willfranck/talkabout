@@ -19,9 +19,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/components/*": ["./src/app/components/*"],
-      "@/auth/*": ["./src/app/components/Auth/*"],
-      "@/images/*": ["./public/images/*"]
+      "@components/*": ["./src/app/components/*"],
+      "@auth/*": ["./src/app/components/Auth/*"],
+      "@ui/*": ["./src/app/components/UI/*"],
+      "@images/*": ["./public/images/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

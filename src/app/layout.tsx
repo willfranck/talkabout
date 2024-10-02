@@ -1,9 +1,10 @@
-import "./globals.css"
 import type { Metadata } from "next"
+import "@radix-ui/themes/styles.css"
+import "./globals.css"
 import { Kumbh_Sans } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { Theme } from "@radix-ui/themes"
-import Header from "@/components/Header"
+import Header from "@components/Header"
 
 const kumbhSans = Kumbh_Sans({
   subsets: ["latin"],

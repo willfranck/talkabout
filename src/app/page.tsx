@@ -1,5 +1,5 @@
 import Image from "next/image"
-import LoginModal from "@/auth/login-modal"
+import LoginModal from "@auth/login-modal"
 
 export default function Home() {
 

@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '@radix-ui/themes/styles.css';
 
 *,
 *::before,
@@ -86,6 +85,7 @@ a {
   text-decoration: none;
   font-size: var(--font-size-normal);
   font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
 }
 
 a:hover {

@@ -71,15 +71,16 @@ const createMainWindow = () => {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http')) {
       shell.openExternal(url)
+      return { action: "deny" }
     }
-    return { action: 'deny' }
+    return { action: "allow" }
   })
 
   mainWindow.webContents.on("will-navigate", (event, url) => {
     if (url.startsWith("http")) {
       shell.openExternal(url)
+      event.preventDefault()
     }
-    event.preventDefault()
   })
 
   return mainWindow
