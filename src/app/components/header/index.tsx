@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Nav } from "@ui/radix-elements"
-
+import { SignOut } from "@phosphor-icons/react/dist/ssr"
 
 export default function Header() {
   const links = [
@@ -31,7 +31,9 @@ export default function Header() {
 
       <Nav links={links} />
       
-      <div className="w-10 h-10"></div>
+      <div className="flex justify-center items-center w-10 h-10">
+        <SignOut size={24} />
+      </div>
     </header>
   )
 }

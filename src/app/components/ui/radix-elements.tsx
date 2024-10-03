@@ -36,6 +36,7 @@ const Nav = ({
     <TabNav.Root 
       color="cyan" 
       size="2" 
+      className="shadow-none"
     >
       {linkElements}
     </TabNav.Root>

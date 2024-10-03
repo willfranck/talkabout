@@ -30,7 +30,10 @@
 
 :root {
   --foreground: #0A0A0A;
-  --foreground-hover: #94A3B8;
+  --foreground-secondary: #00A2C7;
+  --foreground-link: #F1F7FEB5;
+  --foreground-hover: #23AFD0;
+  --foreground-focus: #11809C;
   --background: #EDEDED;
   
   --font-size-largest: 1.625rem;
@@ -69,28 +72,39 @@ html {
 
 body {
   color: var(--foreground);
-  background: var(--background) !important;
+  background: var(--background);
   font-size: var(--font-size-large);
   font-weight: var(--font-weight-normal);
-  text-underline-offset: 0.33em;
   overscroll-behavior-x: none;
+}
+
+.radix-themes {
+  --default-font-family: var(--font-kumbh-sans);
+}
+
+a,
+a.rt-TabNavLink {
+  color: var(--foreground-link);
+}
+
+a:hover,
+a.rt-TabNavLink:hover * {
+  color: var(--foreground);
+  background: transparent;
+}
+
+a[data-active],
+a.rt-TabNavLink[data-active] {
+  color: var(--foreground-secondary);
+}
+
+a:not(.rt-TabNavLink):focus-visible {
+  outline: 2px solid var(--foreground-focus);
 }
 
 img {
   max-width: 100%;
   height: auto;
-}
-
-a {
-  text-decoration: none;
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-semibold);
-  color: var(--foreground);
-}
-
-a:hover {
-  color: var(--foreground-hover);
-  text-decoration: underline;
 }
 
 ul {
