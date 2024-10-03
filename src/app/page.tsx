@@ -54,7 +54,7 @@ export default function Home() {
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-2 py-1 rounded-full"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
@@ -69,7 +69,7 @@ export default function Home() {
           Learn
         </a>
         <a
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-2 py-1 rounded-full"
           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
@@ -84,7 +84,7 @@ export default function Home() {
           Examples
         </a>
         <a
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-2 py-1 rounded-full"
           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"

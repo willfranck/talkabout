@@ -83,7 +83,8 @@ body {
 }
 /* /////////////////////////////// */
 
-a {
+a,
+a.rt-TabNavLink * {
   color: var(--foreground-link);
 }
 

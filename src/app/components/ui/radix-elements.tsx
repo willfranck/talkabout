@@ -24,7 +24,7 @@ const Nav = ({
   const linkElements = links.map((link, index) => (
     <TabNav.Link 
       key={index} 
-      active={pathname === link.linkAddress} 
+      active={pathname === link.linkAddress}
       asChild
     >
       <Link href={link.linkAddress}>
@@ -54,7 +54,7 @@ const Modal = ({
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button>{trigger}</Button>
+        <Button className="h-10 sm:h-12 px-4 sm:px-5 rounded-full">{trigger}</Button>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="24rem" size="4">
