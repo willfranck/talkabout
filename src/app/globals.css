@@ -6,6 +6,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out;
 }
 
 /* Firefox */
@@ -80,6 +81,10 @@ body {
 .radix-themes {
   --default-font-family: var(--font-kumbh-sans);
   --tab-active-letter-spacing: 0em,
+}
+
+.radix-themes * {
+  transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out;
 }
 /* /////////////////////////////// */
 

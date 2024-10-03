@@ -4,6 +4,7 @@ import Link from "next/link"
 import { 
   Flex,
   TabNav, 
+  SegmentedControl, 
   Dialog, 
   DropdownMenu, 
   Button, 
@@ -39,6 +40,31 @@ const Nav = ({
     >
       {linkElements}
     </TabNav.Root>
+  )
+}
+
+const SegmentedController = ({
+  values
+}: {
+  values: string[]
+}) => {
+  const controlElements = values.map((value, index) => (
+    <SegmentedControl.Item 
+      key={index} 
+      value={value}
+      className="capitalize"
+    >
+      {value}
+    </SegmentedControl.Item>
+  ))
+
+  return (
+    <SegmentedControl.Root 
+      defaultValue={values[0]} 
+      className="h-10 sm:h-12 rounded-full overflow-hidden"
+    >
+      {controlElements}
+    </SegmentedControl.Root>
   )
 }
 
@@ -107,7 +133,7 @@ const Dropdown = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button variant="soft">
+        <Button variant="soft" className="h-10 sm:h-12 px-4 sm:px-5 rounded-full">
           {trigger}
           <DropdownMenu.TriggerIcon />
         </Button>
@@ -143,6 +169,7 @@ const Dropdown = ({
 
 export { 
   Nav, 
+  SegmentedController, 
   Modal, 
   Dropdown 
 }
