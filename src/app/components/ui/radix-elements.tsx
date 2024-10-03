@@ -61,7 +61,7 @@ const SegmentedController = ({
   return (
     <SegmentedControl.Root 
       defaultValue={values[0]} 
-      className="h-10 sm:h-12 rounded-full overflow-hidden"
+      className="h-8 p-0.5 rounded-full overflow-hidden"
     >
       {controlElements}
     </SegmentedControl.Root>
@@ -80,7 +80,7 @@ const Modal = ({
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button className="h-10 sm:h-12 px-4 sm:px-5 rounded-full">{trigger}</Button>
+        <Button className="h-8 px-4 sm:px-5 rounded-full">{trigger}</Button>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="24rem" size="4">
@@ -133,7 +133,7 @@ const Dropdown = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button variant="soft" className="h-10 sm:h-12 px-4 sm:px-5 rounded-full">
+        <Button variant="soft" className="h-8 px-4 sm:px-5 rounded-full">
           {trigger}
           <DropdownMenu.TriggerIcon />
         </Button>
