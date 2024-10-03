@@ -33,9 +33,8 @@ const Nav = ({
     </TabNav.Link>
   ))
   return (
-    <TabNav.Root 
-      color="cyan" 
-      size="2" 
+    <TabNav.Root
+      size="2"
       className="shadow-none"
     >
       {linkElements}
@@ -58,7 +57,7 @@ const Modal = ({
         <Button>{trigger}</Button>
       </Dialog.Trigger>
 
-      <Dialog.Content maxWidth="450px" size="4">
+      <Dialog.Content maxWidth="24rem" size="4">
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Description size="2" mb="4">
           {description}
