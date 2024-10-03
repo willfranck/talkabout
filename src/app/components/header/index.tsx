@@ -26,7 +26,7 @@ export default function Header() {
         alt="logo" 
         width={40} 
         height={40} 
-        className="w-10 h-10 dark:invert rounded-full"
+        className="w-10 h-10 light:invert rounded-tr-[30%] rounded-bl-[30%]"
       />
 
       <Nav links={links} />

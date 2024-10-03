@@ -36,19 +36,19 @@
   --foreground-focus: #11809C;
   --background: #EDEDED;
   
-  --font-size-largest: 1.625rem;
-  --font-size-larger: 1.375rem;
-  --font-size-large: 1.125rem;
-  --font-size-normal: 1.000rem;
-  --font-size-small: 0.875rem;
+  --font-size-2xl: 1.625rem;
+  --font-size-xl: 1.375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-reg: 1.000rem;
+  --font-size-sm: 0.875rem;
 
-  --font-weight-extrabold: 700;
-  --font-weight-bolder: 600;
-  --font-weight-bold: 500;
-  --font-weight-semibold: 400;
-  --font-weight-normal: 300;
-  --font-weight-light: 200;
-  --font-weight-extralight: 100;
+  --font-weight-exbld: 700;
+  --font-weight-bld: 600;
+  --font-weight-semibld: 500;
+  --font-weight-med: 400;
+  --font-weight-reg: 300;
+  --font-weight-lgt: 200;
+  --font-weight-exlgt: 100;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,28 +73,28 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-size: var(--font-size-large);
-  font-weight: var(--font-weight-normal);
   overscroll-behavior-x: none;
 }
 
+/* Override default Radix CSS vars */
 .radix-themes {
   --default-font-family: var(--font-kumbh-sans);
+  --tab-active-letter-spacing: 0em,
 }
+/* /////////////////////////////// */
 
-a,
-a.rt-TabNavLink {
+a {
   color: var(--foreground-link);
 }
 
 a:hover,
 a.rt-TabNavLink:hover * {
-  color: var(--foreground);
+  color: var(--foreground-hover);
   background: transparent;
 }
 
 a[data-active],
-a.rt-TabNavLink[data-active] {
+a.rt-TabNavLink[data-active] * {
   color: var(--foreground-secondary);
 }
 
@@ -112,35 +112,32 @@ ul {
 }
 
 li {
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-reg);
+  font-weight: var(--font-weight-reg);
 }
 
 h1 {
-  font-size: var(--font-size-largest);
-  font-weight: var(--font-weight-extrabold);
-  color: var(--foreground);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-exbld);
 }
 
 h2 {
-  font-size: var(--font-size-larger);
-  font-weight: var(--font-weight-bolder);
-  color: var(--foreground);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bld);
 }
 
 h3 {
-  font-size: var(--font-size-large);
-  font-weight: var(--font-weight-bold);
-  color: var(--foreground);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-md);
 }
 
 p {
+  font-size: var(--font-size-reg);
+  font-weight: var(--font-weight-reg);
   max-width: 80ch;
-  font-weight: var(--font-weight-normal);
-  color: var(--foreground);
 }
 
 span {
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-lgt);
 }
