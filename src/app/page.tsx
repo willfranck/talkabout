@@ -1,112 +1,35 @@
 import Image from "next/image"
-import LoginModal from "@auth/login-modal"
-import { BadgeX, Dropdown, ProgressBar, SegmentedController } from "@ui/radix-elements"
+import { ChatArea } from "@chat/chat-area"
+import { ChatInput } from "@chat/chat-input"
+import { SegmentedController } from "@ui/radix-elements"
+import { ScrollArea, Flex } from "@radix-ui/themes"
 
 export default function Home() {
-
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] justify-center items-center min-h-[calc(100vh-4rem)] p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-kumbh-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start pb-16">
+    <main className="flex items-center justify-center gap-4 w-full h-[calc(100vh-4rem)] px-2 pb-2">
+      <aside className="flex flex-col items-end justify-center w-60 h-full gap-8 p-4">
+        <SegmentedController values={["Chats", "Settings"]} />
+        <div className="flex flex-col text-end">
+          <span>Build an application</span>
+          <span>Ideas for new project</span>
+          <span>How to bake a cake</span>
+          <span>Does my dog really love me?</span>
+        </div>
+      </aside>
+
+      <ScrollArea type="auto" scrollbars="vertical">
+        <Flex direction="column" align="center" justify="center" gap="8" mt="8">
         <Image
-          src="/images/Llama.webp"
-          alt="Next.js logo"
+          src={"/images/Llama.webp"}
+          alt="Llama logo"
           width={128}
           height={128}
-          className="w-32 h-auto light:invert rounded-full"
-          priority
+          className="w-32 h-auto rounded-full"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-kumbh-sans)]">
-          <li className="mb-2">
-            Get started by messing around with{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="border border-solid border-transparent flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] h-8 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="border border-solid border-black/[.08] dark:border-white/[.145] flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent h-8 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-          <LoginModal />
-          <Dropdown trigger="Settings" />
-          <SegmentedController values={["inbox", "sent", "trash"]} />
-        </div>
-
-        <div className="flex flex-col items-end gap-1 w-96">
-          <ProgressBar />
-          <BadgeX label="100%" color="cyan" />
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 px-2 py-1"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 px-2 py-1"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 px-2 py-1"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <ChatArea />
+        <ChatInput />
+        </Flex>
+      </ScrollArea>
+    </main>
   )
 }

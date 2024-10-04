@@ -1,12 +1,11 @@
-"use client"
-import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { 
   Flex,
-  Box, 
+  Box,
+  Heading,  
   TabNav, 
   SegmentedControl, 
+  ScrollArea, 
   Dialog, 
   DropdownMenu, 
   Button, 
@@ -17,26 +16,29 @@ import {
 } from "@radix-ui/themes"
 
 
+interface LinkProps {
+  name: string,
+  path: string,
+  active?: boolean,
+}
+
 const Nav = ({
   links,
 }: {
-  links: {
-    linkName: string
-    linkAddress: string
-  }[]
+  links: LinkProps[]
 }) => {
-  const pathname = usePathname()
-  const linkElements = links.map((link, index) => (
+  const linkElements = links.map((link) => (
     <TabNav.Link 
-      key={index} 
-      active={pathname === link.linkAddress}
+      key={link.path} 
+      active={link.active}
       asChild
     >
-      <Link href={link.linkAddress}>
-        {link.linkName}
+      <Link href={link.path}>
+        {link.name}
       </Link>
     </TabNav.Link>
   ))
+  
   return (
     <TabNav.Root
       size="2"
@@ -47,14 +49,17 @@ const Nav = ({
   )
 }
 
+
+interface SCProps {
+  values: string[],
+}
+
 const SegmentedController = ({
   values
-}: {
-  values: string[]
-}) => {
-  const controlElements = values.map((value, index) => (
+}: SCProps) => {
+  const controlElements = values.map((value) => (
     <SegmentedControl.Item 
-      key={index} 
+      key={value} 
       value={value}
       className="capitalize"
     >
@@ -72,15 +77,58 @@ const SegmentedController = ({
   )
 }
 
+
+interface ScrollAreaProps {
+  elementType: "div" | "p" | "span" | "label",
+  heading?: string,
+  text?: string | string[],
+}
+
+const ScrollableArea = ({
+  elementType,
+  heading,
+  text,
+}: ScrollAreaProps) => {
+  const textElements = Array.isArray(text) ? 
+    text.map((txt, index) => (
+      <Text key={index} as={elementType}>
+        {txt}
+      </Text>
+    )) : (
+      <Text as={elementType}>
+        {text}
+      </Text>
+    )
+
+  return (
+    <ScrollArea 
+      type="auto" 
+      scrollbars="vertical"
+    >
+      <Box p="2" pr="6">
+        <Heading size="4" mb="4" trim="start">
+          {heading}
+        </Heading>
+        <Flex direction="column" gap="4">
+          {textElements}
+        </Flex>
+      </Box>
+    </ScrollArea>
+  )
+}
+
+
+interface ModalProps {
+  trigger: string,
+  title: string,
+  description: string,
+}
+
 const Modal = ({
   trigger,
   title,
   description, 
-}: {
-  trigger: string
-  title: string
-  description: string
-}) => {
+}: ModalProps) => {
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
@@ -131,11 +179,14 @@ const Modal = ({
   )
 }
 
+
+interface DropProps {
+  trigger: string,
+}
+
 const Dropdown = ({
   trigger,
-}: {
-  trigger: string
-}) => {
+}: DropProps) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -182,39 +233,35 @@ const Dropdown = ({
   )
 }
 
-const ProgressBar = () => {
-  const [percentLoaded, setPercentLoaded] = useState(0)
 
-  const fakeLoading = () => {
-    let progress = 0
-    while (progress < 100) {
-      progress += (1 - Math.random())
-      setPercentLoaded(progress)
-    }
-  }
+interface ProgressProps {
+  progress: number,
+}
 
-  useEffect(() => {
-    fakeLoading()
-  }, []);
-
+const ProgressBar = ({
+  progress,
+}: ProgressProps) => {
   return (
     <Box width="100%" maxWidth="24rem">
       <Progress 
         variant="soft" 
         size="2"
-        value={percentLoaded}
+        value={progress}
       ></Progress>
     </Box>
   )
 }
 
+
+interface BadgeProps {
+  color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky",
+  label: string,
+}
+
 const BadgeX = ({
   color,
   label,
-}: {
-  color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky"
-  label: string
-}) => {
+}: BadgeProps) => {
   return (
     <Badge 
       variant="soft"
@@ -229,8 +276,9 @@ const BadgeX = ({
 export { 
   Nav, 
   SegmentedController, 
+  ScrollableArea,
   Modal, 
   Dropdown, 
   ProgressBar, 
-  BadgeX
+  BadgeX,
 }

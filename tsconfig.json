@@ -20,10 +20,10 @@
     "paths": {
       "@*": ["./src/*"],
       "@images/*": ["./public/images/*"],
-      "@components/*": ["./src/app/components/*"],
-      "@header/*": ["./src/app/components/header/*"],
       "@auth/*": ["./src/app/components/auth/*"],
-      "@ui/*": ["./src/app/components/ui/*"]
+      "@chat/*": ["./src/app/components/chat/*"],
+      "@header/*": ["./src/app/components/header/*"],
+      "@ui/*": ["./src/app/components/ui/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
