@@ -1,15 +1,18 @@
 "use client"
+import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { 
   Flex,
+  Box, 
   TabNav, 
   SegmentedControl, 
   Dialog, 
   DropdownMenu, 
   Button, 
   Text, 
-  TextField 
+  TextField, 
+  Progress
 } from "@radix-ui/themes"
 
 
@@ -167,9 +170,36 @@ const Dropdown = ({
   )
 }
 
+const ProgressBar = () => {
+  const [percentLoaded, setPercentLoaded] = useState(0)
+
+  const fakeLoading = () => {
+    let progress = 0
+    while (progress < 100) {
+      progress += (1 - Math.random())
+      setPercentLoaded(progress)
+    }
+  }
+
+  useEffect(() => {
+    fakeLoading()
+  }, []);
+
+  return (
+    <Box width="100%" maxWidth="24rem">
+      <Progress 
+        variant="soft" 
+        size="2"
+        value={percentLoaded}
+      ></Progress>
+    </Box>
+  )
+}
+
 export { 
   Nav, 
   SegmentedController, 
   Modal, 
-  Dropdown 
+  Dropdown, 
+  ProgressBar
 }
