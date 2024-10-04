@@ -30,7 +30,7 @@ export default function RootLayout({
           <Theme 
             accentColor="cyan" 
             grayColor="slate" 
-            radius="medium" 
+            radius="full" 
             scaling="100%"
           >
             <Header />

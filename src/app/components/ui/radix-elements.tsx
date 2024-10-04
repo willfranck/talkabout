@@ -65,7 +65,7 @@ const SegmentedController = ({
   return (
     <SegmentedControl.Root 
       defaultValue={values[0]} 
-      className="h-8 p-0.5 rounded-full overflow-hidden"
+      className="h-8 p-0.5"
     >
       {controlElements}
     </SegmentedControl.Root>
@@ -84,7 +84,7 @@ const Modal = ({
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button className="h-8 px-4 sm:px-5 rounded-full">{trigger}</Button>
+        <Button className="h-8 px-4 sm:px-5">{trigger}</Button>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="24rem" size="4">
@@ -95,21 +95,23 @@ const Modal = ({
 
         <Flex direction="column" gap="3">
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
+            <Text as="div" size="2" mb="1" mx="2" weight="bold">
               Name
             </Text>
             <TextField.Root
               defaultValue="Freja Johnsen"
               placeholder="Enter your full name"
+              className="px-2"
             />
           </label>
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
+            <Text as="div" size="2" mb="1" mx="2" weight="bold">
               Email
             </Text>
             <TextField.Root
               defaultValue="freja@example.com"
               placeholder="Enter your email"
+              className="px-2"
             />
           </label>
         </Flex>
@@ -137,17 +139,23 @@ const Dropdown = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button variant="soft" className="h-8 px-4 sm:px-5 rounded-full">
+        <Button variant="soft" className="h-8 px-4 sm:px-5">
           {trigger}
           <DropdownMenu.TriggerIcon />
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-        <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ E" : "^ E"}>
+          Edit
+        </DropdownMenu.Item>
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ D" : "^ D"}>
+          Duplicate
+        </DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
+        
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ N" : "^ N"}>
+          Archive
+        </DropdownMenu.Item>
         <DropdownMenu.Sub>
           <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
@@ -158,12 +166,15 @@ const Dropdown = ({
             <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
-
         <DropdownMenu.Separator />
+
         <DropdownMenu.Item>Share</DropdownMenu.Item>
         <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+        <DropdownMenu.Item 
+          shortcut={process.platform === "darwin" ? "⌘ ⌫" : "^ ⌫"}
+          color="red"
+        >
           Delete
         </DropdownMenu.Item>
       </DropdownMenu.Content>

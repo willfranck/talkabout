@@ -92,6 +92,7 @@ a,
 a.rt-TabNavLink * {
   font-size: var(--font-size-sm);
   color: var(--foreground-link);
+  border-radius: 9999px;
 }
 
 a:hover,
