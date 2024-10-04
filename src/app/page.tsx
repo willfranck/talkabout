@@ -1,6 +1,6 @@
 import Image from "next/image"
 import LoginModal from "@auth/login-modal"
-import { Dropdown, ProgressBar, SegmentedController } from "@ui/radix-elements"
+import { BadgeX, Dropdown, ProgressBar, SegmentedController } from "@ui/radix-elements"
 
 export default function Home() {
 
@@ -55,7 +55,10 @@ export default function Home() {
           <SegmentedController values={["inbox", "sent", "trash"]} />
         </div>
 
-        <ProgressBar />
+        <div className="flex flex-col items-end gap-1 w-96">
+          <ProgressBar />
+          <BadgeX label="100%" color="cyan" />
+        </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

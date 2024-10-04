@@ -12,7 +12,8 @@ import {
   Button, 
   Text, 
   TextField, 
-  Progress
+  Progress, 
+  Badge
 } from "@radix-ui/themes"
 
 
@@ -196,10 +197,29 @@ const ProgressBar = () => {
   )
 }
 
+const BadgeX = ({
+  color,
+  label,
+}: {
+  color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky"
+  label: string
+}) => {
+  return (
+    <Badge 
+      variant="soft"
+      radius="medium" 
+      color={color}
+    >
+      {label}
+    </Badge>
+  )
+}
+
 export { 
   Nav, 
   SegmentedController, 
   Modal, 
   Dropdown, 
-  ProgressBar
+  ProgressBar, 
+  BadgeX
 }
