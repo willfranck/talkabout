@@ -109,6 +109,7 @@ const ScrollableArea = ({
     <ScrollArea 
       type="auto" 
       scrollbars="vertical"
+      className="p-2"
     >
       <Box p="2" pr="6">
         <Heading size="4" mb="4" trim="start">

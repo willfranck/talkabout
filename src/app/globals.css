@@ -24,7 +24,8 @@
   --font-weight-lgt: 400;
   --font-weight-exlgt: 300;
 
-  --background-tb-shadow: linear-gradient(to bottom, #DADADA 0%, transparent 4%);
+  --accent-color: "indigo",
+  --background-tb-shadow: linear-gradient(to bottom, #DADADA 0%, transparent 4%, transparent 96%, #DADADA 99%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,7 +38,8 @@
     --font-weight-lgt: 200;
     --font-weight-exlgt: 100;
 
-    --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
+    --accent-color: "cyan",
+    --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%, transparent 96%, #0A0A0A 99%);
   }
 }
 
@@ -60,6 +62,14 @@ body {
 /* Override default Radix CSS vars */
 .radix-themes {
   --default-font-family: var(--font-kumbh-sans);
+  --scrollarea-scrollbar-horizontal-margin-top: var(--space-3);
+  --scrollarea-scrollbar-horizontal-margin-bottom: var(--space-3);
+  --scrollarea-scrollbar-horizontal-margin-left: var(--space-3);
+  --scrollarea-scrollbar-horizontal-margin-right: var(--space-3);
+  --scrollarea-scrollbar-vertical-margin-top: var(--space-3);
+  --scrollarea-scrollbar-vertical-margin-bottom: var(--space-3);
+  --scrollarea-scrollbar-vertical-margin-left: var(--space-3);
+  --scrollarea-scrollbar-vertical-margin-right: var(--space-3);
   --tab-active-letter-spacing: 0em,
 }
 
@@ -69,11 +79,11 @@ body {
 
 :is(.light, .light-theme) :where(.radix-themes:not(.dark, .dark-theme)) {
   --color-background: #EAEAEA;
-  --color-surface: #BBB;
+  --color-surface: #BABABA;
 }
 
 :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
-  
+  --accent-color: "cyan",
 }
 /* /////////////////////////////// */
 
