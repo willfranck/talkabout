@@ -186,13 +186,13 @@ const Modal = ({
 }
 
 
-interface DropProps {
+interface DropdownProps {
   trigger: string,
 }
 
 const Dropdown = ({
   trigger,
-}: DropProps) => {
+}: DropdownProps) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>

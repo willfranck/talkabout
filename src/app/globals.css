@@ -24,7 +24,7 @@
   --font-weight-lgt: 400;
   --font-weight-exlgt: 300;
 
-  --accent-color: "indigo",
+  --accent-color: "indigo";
   --background-tb-shadow: linear-gradient(to bottom, #DADADA 0%, transparent 4%, transparent 96%, #DADADA 99%);
 }
 
@@ -38,7 +38,7 @@
     --font-weight-lgt: 200;
     --font-weight-exlgt: 100;
 
-    --accent-color: "cyan",
+    --accent-color: "cyan";
     --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%, transparent 96%, #0A0A0A 99%);
   }
 }
@@ -47,6 +47,19 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.24s ease-out;
 }
 
 html {

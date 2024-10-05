@@ -1,9 +1,10 @@
+import { PageLayout} from "@ui/radix-layout"
+
+
 export default function AboutPage() {
   return (
-    <main className="flex flex-col items-center justify-center w-full min-h-[calc(100vh-4rem)]">
-      <section className="flex flex-col items-center justify-center w-full h-full pb-16">
-        <h1 className="text-2xl font-bold">About</h1>
-      </section>
-    </main>
+    <PageLayout>
+      <h1 className="text-2xl font-bold mb-16">About</h1>
+    </PageLayout>
   )
 }
