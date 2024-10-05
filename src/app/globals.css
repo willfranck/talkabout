@@ -9,55 +9,35 @@
   transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out;
 }
 
-/* Firefox */
-* {
-  scrollbar-width: auto;
-  scrollbar-color: #94A3B8;
-}
-
-/* Chrome, Safari, Edge  */
-*::-webkit-scrollbar {
-  width: 0.625em;
-}
-
-*::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #94A3B8;
-  border-radius: 0 0.625em 0.625em 0;
-}
-
 :root {
-  --foreground: #0A0A0A;
-  --foreground-secondary: #00A2C7;
-  --foreground-link: #F1F7FEB5;
-  --foreground-hover: #23AFD0;
-  --foreground-focus: #11809C;
-  --background: #EDEDED;
-  --background-tb-shadow: linear-gradient(to bottom, #EDEDED 0%, transparent 4%, transparent 96%, #EDEDED 100%);
-  
   --font-size-2xl: 1.625rem;
   --font-size-xl: 1.375rem;
   --font-size-lg: 1.125rem;
   --font-size-reg: 1.000rem;
   --font-size-sm: 0.875rem;
 
-  --font-weight-exbld: 700;
-  --font-weight-bld: 600;
-  --font-weight-semibld: 500;
-  --font-weight-med: 400;
-  --font-weight-reg: 300;
-  --font-weight-lgt: 200;
-  --font-weight-exlgt: 100;
+  --font-weight-exbld: 900;
+  --font-weight-bld: 800;
+  --font-weight-semibld: 700;
+  --font-weight-med: 600;
+  --font-weight-reg: 500;
+  --font-weight-lgt: 400;
+  --font-weight-exlgt: 300;
+
+  --background-tb-shadow: linear-gradient(to bottom, #DADADA 0%, transparent 4%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: #EDEDED;
-    --background: #0A0A0A;
-    --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%, transparent 96%, #0A0A0A 100%);
+    --font-weight-exbld: 700;
+    --font-weight-bld: 600;
+    --font-weight-semibld: 500;
+    --font-weight-med: 400;
+    --font-weight-reg: 300;
+    --font-weight-lgt: 200;
+    --font-weight-exlgt: 100;
+
+    --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
   }
 }
 
@@ -74,8 +54,6 @@ html {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   overscroll-behavior-x: none;
 }
 
@@ -88,11 +66,19 @@ body {
 .radix-themes * {
   transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out;
 }
+
+:is(.light, .light-theme) :where(.radix-themes:not(.dark, .dark-theme)) {
+  --color-background: #EAEAEA;
+  --color-surface: #BBB;
+}
+
+:is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
+  
+}
 /* /////////////////////////////// */
 
 main {
   position: relative;
-  isolation: isolate;
 }
 
 main::before {
@@ -107,6 +93,7 @@ main::before {
 a,
 a.rt-TabNavLink * {
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-reg);
   color: var(--foreground-link);
   border-radius: 9999px;
 }

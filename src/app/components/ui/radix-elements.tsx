@@ -70,6 +70,7 @@ const SegmentedController = ({
   return (
     <SegmentedControl.Root 
       defaultValue={values[0]} 
+      variant="surface"
       className="h-8 p-0.5"
     >
       {controlElements}
@@ -78,17 +79,21 @@ const SegmentedController = ({
 }
 
 
-interface ScrollAreaProps {
-  elementType: "div" | "p" | "span" | "label",
-  heading?: string,
-  text?: string | string[],
-}
+// interface ScrollAreaProps {
+//   elementType: "div" | "p" | "span" | "label",
+//   heading?: string,
+//   text?: string | string[],
+// }
 
 const ScrollableArea = ({
   elementType,
   heading,
   text,
-}: ScrollAreaProps) => {
+}: {
+  elementType: "div" | "p" | "span" | "label",
+  heading: string,
+  text: string | string[]
+}) => {
   const textElements = Array.isArray(text) ? 
     text.map((txt, index) => (
       <Text key={index} as={elementType}>

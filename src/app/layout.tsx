@@ -9,7 +9,7 @@ import Header from "@header/index"
 const kumbhSans = Kumbh_Sans({
   subsets: ["latin"],
   variable: "--font-kumbh-sans",
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
 
 export const metadata: Metadata = {
@@ -25,10 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${kumbhSans.variable} antialiased`}>
-        <ThemeProvider attribute="class">
+      <body className={`${kumbhSans.variable}`}>
+        <ThemeProvider 
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
           <Theme 
-            accentColor="cyan" 
+            appearance="inherit"
+            accentColor="cyan"
             grayColor="slate" 
             radius="full" 
             scaling="100%"

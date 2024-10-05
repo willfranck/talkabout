@@ -20,7 +20,7 @@ export default function Header() {
         alt="logo" 
         width={40} 
         height={40} 
-        className="w-10 h-10 light:invert rounded-tr-[30%] rounded-bl-[30%]"
+        className="invert dark:invert-0 w-10 h-10 rounded-tr-[30%] rounded-bl-[30%]"
       />
 
       <Nav 
