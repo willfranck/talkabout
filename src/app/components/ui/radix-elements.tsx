@@ -272,7 +272,7 @@ const ChatHistoryTabs = ({
               {chat.date.toLocaleDateString()}
             </Text>
           </Flex>
-          <CaretCircleRight size={24} className={`opacity-0 group-hover:opacity-100 ${chat.active ? "opacity-100 text-[#EDEDED]" : ""}`} />
+          <CaretCircleRight size={24} className={`opacity-0 group-hover:opacity-100 ${chat.active ? "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]" : ""}`} />
         </Card>
       ))}
     </Flex>
@@ -302,7 +302,7 @@ const ChatHistory = ({
           <Card 
             key={message.id} 
             variant="surface" 
-            className={`max-w-[78%] bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/20" : ""}`}
+            className={`max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/80 dark:bg-gray-800/20" : ""}`}
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (

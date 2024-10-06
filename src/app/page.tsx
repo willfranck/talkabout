@@ -1,6 +1,6 @@
 import { Flex } from "@radix-ui/themes"
 import { PageLayout } from "@ui/radix-layout"
-import { ChatPanel } from "@chat/chat-history"
+import { ChatPanel } from "@chat/chat-panel"
 import { ChatArea } from "@chat/chat-area"
 import { ChatInput } from "@chat/chat-input"
 
