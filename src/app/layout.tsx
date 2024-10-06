@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import { Kumbh_Sans } from "next/font/google"
+import { ReduxProvider } from "@providers/redux-provider"
 import { ThemeProvider } from "next-themes"
 import { Theme } from "@radix-ui/themes"
+import { Kumbh_Sans } from "next/font/google"
 import "@radix-ui/themes/styles.css"
 import "./globals.css"
 import Header from "@header/index"
@@ -38,8 +39,10 @@ export default function RootLayout({
             radius="full" 
             scaling="100%"
           >
-            <Header />
-            {children}
+            <ReduxProvider>
+              <Header />
+              {children}
+            </ReduxProvider>
           </Theme>
         </ThemeProvider>
       </body>

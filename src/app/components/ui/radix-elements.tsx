@@ -293,7 +293,7 @@ const ChatHistory = ({
 }: ChatHistoryMessageProps) => {
   return (
     <ScrollArea 
-      type="scroll"
+      type="hover"
       scrollbars="vertical"
       className="flex-1 pr-12 pl-4"
     >
