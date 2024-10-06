@@ -31,8 +31,6 @@ export const ChatArea = () => {
 
 
   return (
-    <article className="flex-1 h-full pr-8 pt-16">
-      <ChatHistory messages={sampleMessages} />
-    </article>
+    <ChatHistory messages={sampleMessages} />
   )
 }

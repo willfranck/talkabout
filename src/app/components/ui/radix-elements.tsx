@@ -11,11 +11,16 @@ import {
   DropdownMenu, 
   Button, 
   Text, 
+  TextArea, 
   TextField, 
   Progress, 
   Badge
 } from "@radix-ui/themes"
-import { CaretCircleRight } from "@phosphor-icons/react/dist/ssr"
+import { 
+  CaretCircleRight,
+  GoogleLogo, 
+  UserCircle
+} from "@phosphor-icons/react/dist/ssr"
 
 
 //// Control Components ////
@@ -287,24 +292,51 @@ const ChatHistory = ({
   messages
 }: ChatHistoryMessageProps) => {
   return (
-    <Flex 
-      direction="column" 
-      align="start"
-      gap="4" 
-      px="4" 
-      width="100%"
-      className="h-full"
+    <ScrollArea 
+      type="scroll"
+      scrollbars="vertical"
+      className="flex-1 pr-12 pl-4"
     >
-      {messages.map((message) => (
-        <Card key={message.id} variant="surface" className={`bg-gray-600 ${message.role === "user" ? "self-end text-right bg-gray-800" : ""}`}>
-          <Text as="p" size="3" className="">{message.content}</Text>
-          <Text as="span" size="1">{message.date.toLocaleDateString()}</Text>
-        </Card>
-      ))}
-    </Flex>
+      <Flex direction="column" gap="6" pt="8">
+        {messages.map((message) => (
+          <Card 
+            key={message.id} 
+            variant="surface" 
+            className={`w-5/6 bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/20" : ""}`}
+          >
+            <Flex gap="4" align="start">
+              {message.role === "ai" && (
+                <GoogleLogo size={24} weight="fill" className="text-gray-400" />
+              )}
+              <Box>
+                <Text as="p" size="3" className="">
+                {message.content}
+                </Text>
+                <Text as="span" size="1">
+                  {message.date.toLocaleDateString()}
+                </Text>
+              </Box>
+              {message.role === "user" && (
+                <UserCircle size={24} weight="duotone" className="text-gray-400" />
+              )}
+            </Flex>
+          </Card>
+        ))}
+      </Flex>
+    </ScrollArea>
   )
 }
 
+const ChatInputField = () => {
+  return (
+    <TextArea 
+      variant="surface"
+      size="3"
+      placeholder="Enter your message"
+      className="h-36 mt-auto mr-8 mb-4 px-2"
+    />
+  )
+}
 
 //// Utility Components ////
 interface ProgressProps {
@@ -355,6 +387,7 @@ export {
   Dropdown, 
   ChatHistoryTabs, 
   ChatHistory, 
+  ChatInputField, 
   ProgressBar, 
   BadgeX,
 }

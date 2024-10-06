@@ -174,11 +174,9 @@ h3 {
 p {
   font-size: var(--font-size-reg);
   font-weight: var(--font-weight-reg);
-  max-width: 80ch;
 }
 
 span {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-lgt);
-  max-width: 80ch;
 }

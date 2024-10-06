@@ -105,7 +105,7 @@ export const ChatPanel = () => {
   ]
 
   return (
-    <aside className="flex flex-col items-center justify-start w-96 h-page-content gap-8 pt-8 pb-2 bg-gray-400 dark:bg-gray-950">
+    <aside className="flex flex-col items-center justify-start shrink-0 w-96 h-page-content gap-8 pt-8 pb-2 bg-gray-400 dark:bg-gray-950">
       <Flex direction="row" align="center" justify="between" width="100%" px="4">
         <Flex direction="row" align="center" gap="1">
           <ChatTeardropText size={24} weight="bold" />
