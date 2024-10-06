@@ -12,13 +12,13 @@ export const ChatArea = () => {
     {
       id: 2,
       role: "ai",
-      content: "Legibility describes how easily individual characters can be distinguished from one another. It is described by Walter Tracy as “the	quality of being decipherable and recognisable”. For instance, if a “b”	and an “h”, or a “3” and an “8”, are difficult to distinguish at small sizes, this is a problem of legibility.",
+      content: "Legibility describes how easily individual characters can be distinguished from one another. It is described by Walter Tracy as “the	quality of being decipherable and recognisable”. For instance, if a “b” and an “h”, or a “3” and an “8”, are difficult to distinguish at small sizes, this is a problem of legibility.",
       date: new Date(),
     },
     {
       id: 3,
       role: "user",
-      content: "Typographers are concerned with legibility insofar as it is their job to	select the correct font to use. Brush Script is an example of a font containing many characters that might be difficult to distinguish. The	selection of cases influences the legibility of typography because using only uppercase letters (all-caps) reduces legibility.",
+      content: "Typographers are concerned with legibility insofar as it is their job to select the correct font to use. Brush Script is an example of a font containing many characters that might be difficult to distinguish. The selection of cases influences the legibility of typography because using only uppercase letters (all-caps) reduces legibility.",
       date: new Date(),
     },
     {

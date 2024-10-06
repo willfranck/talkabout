@@ -297,7 +297,7 @@ const ChatHistory = ({
       scrollbars="vertical"
       className="flex-1 pr-12 pl-4"
     >
-      <Flex direction="column" gap="6" pt="8">
+      <Flex direction="column" gap="6" pt="6">
         {messages.map((message) => (
           <Card 
             key={message.id} 
