@@ -7,7 +7,7 @@ const PageLayout = ({
   children: React.ReactNode
 }) => {
   return (
-    <main className="w-full h-[calc(100vh-4rem)] pr-2">
+    <main className="w-full h-page-content pr-2">
       <ScrollArea
         type="auto"
         scrollbars="vertical"

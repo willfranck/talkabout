@@ -239,36 +239,66 @@ const Modal = ({
 }
 
 
-interface ChatHistoryProps {
+interface ChatHistoryTabProps {
   chat: {
     id: number,
     title: string,
-    description: string,
     date: Date,
     active: boolean
   }[]
 }
 
-const ChatHistory = ({
+const ChatHistoryTabs = ({
   chat,
-}: ChatHistoryProps) => {
+}: ChatHistoryTabProps) => {
   return (
-    <Flex direction="column" gap="2" width="100%">
+    <Flex direction="column" gap="2" px="4" width="100%">
       {chat.map((chat) => (
         <Card 
           key={chat.id} 
           variant="surface" 
-          className={`flex items-center justify-between hover:bg-gray-700`}
+          className={`group flex items-center justify-between hover:bg-gray-700 ${chat.active ? "bg-gray-600" : ""}`}
         >
-          <Flex direction="column" gap="1" className={chat.active ? "bg-gray-500" : ""}>
-            <Heading size="2" trim="start">
+          <Flex direction="column" gap="1" pr="2">
+            <Heading size="2" trim="start" className="line-clamp-1">
               {chat.title}
             </Heading>
             <Text as="span" size="1">
               {chat.date.toLocaleDateString()}
             </Text>
           </Flex>
-          <CaretCircleRight size={24} />
+          <CaretCircleRight size={24} className={`opacity-0 group-hover:opacity-100 ${chat.active ? "opacity-100 text-[#EDEDED]" : ""}`} />
+        </Card>
+      ))}
+    </Flex>
+  )
+}
+
+export interface ChatHistoryMessageProps {
+  messages: {
+    id: number,
+    role: "user" | "ai",
+    content: string,
+    date: Date,
+  }[]
+}
+
+const ChatHistory = ({
+  messages
+}: ChatHistoryMessageProps) => {
+  return (
+    <Flex 
+      direction="column" 
+      align="start"
+      gap="4" 
+      px="4" 
+      width="100%"
+      className="h-full"
+    >
+      {messages.map((message) => (
+        <Card key={message.id} variant="surface" className={`bg-gray-600 ${message.role === "user" ? "self-end text-right bg-gray-800" : ""}`}>
+          <Text as="p" size="3" className="">{message.content}</Text>
+          <Text as="span" size="1">{message.date.toLocaleDateString()}</Text>
         </Card>
       ))}
     </Flex>
@@ -323,6 +353,7 @@ export {
   ScrollableArticle,
   Modal, 
   Dropdown, 
+  ChatHistoryTabs, 
   ChatHistory, 
   ProgressBar, 
   BadgeX,
