@@ -1,13 +1,13 @@
 import { Flex, ScrollArea } from "@radix-ui/themes"
 
-
+//// Layout Components ////
 const PageLayout = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
   return (
-    <main className="w-full h-[calc(100vh-4rem)] px-2 pb-1">
+    <main className="w-full h-[calc(100vh-4rem)] pr-2">
       <ScrollArea
         type="auto"
         scrollbars="vertical"

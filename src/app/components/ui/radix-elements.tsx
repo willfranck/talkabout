@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { 
   Flex,
-  Box,
+  Box, 
+  Card, 
   Heading,  
   TabNav, 
   SegmentedControl, 
@@ -14,8 +15,9 @@ import {
   Progress, 
   Badge
 } from "@radix-ui/themes"
+import { CaretCircleRight } from "@phosphor-icons/react/dist/ssr"
 
-
+//// Control Components ////
 interface LinkProps {
   name: string,
   path: string,
@@ -50,6 +52,60 @@ const Nav = ({
 }
 
 
+interface DropdownProps {
+  trigger: string,
+}
+
+const Dropdown = ({
+  trigger,
+}: DropdownProps) => {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button variant="soft" className="h-8 px-4 sm:px-5">
+          {trigger}
+          <DropdownMenu.TriggerIcon />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ E" : "^ E"}>
+          Edit
+        </DropdownMenu.Item>
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ D" : "^ D"}>
+          Duplicate
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        
+        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ N" : "^ N"}>
+          Archive
+        </DropdownMenu.Item>
+        <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent>
+            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
+            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
+
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
+        <DropdownMenu.Separator />
+
+        <DropdownMenu.Item>Share</DropdownMenu.Item>
+        <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item 
+          shortcut={process.platform === "darwin" ? "⌘ ⌫" : "^ ⌫"}
+          color="red"
+        >
+          Delete
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  )
+}
+
+
 interface SCProps {
   values: string[],
 }
@@ -78,22 +134,18 @@ const SegmentedController = ({
   )
 }
 
+//// Content Components ////
+interface ScrollableArticleProps {
+  elementType: "div" | "p" | "span" | "label",
+  heading?: string,
+  text: string | string[],
+}
 
-// interface ScrollAreaProps {
-//   elementType: "div" | "p" | "span" | "label",
-//   heading?: string,
-//   text?: string | string[],
-// }
-
-const ScrollableArea = ({
+const ScrollableArticle = ({
   elementType,
   heading,
   text,
-}: {
-  elementType: "div" | "p" | "span" | "label",
-  heading: string,
-  text: string | string[]
-}) => {
+}: ScrollableArticleProps) => {
   const textElements = Array.isArray(text) ? 
     text.map((txt, index) => (
       <Text key={index} as={elementType}>
@@ -186,60 +238,39 @@ const Modal = ({
 }
 
 
-interface DropdownProps {
-  trigger: string,
+interface ChatHistoryProps {
+  chat: {
+    id: number,
+    title: string,
+    description: string,
+    date: Date,
+  }[],
 }
 
-const Dropdown = ({
-  trigger,
-}: DropdownProps) => {
+const ChatHistory = ({
+  chat,
+}: ChatHistoryProps) => {
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="soft" className="h-8 px-4 sm:px-5">
-          {trigger}
-          <DropdownMenu.TriggerIcon />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ E" : "^ E"}>
-          Edit
-        </DropdownMenu.Item>
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ D" : "^ D"}>
-          Duplicate
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ N" : "^ N"}>
-          Archive
-        </DropdownMenu.Item>
-        <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-          <DropdownMenu.SubContent>
-            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Sub>
-        <DropdownMenu.Separator />
-
-        <DropdownMenu.Item>Share</DropdownMenu.Item>
-        <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item 
-          shortcut={process.platform === "darwin" ? "⌘ ⌫" : "^ ⌫"}
-          color="red"
-        >
-          Delete
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <Flex direction="column" gap="2" px="4" width="100%">
+      {chat.map((chat) => (
+        <Card key={chat.id} variant="surface" className="flex items-center justify-between">
+          <Flex direction="column" gap="1">
+            <Heading size="2" trim="start">
+              {chat.title}
+            </Heading>
+            <Text as="span" size="1">
+              {chat.date.toLocaleDateString()}
+            </Text>
+          </Flex>
+          <CaretCircleRight size={24} />
+        </Card>
+      ))}
+    </Flex>
   )
 }
 
 
+//// Utility Components ////
 interface ProgressProps {
   progress: number,
 }
@@ -279,12 +310,14 @@ const BadgeX = ({
   )
 }
 
+
 export { 
   Nav, 
   SegmentedController, 
-  ScrollableArea,
+  ScrollableArticle,
   Modal, 
   Dropdown, 
+  ChatHistory, 
   ProgressBar, 
   BadgeX,
 }

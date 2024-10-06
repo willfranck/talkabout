@@ -1,4 +1,4 @@
-import { ScrollableArea } from "@ui/radix-elements"
+import { ScrollableArticle } from "@ui/radix-elements"
 
 
 export const ChatArea = () => {
@@ -12,8 +12,8 @@ export const ChatArea = () => {
 
 
   return (
-    <article className="w-full max-w-[75%]">
-      <ScrollableArea 
+    <article className="w-full max-w-[30%] h-[600px] mx-auto">
+      <ScrollableArticle 
         elementType="p"
         heading={sampleHeading}
         text={sampleText}
