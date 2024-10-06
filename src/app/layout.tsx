@@ -7,16 +7,34 @@ import "@radix-ui/themes/styles.css"
 import "./globals.css"
 import Header from "@header/index"
 
+
+export const metadata: Metadata = {
+  title: "Talkabout",
+  description: "AI Powered NextJS Electron App",
+  keywords: "AI, Chat, Productivity, Application, NextJS, Electron",
+  robots: "index, follow",
+  viewport: "width=device-width, initial-scale=1",
+  themeColor: "#111319",
+  openGraph: {
+    title: "Talkabout",
+    description: "AI Powered NextJS Electron App",
+    url: "https://talkabout.vercel.app",
+    images: "https://talkabout.vercel.app/image.png",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Talkabout",
+    description: "AI Powered NextJS Electron App",
+    images: "https://talkabout.vercel.app/image.png",
+  },
+}
+
 const kumbhSans = Kumbh_Sans({
   subsets: ["latin"],
   variable: "--font-kumbh-sans",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
-
-export const metadata: Metadata = {
-  title: "Talkabout",
-  description: "AI Powered NextJS Electron App",
-}
 
 
 export default function RootLayout({
