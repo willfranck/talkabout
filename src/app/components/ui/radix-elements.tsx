@@ -334,7 +334,7 @@ const ChatInputField = () => {
       size="3"
       placeholder="Enter your message"
       tabIndex={1}
-      className="h-36 mt-auto mr-8 mb-4 px-2"
+      className="h-36 mt-auto mr-8 mb-4"
     />
   )
 }
