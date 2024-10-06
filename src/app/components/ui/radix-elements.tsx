@@ -302,7 +302,7 @@ const ChatHistory = ({
           <Card 
             key={message.id} 
             variant="surface" 
-            className={`w-5/6 bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/20" : ""}`}
+            className={`max-w-[78%] bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/20" : ""}`}
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (
