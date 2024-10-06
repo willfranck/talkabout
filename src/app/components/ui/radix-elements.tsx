@@ -1,3 +1,4 @@
+import { cn } from "@utils/clsx"
 import Link from "next/link"
 import { 
   Flex,
@@ -257,12 +258,14 @@ const ChatHistoryTabs = ({
   chat,
 }: ChatHistoryTabProps) => {
   return (
-    <Flex direction="column" gap="2" px="4" width="100%">
+    <Flex direction="column" gap="2" px="4" pb="2" width="100%">
       {chat.map((chat) => (
         <Card 
           key={chat.id} 
           variant="surface" 
-          className={`group flex items-center justify-between hover:bg-gray-700 ${chat.active ? "bg-gray-600" : ""}`}
+          className={cn("group flex items-center justify-between hover:bg-gray-700", {
+            "bg-gray-600": chat.active
+          })}
         >
           <Flex direction="column" gap="1" pr="2">
             <Heading size="2" trim="start" className="line-clamp-1">
@@ -272,7 +275,12 @@ const ChatHistoryTabs = ({
               {chat.date.toLocaleDateString()}
             </Text>
           </Flex>
-          <CaretCircleRight size={24} className={`opacity-0 group-hover:opacity-100 ${chat.active ? "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]" : ""}`} />
+          <CaretCircleRight 
+            size={24} 
+            className={cn("opacity-0 group-hover:opacity-100", {
+              "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": chat.active
+            })} 
+          />
         </Card>
       ))}
     </Flex>
@@ -302,7 +310,9 @@ const ChatHistory = ({
           <Card 
             key={message.id} 
             variant="surface" 
-            className={`max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 ${message.role === "user" ? "self-end text-right bg-gray-800/80 dark:bg-gray-800/20" : ""}`}
+            className={cn("max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20", {
+              "self-end text-right bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
+            })}
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (
