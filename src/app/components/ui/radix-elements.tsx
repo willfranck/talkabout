@@ -245,11 +245,12 @@ interface ChatHistoryProps {
     title: string,
     description: string,
     date: Date,
-  }[],
+    active: boolean
+  }[]
 }
 
 const ChatHistory = ({
-  chat
+  chat,
 }: ChatHistoryProps) => {
   return (
     <Flex direction="column" gap="2" width="100%">
@@ -257,9 +258,9 @@ const ChatHistory = ({
         <Card 
           key={chat.id} 
           variant="surface" 
-          className="flex items-center justify-between hover:bg-gray-700"
+          className={`flex items-center justify-between hover:bg-gray-700`}
         >
-          <Flex direction="column" gap="1">
+          <Flex direction="column" gap="1" className={chat.active ? "bg-gray-500" : ""}>
             <Heading size="2" trim="start">
               {chat.title}
             </Heading>
