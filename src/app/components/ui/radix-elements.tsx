@@ -17,6 +17,7 @@ import {
 } from "@radix-ui/themes"
 import { CaretCircleRight } from "@phosphor-icons/react/dist/ssr"
 
+
 //// Control Components ////
 interface LinkProps {
   name: string,
@@ -25,7 +26,7 @@ interface LinkProps {
 }
 
 const Nav = ({
-  links,
+  links
 }: {
   links: LinkProps[]
 }) => {
@@ -57,7 +58,7 @@ interface DropdownProps {
 }
 
 const Dropdown = ({
-  trigger,
+  trigger
 }: DropdownProps) => {
   return (
     <DropdownMenu.Root>
@@ -144,7 +145,7 @@ interface ScrollableArticleProps {
 const ScrollableArticle = ({
   elementType,
   heading,
-  text,
+  text
 }: ScrollableArticleProps) => {
   const textElements = Array.isArray(text) ? 
     text.map((txt, index) => (
@@ -185,7 +186,7 @@ interface ModalProps {
 const Modal = ({
   trigger,
   title,
-  description, 
+  description 
 }: ModalProps) => {
   return (    
     <Dialog.Root>
@@ -248,12 +249,16 @@ interface ChatHistoryProps {
 }
 
 const ChatHistory = ({
-  chat,
+  chat
 }: ChatHistoryProps) => {
   return (
-    <Flex direction="column" gap="2" px="4" width="100%">
+    <Flex direction="column" gap="2" width="100%">
       {chat.map((chat) => (
-        <Card key={chat.id} variant="surface" className="flex items-center justify-between">
+        <Card 
+          key={chat.id} 
+          variant="surface" 
+          className="flex items-center justify-between hover:bg-gray-700"
+        >
           <Flex direction="column" gap="1">
             <Heading size="2" trim="start">
               {chat.title}
@@ -276,7 +281,7 @@ interface ProgressProps {
 }
 
 const ProgressBar = ({
-  progress,
+  progress
 }: ProgressProps) => {
   return (
     <Box width="100%" maxWidth="24rem">
@@ -297,7 +302,7 @@ interface BadgeProps {
 
 const BadgeX = ({
   color,
-  label,
+  label
 }: BadgeProps) => {
   return (
     <Badge 
