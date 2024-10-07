@@ -2,28 +2,15 @@ import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
   HarmCategory,
-  SafetySetting,
 } from "@google/generative-ai";
 
 
 const geminiApiKey = process.env.GEMINI_API_KEY
-const safetySettings: SafetySetting[] = [
-  {
-    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
-  },
+const safetyOptions = [
+  { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+  { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+  { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
 ];
 
 
@@ -36,7 +23,7 @@ async function ChatService() {
         generationConfig: {
           responseMimeType: "application/json",
         },
-        safetySettings: safetySettings
+        safetySettings: safetyOptions
       })
 
       const prompt = "Tell me a joke"
