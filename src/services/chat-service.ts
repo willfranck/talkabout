@@ -6,6 +6,7 @@ import {
 } from "@google/generative-ai";
 
 
+const geminiApiKey = process.env.GEMINI_API_KEY!
 const safetySettings: SafetySetting[] = [
   {
     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
@@ -25,7 +26,6 @@ const safetySettings: SafetySetting[] = [
   },
 ];
 
-const geminiApiKey = process.env.GEMINI_API_KEY!
 
 async function ChatService() {
   try {
