@@ -42,7 +42,6 @@ async function ChatService() {
     const result = await model.generateContent(prompt)
 
     console.log(result.response.text())
-    console.log(genAI.apiKey);
 
     return result.response.text()
 

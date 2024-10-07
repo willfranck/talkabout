@@ -26,6 +26,7 @@
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/themes": "^3.1.4",
     "@reduxjs/toolkit": "^2.2.7",
+    "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
