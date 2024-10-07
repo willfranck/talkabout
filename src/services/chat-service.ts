@@ -7,9 +7,6 @@ import {
 
 
 const geminiApiKey = process.env.GEMINI_API_KEY
-console.log(`Gemini Key: ${process.env.GEMINI_API_KEY}`)
-console.log(`NJS Port: ${process.env.NEXTJS_SERVER_PORT}`)
-
 const safetySettings: SafetySetting[] = [
   {
     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
