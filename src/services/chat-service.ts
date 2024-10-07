@@ -6,7 +6,10 @@ import {
 } from "@google/generative-ai";
 
 
-const geminiApiKey = process.env.GEMINI_API_KEY!
+const geminiApiKey = process.env.GEMINI_API_KEY
+console.log(`Gemini Key: ${process.env.GEMINI_API_KEY}`)
+console.log(`NJS Port: ${process.env.NEXTJS_SERVER_PORT}`)
+
 const safetySettings: SafetySetting[] = [
   {
     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
@@ -28,25 +31,27 @@ const safetySettings: SafetySetting[] = [
 
 
 async function ChatService() {
-  try {
-    const genAI = new GoogleGenerativeAI(geminiApiKey)
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: {
-        responseMimeType: "application/json",
-      },
-      safetySettings: safetySettings
-    })
+  if (geminiApiKey !== undefined) {
+    try {
+      const genAI = new GoogleGenerativeAI(geminiApiKey)
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        generationConfig: {
+          responseMimeType: "application/json",
+        },
+        safetySettings: safetySettings
+      })
 
-    const prompt = "Tell me a joke"
-    const result = await model.generateContent(prompt)
+      const prompt = "Tell me a joke"
+      const result = await model.generateContent(prompt)
 
-    console.log(result.response.text())
+      console.log(result.response.text())
 
-    return result.response.text()
+      return result.response.text()
 
-  } catch (error) {
-    console.log(error)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

@@ -1,13 +1,15 @@
 import dotenv from "dotenv"
+import path from "path"
+import next from "next"
+import { app, shell, BrowserWindow } from "electron"
+import { createServer } from 'http'
+
+
 dotenv.config({
   path: app.isPackaged
     ? path.join(process.resourcesPath, ".env")
     : path.resolve(process.cwd(), ".env")
 })
-import { app, shell, BrowserWindow } from "electron"
-import { createServer } from 'http'
-import path from "path"
-import next from "next"
 
 const startNextApp = async () => {
   try {
@@ -53,8 +55,10 @@ const createMainWindow = () => {
     } else {
       try {
         await startNextApp()
+      
         const nextServerURL = `http://localhost:${process.env.NEXTJS_SERVER_PORT || 3033}`
         mainWindow.loadURL(nextServerURL)
+      
       } catch (error) {
         console.log(`Error initializing server: ${error}`)
       }
@@ -88,6 +92,8 @@ app.whenReady().then(() => {
   createMainWindow()
   app.on('activate', createMainWindow)
 });
+
+console.log()
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit()
