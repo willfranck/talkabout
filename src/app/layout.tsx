@@ -13,8 +13,6 @@ export const metadata: Metadata = {
   description: "AI Powered NextJS Electron App",
   keywords: "AI, Chat, Productivity, Application, NextJS, Electron",
   robots: "index, follow",
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#111319",
   openGraph: {
     title: "Talkabout",
     description: "AI Powered NextJS Electron App",
@@ -43,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${kumbhSans.variable}`}>
         <ThemeProvider 
           attribute="class"

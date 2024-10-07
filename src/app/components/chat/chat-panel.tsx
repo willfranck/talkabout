@@ -1,14 +1,16 @@
+"use client"
 import { 
   Flex, 
+  Button, 
   Heading, 
   ScrollArea 
 } from "@radix-ui/themes"
 import { 
-  SegmentedController, 
+  // SegmentedController, 
   ChatHistoryTabs
 } from "@ui/radix-elements"
 import { ChatTeardropText } from "@phosphor-icons/react/dist/ssr"
-
+import { ChatService } from "@services/chat-service"
 
 export const ChatPanel = () => {
   const chatItems = [
@@ -111,7 +113,12 @@ export const ChatPanel = () => {
           <ChatTeardropText size={24} weight="bold" />
           <Heading>Chats</Heading>
         </Flex>
-        <SegmentedController values={["Active", "Archived"]} />
+        {/* <SegmentedController values={["Active", "Archived"]} /> */}
+        <Button
+          onClick={ChatService}
+        >
+          SEND
+        </Button>
       </Flex>
 
       <ScrollArea type="scroll" scrollbars="vertical">
