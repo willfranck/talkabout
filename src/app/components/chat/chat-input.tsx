@@ -18,11 +18,11 @@ export const ChatInput = () => {
   const handleSubmit = async () => {
     console.log(`Submitted: ${userPrompt}`)
     try {
-      const userMessage = { 
+      const userMessage: ChatMessage = { 
         role: "user", 
         content: userPrompt, 
         date: new Date().toLocaleDateString()
-      } as ChatMessage
+      }
 
       dispatch(addMessage(userMessage))
 
