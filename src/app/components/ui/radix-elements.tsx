@@ -307,16 +307,17 @@ const ChatHistory = ({
           <Card 
             key={index} 
             variant="surface" 
-            className={cn("max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
+            className={cn("w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
               "self-end text-right bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
             })}
+            style={{ overflowWrap: "anywhere" }}
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (
                 <GoogleLogo size={24} weight="fill" className="text-gray-400" />
               )}
               <Box>
-                <Text as="p" size="3" className="">
+                <Text as="p" size="3">
                 {message.content}
                 </Text>
                 <Text as="span" size="1">
