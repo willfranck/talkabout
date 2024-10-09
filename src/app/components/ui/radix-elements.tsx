@@ -307,7 +307,7 @@ const ChatHistory = ({
           <Card 
             key={index} 
             variant="surface" 
-            className={cn("max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20", {
+            className={cn("max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
               "self-end text-right bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
             })}
           >

@@ -22,6 +22,7 @@ async function ChatService({ prompt }: { prompt: string }) {
         model: "gemini-1.5-flash",
         generationConfig: {
           responseMimeType: "application/json",
+          temperature: 2.0
         },
         safetySettings: safetyOptions
       })
@@ -29,9 +30,11 @@ async function ChatService({ prompt }: { prompt: string }) {
       const userPrompt = prompt
       const result = await model.generateContent(userPrompt)
 
-      console.log(result.response.text())
+      const parsedResult = JSON.parse(result.response.text())
+      let parsedText = Object.values(parsedResult).join('\n\n')
+      parsedText = parsedText.replace(/(\.)(\s)([A-Z])/g, '$1  $3')
 
-      return result.response.text()
+      return parsedText
 
     } catch (error) {
       console.log(error)
