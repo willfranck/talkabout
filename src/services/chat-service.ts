@@ -2,7 +2,8 @@ import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
   HarmCategory,
-} from "@google/generative-ai";
+} from "@google/generative-ai"
+import { ChatMessage } from "@types"
 
 
 const geminiApiKey = process.env.GEMINI_API_KEY
@@ -14,7 +15,7 @@ const safetyOptions = [
 ];
 
 
-async function ChatService() {
+async function ChatService({ prompt }: { prompt: ChatMessage }) {
   if (geminiApiKey !== undefined) {
     try {
       const genAI = new GoogleGenerativeAI(geminiApiKey)
@@ -26,8 +27,8 @@ async function ChatService() {
         safetySettings: safetyOptions
       })
 
-      const prompt = "Tell me a joke"
-      const result = await model.generateContent(prompt)
+      const userPrompt = prompt.content
+      const result = await model.generateContent(userPrompt)
 
       console.log(result.response.text())
 

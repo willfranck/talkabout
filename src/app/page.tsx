@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <PageLayout>
       <ChatPanel />
-      <Flex direction="column" gap="6" className="h-page-content">
+      <Flex direction="column" gap="6" className="flex-1 h-page-content">
         <ChatArea />
         <ChatInput />
       </Flex>

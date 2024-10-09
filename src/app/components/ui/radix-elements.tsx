@@ -20,8 +20,10 @@ import {
 import { 
   CaretCircleRight,
   GoogleLogo, 
-  UserCircle
+  UserCircle,
+  PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
+import { ChatMessage } from "@types"
 
 
 //// Control Components ////
@@ -287,18 +289,13 @@ const ChatHistoryTabs = ({
   )
 }
 
-export interface ChatHistoryMessageProps {
-  messages: {
-    id: number,
-    role: "user" | "ai",
-    content: string,
-    date: Date,
-  }[]
+interface ChatHistoryProps {
+  messages: ChatMessage[]
 }
 
 const ChatHistory = ({
   messages
-}: ChatHistoryMessageProps) => {
+}: ChatHistoryProps) => {
   return (
     <ScrollArea 
       type="hover"
@@ -306,9 +303,9 @@ const ChatHistory = ({
       className="flex-1 pr-12 pl-4"
     >
       <Flex direction="column" gap="6" pt="6">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <Card 
-            key={message.id} 
+            key={index} 
             variant="surface" 
             className={cn("max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20", {
               "self-end text-right bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
@@ -323,7 +320,7 @@ const ChatHistory = ({
                 {message.content}
                 </Text>
                 <Text as="span" size="1">
-                  {message.date.toLocaleDateString()}
+                  {message.date}
                 </Text>
               </Box>
               {message.role === "user" && (
@@ -337,15 +334,46 @@ const ChatHistory = ({
   )
 }
 
-const ChatInputField = () => {
+interface ChatInputProps {
+  prompt: string,
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
+  onSubmit: () => void
+}
+
+const ChatInputField = ({ 
+  prompt,
+  onChange,
+  onSubmit
+}: ChatInputProps) => {
+  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && event.shiftKey) {
+      event.preventDefault()
+      onSubmit()
+    }
+  }
   return (
-    <TextArea 
-      variant="surface"
-      size="3"
-      placeholder="Enter your message"
-      tabIndex={1}
-      className="h-36 mt-auto mr-8 mb-4"
-    />
+    <form 
+      onSubmit={onSubmit} 
+      className="relative flex mt-auto mb-4 mr-8"
+    >
+      <TextArea 
+        variant="surface"
+        size="3"
+        value={prompt}
+        onChange={onChange}
+        onKeyDown={handleSubmitKeyDown}
+        placeholder="Enter your message"
+        tabIndex={1}
+        className="flex-1 h-36 pr-10"
+      />
+      <Button 
+        variant="surface"
+        onClick={onSubmit} 
+        className="absolute bottom-0 right-0 w-10 h-full rounded-l-none rounded-r-md"
+      >
+        <PaperPlaneTilt size={18} />
+      </Button>
+    </form>
   )
 }
 
