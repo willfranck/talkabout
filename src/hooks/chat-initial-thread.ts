@@ -1,7 +1,6 @@
 import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "@redux/hooks"
-import { createThread } from "@redux/reducers"
-import { ChatThread } from "@types"
+import { createNewThread } from "@globals/functions"
 
 let threadCreated = false
 
@@ -12,14 +11,7 @@ export const useInitialThread = () => {
 
   useEffect(() => {
     if (threads.length === 0 && !threadCreated) {
-      const newThread: ChatThread = {
-        id: crypto.randomUUID(),
-        topic: "New Chat",
-        messages: [],
-        created: new Date().toLocaleDateString(),
-        active: true,
-      }
-      dispatch(createThread(newThread))
+      createNewThread(dispatch)
       threadCreated = true
     }
   }, [dispatch, threads])

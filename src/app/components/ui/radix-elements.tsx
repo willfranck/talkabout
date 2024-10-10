@@ -19,7 +19,7 @@ import {
   Badge
 } from "@radix-ui/themes"
 import { 
-  CaretCircleRight,
+  CaretCircleRight, 
   // GoogleLogo, 
   UserCircle,
   PaperPlaneTilt
@@ -257,12 +257,12 @@ const ChatHistoryTabs = ({
   threads
 }: ChatHistoryTabProps) => {
   return (
-    <Flex direction="column" gap="2" px="4" pb="2" width="100%">
+    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
       {threads.map((thread) => (
         <Card 
           key={thread.id} 
           variant="surface" 
-          className={cn("group flex items-center justify-between hover:bg-gray-700 fade-in", {
+          className={cn("group flex items-center justify-between w-full hover:bg-gray-700 fade-in", {
             "bg-gray-600": thread.active
           })}
         >
