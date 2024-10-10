@@ -32,6 +32,7 @@ async function ChatService({ prompt }: { prompt: string }) {
           }
         }
       } 
+
       const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
         generationConfig: {
@@ -45,7 +46,7 @@ async function ChatService({ prompt }: { prompt: string }) {
       const userPrompt = prompt
       const result = await model.generateContent(`
         User Prompt: ${userPrompt};
-        Topic: Give this thread a summary based on the User Prompt;
+        Topic: Give this thread a summary title based on the User Prompt and your response;
         Response: Respond to the User Prompt as if you were a wise, albeit eccentric, llama;
       `)
 
@@ -54,9 +55,6 @@ async function ChatService({ prompt }: { prompt: string }) {
 
         const topic = parsedResult.topic || "Undefined Topic"
         const content = parsedResult.response || "Oops, I goofed"
-
-        // let parsedContent = Object.values(content).join('\n\n')
-        // parsedContent = parsedContent.replace(/(\.)(\s)([A-Z])/g, '$1  $3')
 
         return { topic, content }
       }

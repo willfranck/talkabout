@@ -24,22 +24,35 @@ const chatSlice = createSlice({
         active: true
       })
     },
+    updateThreadTopic: (state, action: PayloadAction<string>) => {
+      const activeThread = state.threads.find(thread => thread.active)
+      if (activeThread) {
+        activeThread.topic = action.payload
+      }
+    },
     setActiveThread: (state, action: PayloadAction<string>) => {
       state.threads.forEach(thread => {
         thread.active = thread.id === action.payload
       })
     },
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
-      state.messages.push(action.payload)
+      const activeThread = state.threads.find(thread => thread.active)
+      if (activeThread) {
+        activeThread.messages.push(action.payload)
+      }
     },
     clearMessages: (state) => {
-      state.messages = []
+      const activeThread = state.threads.find(thread => thread.active)
+      if (activeThread) {
+        activeThread.messages = []
+      }
     }
   }
 })
 
 export const {
   createThread,
+  updateThreadTopic,
   setActiveThread,
   addMessage,
   clearMessages

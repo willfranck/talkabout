@@ -262,12 +262,12 @@ const ChatHistoryTabs = ({
         <Card 
           key={thread.id} 
           variant="surface" 
-          className={cn("group flex items-center justify-between hover:bg-gray-700", {
+          className={cn("group flex items-center justify-between hover:bg-gray-700 fade-in", {
             "bg-gray-600": thread.active
           })}
         >
           <Flex direction="column" gap="1" pr="2">
-            <Heading size="2" trim="start" className="line-clamp-1">
+            <Heading size="2" trim="start" className="line-clamp-1 fade-in">
               {thread.topic}
             </Heading>
             <Text as="span" size="1">
@@ -311,7 +311,7 @@ const ChatHistory = ({
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (
-                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto pt-0.5 pl-0.5 rounded-full invert dark:invert-0" />
+                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
               )}
               <Box>
                 <Text as="div" size="3">
