@@ -1,5 +1,6 @@
 import { cn } from "@utils/clsx"
 import Link from "next/link"
+import Image from "next/image"
 import { 
   Flex,
   Box, 
@@ -19,11 +20,13 @@ import {
 } from "@radix-ui/themes"
 import { 
   CaretCircleRight,
-  GoogleLogo, 
+  // GoogleLogo, 
   UserCircle,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
-import { ChatMessage } from "@types"
+import { ChatThread, ChatMessage } from "@types"
+import ReactMarkdown from "react-markdown"
+import rehypeHighlight from "rehype-highlight"
 
 
 //// Control Components ////
@@ -246,41 +249,35 @@ const Modal = ({
   )
 }
 
-
 interface ChatHistoryTabProps {
-  chat: {
-    id: number,
-    title: string,
-    date: Date,
-    active: boolean
-  }[]
+  threads: ChatThread[]
 }
 
 const ChatHistoryTabs = ({
-  chat,
+  threads
 }: ChatHistoryTabProps) => {
   return (
     <Flex direction="column" gap="2" px="4" pb="2" width="100%">
-      {chat.map((chat) => (
+      {threads.map((thread) => (
         <Card 
-          key={chat.id} 
+          key={thread.id} 
           variant="surface" 
           className={cn("group flex items-center justify-between hover:bg-gray-700", {
-            "bg-gray-600": chat.active
+            "bg-gray-600": thread.active
           })}
         >
           <Flex direction="column" gap="1" pr="2">
             <Heading size="2" trim="start" className="line-clamp-1">
-              {chat.title}
+              {thread.topic}
             </Heading>
             <Text as="span" size="1">
-              {chat.date.toLocaleDateString()}
+              {thread.created}
             </Text>
           </Flex>
           <CaretCircleRight 
             size={24} 
             className={cn("opacity-0 group-hover:opacity-100", {
-              "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": chat.active
+              "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
             })} 
           />
         </Card>
@@ -300,7 +297,7 @@ const ChatHistory = ({
     <ScrollArea 
       type="hover"
       scrollbars="vertical"
-      className="flex-1 pr-12 pl-4"
+      className="flex-1 pr-12"
     >
       <Flex direction="column" gap="6" pt="6">
         {messages.map((message, index) => (
@@ -314,11 +311,13 @@ const ChatHistory = ({
           >
             <Flex gap="4" align="start">
               {message.role === "ai" && (
-                <GoogleLogo size={24} weight="fill" className="text-gray-400" />
+                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto pt-0.5 pl-0.5 rounded-full invert dark:invert-0" />
               )}
               <Box>
-                <Text as="p" size="3">
-                {message.content}
+                <Text as="div" size="3">
+                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+                    {message.content}
+                  </ReactMarkdown>
                 </Text>
                 <Text as="span" size="1">
                   {message.date}
@@ -347,7 +346,7 @@ const ChatInputField = ({
   onSubmit
 }: ChatInputProps) => {
   const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && event.shiftKey) {
+    if (prompt.trim().length > 0 && event.key === "Enter" && event.shiftKey) {
       event.preventDefault()
       onSubmit()
     }
@@ -355,7 +354,7 @@ const ChatInputField = ({
   return (
     <form 
       onSubmit={onSubmit} 
-      className="relative flex mt-auto mb-4 mr-8"
+      className="relative flex mt-auto mb-4 mr-12"
     >
       <TextArea 
         variant="surface"
@@ -368,8 +367,9 @@ const ChatInputField = ({
         className="flex-1 h-36 pr-10"
       />
       <Button 
-        variant="surface"
-        onClick={onSubmit} 
+        variant="soft"
+        onClick={onSubmit}
+        disabled={prompt.trim().length === 0}
         className="absolute bottom-0 right-0 w-10 h-full rounded-l-none rounded-r-md"
       >
         <PaperPlaneTilt size={18} />
