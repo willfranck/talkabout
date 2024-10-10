@@ -304,8 +304,20 @@ const ChatHistory = ({
       scrollbars="vertical"
       className="flex-1 pr-12"
     >
-      <Flex direction="column" gap="6" pt="6">
-        {messages.map((message, index) => (
+      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
+        {messages.length === 0 && (
+          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
+            <Image 
+              src={"./images/Llama.webp"}
+              alt="Llama logo"
+              width={128}
+              height={128}
+              className="w-32 h-auto rounded-full opacity-30 invert dark:invert-0"
+            />
+            <Text as="span">much empty in here...</Text>
+          </Flex>
+        )}
+        {messages.length > 0 && messages.map((message, index) => (
           <Card 
             key={index} 
             variant="surface" 
