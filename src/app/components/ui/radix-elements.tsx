@@ -1,6 +1,11 @@
 import { cn } from "@utils/clsx"
 import Link from "next/link"
 import Image from "next/image"
+import ReactMarkdown from "react-markdown"
+import rehypeHighlight from "rehype-highlight"
+import { useAppDispatch } from "@redux/hooks"
+import { ChatThread, ChatMessage } from "@types"
+import { selectActiveThread } from "@globals/functions"
 import { 
   Flex,
   Box, 
@@ -24,9 +29,6 @@ import {
   UserCircle,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
-import { ChatThread, ChatMessage } from "@types"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
 
 
 //// Control Components ////
@@ -256,12 +258,15 @@ interface ChatHistoryTabProps {
 const ChatHistoryTabs = ({
   threads
 }: ChatHistoryTabProps) => {
+  const dispatch = useAppDispatch()
+
   return (
     <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
       {threads.map((thread) => (
         <Card 
           key={thread.id} 
           variant="surface" 
+          onClick={() => selectActiveThread(dispatch, thread.id)}
           className={cn("group flex items-center justify-between w-full hover:bg-gray-700 fade-in", {
             "bg-gray-600": thread.active
           })}

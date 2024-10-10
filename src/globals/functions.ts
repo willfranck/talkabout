@@ -1,5 +1,5 @@
 import { AppDispatch } from "@redux/store"
-import { createThread } from "@redux/reducers"
+import { createThread, setActiveThread } from "@redux/reducers"
 import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
 
@@ -13,4 +13,8 @@ export function createNewThread(dispatch: AppDispatch) {
     active: true,
   }
   dispatch(createThread(newThread))
+}
+
+export function selectActiveThread(dispatch: AppDispatch, threadId: string) {
+  dispatch(setActiveThread(threadId))
 }
