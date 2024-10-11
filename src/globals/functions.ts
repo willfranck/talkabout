@@ -2,7 +2,8 @@ import { AppDispatch } from "@redux/store"
 import { 
   createThread, 
   deleteThread, 
-  setActiveThread 
+  setActiveThread, 
+  deleteMessages
 } from "@redux/reducers"
 import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
@@ -25,6 +26,10 @@ export function removeThread(dispatch: AppDispatch, threadId: string) {
 
 export function selectActiveThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setActiveThread(threadId))
+}
+
+export function deleteMessage(dispatch: AppDispatch, messageId: string) {
+  dispatch(deleteMessages(messageId))
 }
 
 //// UI Functions ////

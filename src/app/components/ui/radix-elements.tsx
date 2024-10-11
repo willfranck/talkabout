@@ -1,8 +1,10 @@
+import { useRef, useEffect } from "react"
 import { cn } from "@utils/clsx"
 import Link from "next/link"
 import Image from "next/image"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
+import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { 
   ChatThread, 
@@ -10,7 +12,8 @@ import {
 } from "@types"
 import { 
   selectActiveThread, 
-  removeThread 
+  removeThread, 
+  deleteMessage 
 } from "@globals/functions"
 import { 
   Flex,
@@ -32,6 +35,7 @@ import {
 import { 
   CaretCircleRight, 
   Trash,
+  ArrowDown, 
   UserCircle,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
@@ -68,6 +72,33 @@ const Nav = ({
     >
       {linkElements}
     </TabNav.Root>
+  )
+}
+
+interface DeleteButtonProps {
+  action: (dispatch: AppDispatch, id: string) => void
+  itemId: string
+  buttonLocation: "chat-history" | "threads"
+}
+
+const DeleteButton = ({
+  action,
+  itemId,
+  buttonLocation
+}: DeleteButtonProps) => {
+  const dispatch = useAppDispatch()
+
+  return (
+    <Button 
+      variant="soft"
+      onClick={() => action(dispatch, itemId)}
+      className="absolute top-0 right-0 flex flex-col h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600"
+    >
+      <Trash size={22} />
+      {buttonLocation === "chat-history" && (
+        <ArrowDown size={20} />
+      )}
+    </Button>
   )
 }
 
@@ -292,12 +323,7 @@ const ChatHistoryTabs = ({
               "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
             })} 
           />
-          <Button 
-            variant="soft"
-            onClick={() => removeThread(dispatch, thread.id)}
-            className="absolute right-0 h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600">
-            <Trash size={22} />
-          </Button>
+          <DeleteButton action={removeThread} itemId={thread.id} buttonLocation="threads" />
         </Card>
       ))}
     </Flex>
@@ -311,10 +337,20 @@ interface ChatHistoryProps {
 const ChatHistory = ({
   messages
 }: ChatHistoryProps) => {
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const { current } = scrollAreaRef;
+    if (current) {
+      current.scrollTo({ top: current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [messages])
+
   return (
     <ScrollArea 
       type="hover"
       scrollbars="vertical"
+      ref={scrollAreaRef}
       className="flex-1 pr-12"
     >
       <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
@@ -334,8 +370,8 @@ const ChatHistory = ({
           <Card 
             key={index} 
             variant="surface" 
-            className={cn("w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-              "self-end text-right bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
+            className={cn("relative group w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
+              "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
             })}
             style={{ overflowWrap: "anywhere" }}
           >
@@ -354,7 +390,10 @@ const ChatHistory = ({
                 </Text>
               </Box>
               {message.role === "user" && (
-                <UserCircle size={24} weight="duotone" className="text-gray-400" />
+                <>
+                  <UserCircle size={24} weight="duotone" className="text-gray-400" />
+                  <DeleteButton action={deleteMessage} itemId={message.id} buttonLocation="chat-history" />
+                </>
               )}
             </Flex>
           </Card>
@@ -376,11 +415,12 @@ const ChatInputField = ({
   onSubmit
 }: ChatInputProps) => {
   const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (prompt.trim().length > 0 && event.key === "Enter" && event.shiftKey) {
+    if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
       onSubmit()
     }
   }
+
   return (
     <form 
       onSubmit={onSubmit} 
@@ -394,7 +434,7 @@ const ChatInputField = ({
         onKeyDown={handleSubmitKeyDown}
         placeholder="Enter your message"
         tabIndex={1}
-        className="flex-1 h-36 pr-10"
+        className="flex-1 h-36 pr-10 whitespace-pre"
       />
       <Button 
         variant="soft"

@@ -44,6 +44,15 @@ const chatSlice = createSlice({
         activeThread.messages.push(action.payload)
       }
     },
+    deleteMessages: (state, action: PayloadAction<string>) => {
+      const activeThread = state.threads.find(thread => thread.active)
+      if (activeThread) {
+        const messageIndex = activeThread.messages.findIndex(message => message.id === action.payload)
+        if (messageIndex !== -1) {
+          activeThread.messages = activeThread.messages.slice(0, messageIndex)
+        }
+      }
+    },
     clearMessages: (state) => {
       const activeThread = state.threads.find(thread => thread.active)
       if (activeThread) {
@@ -59,6 +68,7 @@ export const {
   updateThreadTopic,
   setActiveThread,
   addMessage,
+  deleteMessages, 
   clearMessages
 } = chatSlice.actions
 

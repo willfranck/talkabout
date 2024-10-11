@@ -45,9 +45,11 @@ async function ChatService({ prompt }: { prompt: string }) {
 
       const userPrompt = prompt
       const result = await model.generateContent(`
+        Identity: You are a helpful assistant.  You take the form of a wise, albeit eccentric, llama.  Have your responses reflect this identity;
+        Objective: Users will engage you have a friendly chat, learn about new things, and just mess around;
         User Prompt: ${userPrompt};
-        Topic: Give this thread a summary title based on the User Prompt and your response;
-        Response: Respond to the User Prompt as if you were a wise, albeit eccentric, llama;
+        Topic: Give this thread a short title based on the User Prompt;
+        Response: Respond to the User Prompt in a way that balances detail, conciseness, and quirkiness.  Cite any resources when appropriate.  Give specific answers to specific questions.  Use markdown for text and code where needed;
       `)
 
       if (result.response) {
