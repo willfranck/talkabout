@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { cn } from "@utils/clsx"
 import Link from "next/link"
 import Image from "next/image"
@@ -405,12 +405,14 @@ const ChatHistory = ({
 
 interface ChatInputProps {
   prompt: string,
+  threads: number,
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
   onSubmit: () => void
 }
 
 const ChatInputField = ({ 
   prompt,
+  threads,
   onChange,
   onSubmit
 }: ChatInputProps) => {
@@ -430,9 +432,10 @@ const ChatInputField = ({
         variant="surface"
         size="3"
         value={prompt}
+        placeholder="Message Llamini-Flash"
+        disabled={threads === 0}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
-        placeholder="Enter your message"
         tabIndex={1}
         className="flex-1 h-36 pr-10 whitespace-pre"
       />

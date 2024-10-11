@@ -15,6 +15,7 @@ import { ChatInputField } from "@ui/radix-elements"
 
 export const ChatInput = () => {
   const [userPrompt, setUserPrompt] = useState("")
+  const threadCount = useAppSelector((state) => state.chat.threads.length)
   const activeThread = useAppSelector((state) => state.chat.threads.find(thread => thread.active))
   const dispatch = useAppDispatch()
   
@@ -56,6 +57,7 @@ export const ChatInput = () => {
   return (
     <ChatInputField 
       prompt={userPrompt} 
+      threads={threadCount}
       onChange={handleInputChange}
       onSubmit={handleSubmit}
     />

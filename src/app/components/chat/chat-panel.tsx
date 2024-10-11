@@ -52,6 +52,16 @@ export const ChatPanel = () => {
         <PlusCircle size={24} />
       </Button>
 
+      {threads.length === 0 && (
+        <Text 
+          as="span" 
+          className="opacity-0 fade-in mt-1.5" 
+          style={{ animationDelay: "360ms" }}
+        >
+          Create a New Thread to Chat
+        </Text>
+      )}
+
       <ScrollArea type="scroll" scrollbars="vertical">
         <ChatHistoryTabs threads={threads} />
       </ScrollArea>
