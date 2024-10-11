@@ -4,8 +4,14 @@ import Image from "next/image"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
 import { useAppDispatch } from "@redux/hooks"
-import { ChatThread, ChatMessage } from "@types"
-import { selectActiveThread } from "@globals/functions"
+import { 
+  ChatThread, 
+  ChatMessage 
+} from "@types"
+import { 
+  selectActiveThread, 
+  removeThread 
+} from "@globals/functions"
 import { 
   Flex,
   Box, 
@@ -26,7 +32,6 @@ import {
 import { 
   CaretCircleRight, 
   Trash,
-  // GoogleLogo, 
   UserCircle,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
@@ -287,7 +292,10 @@ const ChatHistoryTabs = ({
               "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
             })} 
           />
-          <Button className="absolute right-0 h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600">
+          <Button 
+            variant="soft"
+            onClick={() => removeThread(dispatch, thread.id)}
+            className="absolute right-0 h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600">
             <Trash size={22} />
           </Button>
         </Card>

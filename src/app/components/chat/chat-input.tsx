@@ -1,9 +1,15 @@
 "use client"
 import { useState } from "react"
 import axios from "axios"
+import { 
+  useAppSelector, 
+  useAppDispatch 
+} from "@redux/hooks"
+import { 
+  addMessage, 
+  updateThreadTopic 
+} from "@redux/reducers"
 import { ChatMessage } from "@types"
-import { useAppSelector, useAppDispatch } from "@redux/hooks"
-import { addMessage, updateThreadTopic } from "@redux/reducers"
 import { ChatInputField } from "@ui/radix-elements"
 
 

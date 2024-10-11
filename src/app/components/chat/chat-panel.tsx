@@ -1,7 +1,14 @@
 "use client"
 import { useState } from "react"
-import { useAppSelector, useAppDispatch } from "@redux/hooks"
-import { createNewThread, displayTextByChar, removeTextByChar } from "@globals/functions"
+import { 
+  useAppSelector, 
+  useAppDispatch 
+} from "@redux/hooks"
+import { 
+  createNewThread, 
+  displayTextByChar, 
+  removeTextByChar 
+} from "@globals/functions"
 import { 
   Flex, 
   ScrollArea, 
@@ -13,14 +20,16 @@ import {
   SegmentedController, 
   ChatHistoryTabs
 } from "@ui/radix-elements"
-import { ChatTeardropText, PlusCircle } from "@phosphor-icons/react/dist/ssr"
+import { 
+  ChatTeardropText, 
+  PlusCircle 
+} from "@phosphor-icons/react/dist/ssr"
 
 
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
   const threads = useAppSelector((state) => state.chat.threads)
   const [displayedText, setDisplayedText] = useState("")
-
 
   return (
     <aside className="flex flex-col items-center justify-start shrink-0 w-96 h-page-content gap-4 pt-8 pb-2 bg-gray-400/50 dark:bg-gray-950/30">
