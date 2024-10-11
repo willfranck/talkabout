@@ -31,12 +31,11 @@ export function displayTextByChar(text: string, setState: React.Dispatch<React.S
 }
 
 export function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateAction<string>>) {
-  const textLength = text.length;
-
+  const textLength = text.length
   text.split("").forEach((_, index) => {
     setTimeout(() => {
-      const remainingText = text.slice(0, textLength - index - 1); // Slice off one more character each time
-      setState(remainingText);
-    }, index * 12); // Delay for removing characters (adjust time as needed)
+      const remainingText = text.slice(0, textLength - index - 1)
+      setState(remainingText)
+    }, index * 12)
   })
 }

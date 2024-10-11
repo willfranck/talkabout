@@ -287,7 +287,7 @@ const ChatHistoryTabs = ({
               "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
             })} 
           />
-          <Button className="absolute right-0 h-full rounded-right-only bg-red-500 hover:bg-red-600 opacity-0 group-hover:opacity-100">
+          <Button className="absolute right-0 h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600">
             <Trash size={22} />
           </Button>
         </Card>
