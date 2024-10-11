@@ -1,6 +1,7 @@
 "use client"
+import { useState } from "react"
 import { useAppSelector, useAppDispatch } from "@redux/hooks"
-import { createNewThread } from "@globals/functions"
+import { createNewThread, displayTextByChar, removeTextByChar } from "@globals/functions"
 import { 
   Flex, 
   ScrollArea, 
@@ -18,6 +19,7 @@ import { ChatTeardropText, PlusCircle } from "@phosphor-icons/react/dist/ssr"
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
   const threads = useAppSelector((state) => state.chat.threads)
+  const [displayedText, setDisplayedText] = useState("")
 
 
   return (
@@ -32,10 +34,12 @@ export const ChatPanel = () => {
 
       <Button 
         variant="ghost" 
+        onMouseEnter={() => displayTextByChar("New Thread", setDisplayedText)}
+        onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => createNewThread(dispatch)}
-        className="group w-32 mt-2 mb-1"
+        className="group mt-2 mb-1"
       >
-        <Text as="span" className="hidden group-hover:block fade-in">New Thread</Text>
+        <Text as="span">{displayedText}</Text>
         <PlusCircle size={24} />
       </Button>
 

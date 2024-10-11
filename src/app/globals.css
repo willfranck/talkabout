@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base Styles */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-  transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out;
+  transition: color 0.24s ease-out, background-color 0.24s ease-out, outline 0.24s ease-out, opacity 0.24s ease-out !important;
 }
 
 :root {
@@ -41,25 +42,6 @@
     --foreground: #AFB4BB;
     --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
   }
-}
-
-/* @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.24s ease-out;
 }
 
 html {
@@ -99,8 +81,17 @@ body {
 :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
   --accent-color: "cyan",
 }
-/* /////////////////////////////// */
 
+.rt-BaseButton {
+  cursor: pointer;
+}
+
+.rt-BaseButton:disabled {
+  cursor: not-allowed;
+}
+/*/////////////////////////////////*/
+
+/* Element Styles */
 main {
   position: relative;
 }
@@ -178,4 +169,56 @@ p {
 span {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-lgt);
+}
+
+.rounded-logo {
+  border-radius: 0 30% 0 30%;
+}
+
+.rounded-right-only {
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInFromLeft {
+  from {
+    width: 0;
+    transform: translateX(-0.4rem);
+  }
+  to {
+    width: 100%;
+    transform: translateX(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.24s ease-out forwards;
+}
+
+.fade-in-right {
+  animation: fadeInFromRight 0.24s ease-out forwards;
+}
+
+.fade-in-left {
+  animation: fadeInFromLeft 4s ease-out forwards;
 }

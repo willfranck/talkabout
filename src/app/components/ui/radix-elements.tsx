@@ -25,6 +25,7 @@ import {
 } from "@radix-ui/themes"
 import { 
   CaretCircleRight, 
+  Trash,
   // GoogleLogo, 
   UserCircle,
   PaperPlaneTilt
@@ -267,11 +268,12 @@ const ChatHistoryTabs = ({
           key={thread.id} 
           variant="surface" 
           onClick={() => selectActiveThread(dispatch, thread.id)}
-          className={cn("group flex items-center justify-between w-full hover:bg-gray-700 fade-in", {
-            "bg-gray-600": thread.active
+          className={cn("relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in", {
+            "bg-gray-600": thread.active,
+            "hover:bg-gray-700": !thread.active
           })}
         >
-          <Flex direction="column" gap="1" pr="2">
+          <Flex direction="column" gap="1" px="2">
             <Heading size="2" trim="start" className="line-clamp-1 fade-in">
               {thread.topic}
             </Heading>
@@ -281,10 +283,13 @@ const ChatHistoryTabs = ({
           </Flex>
           <CaretCircleRight 
             size={24} 
-            className={cn("opacity-0 group-hover:opacity-100", {
+            className={cn("opacity-0", {
               "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
             })} 
           />
+          <Button className="absolute right-0 h-full rounded-right-only bg-red-500 hover:bg-red-600 opacity-0 group-hover:opacity-100">
+            <Trash size={22} />
+          </Button>
         </Card>
       ))}
     </Flex>
@@ -312,9 +317,9 @@ const ChatHistory = ({
               alt="Llama logo"
               width={128}
               height={128}
-              className="w-32 h-auto rounded-full opacity-30 invert dark:invert-0"
+              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
             />
-            <Text as="span">much empty in here...</Text>
+            <Text as="span">much empty in here</Text>
           </Flex>
         )}
         {messages.length > 0 && messages.map((message, index) => (
@@ -387,7 +392,7 @@ const ChatInputField = ({
         variant="soft"
         onClick={onSubmit}
         disabled={prompt.trim().length === 0}
-        className="absolute bottom-0 right-0 w-10 h-full rounded-l-none rounded-r-md"
+        className="absolute bottom-0 right-0 w-10 h-full rounded-right-only"
       >
         <PaperPlaneTilt size={18} />
       </Button>
