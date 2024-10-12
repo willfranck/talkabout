@@ -16,7 +16,7 @@ import {
 } from "@radix-ui/themes"
 import { 
   Trash,
-  ArrowDown, 
+  ArrowDown 
 } from "@phosphor-icons/react/dist/ssr"
 
 
