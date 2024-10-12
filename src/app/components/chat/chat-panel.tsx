@@ -35,7 +35,7 @@ export const ChatPanel = () => {
     return [...threads].sort((a, b) => {
       const mostRecentThread = a.created
       const oldestThread = b.created
-      return new Date(oldestThread).getTime() - new Date(mostRecentThread).getTime();
+      return new Date(oldestThread).getTime() - new Date(mostRecentThread).getTime()
     })
   }
 

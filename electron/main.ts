@@ -70,7 +70,7 @@ const createMainWindow = () => {
     mainWindow.show()
   })
   
-  const isInternalUrl = (url: string) => url.startsWith("http://localhost");
+  const isInternalUrl = (url: string) => url.startsWith("http://localhost")
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (!isInternalUrl(url)) {
       shell.openExternal(url)
@@ -91,7 +91,7 @@ const createMainWindow = () => {
 app.whenReady().then(() => {
   createMainWindow()
   app.on('activate', createMainWindow)
-});
+})
 
 console.log()
 

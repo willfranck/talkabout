@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig({
   entry: ["./electron/main.ts", "./electron/preload.ts"],
@@ -13,4 +13,4 @@ export default defineConfig({
   skipNodeModulesBundle: true,
   treeshake: true,
   bundle: true,
-});
+})

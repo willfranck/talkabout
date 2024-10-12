@@ -57,13 +57,13 @@ const Nav = ({
 interface DeleteButtonProps {
   action: (dispatch: AppDispatch, id: string) => void
   itemId: string
-  buttonLocation: "chat-history" | "threads"
+  location: "chat-history" | "threads"
 }
 
 const DeleteButton = ({
   action,
   itemId,
-  buttonLocation
+  location
 }: DeleteButtonProps) => {
   const dispatch = useAppDispatch()
 
@@ -74,8 +74,11 @@ const DeleteButton = ({
       tabIndex={-1}
       className="absolute top-0 right-0 flex flex-col h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600"
     >
-      <Trash size={22} className={cn({"mt-1.5": buttonLocation === "chat-history"})} />
-      {buttonLocation === "chat-history" && (
+      <Trash 
+        size={22} 
+        className={cn({"mt-1.5": location === "chat-history"})} 
+      />
+      {location === "chat-history" && (
         <ArrowDown size={20} />
       )}
     </Button>
@@ -125,7 +128,9 @@ const Modal = ({
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button className="h-8 px-4 sm:px-5">{trigger}</Button>
+        <Button className="h-8 px-4 sm:px-5">
+          {trigger}
+        </Button>
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="24rem" size="4">

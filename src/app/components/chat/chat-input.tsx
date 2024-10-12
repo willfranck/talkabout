@@ -35,7 +35,7 @@ export const ChatInput = () => {
         setUserPrompt("")
         dispatch(addMessage(userMessage))
 
-        const reply = await axios.post("/api/chat", { prompt: userPrompt })
+        const reply = await axios.post("/api/chat", { prompt: userPrompt, temperature: 2.0 })
         if (reply.data) {
           const { topic, content } = reply.data.res
           const aiMessage: ChatMessage = {

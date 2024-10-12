@@ -5,9 +5,10 @@ import { useInitialThread } from "@hooks/chat-initial-thread"
 
 
 export const ChatArea = () => {
-  useInitialThread()
   const activeThread = useAppSelector((state) => state.chat.threads.find(thread => thread.active))
   const messageHistory = activeThread ? activeThread.messages : []
+
+  useInitialThread()
 
   return (
     <ChatHistory messages={messageHistory} />

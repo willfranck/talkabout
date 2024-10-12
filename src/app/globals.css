@@ -170,6 +170,10 @@ span {
   font-weight: var(--font-weight-lgt);
 }
 
+pre {
+  white-space: pre-line;
+}
+
 .rounded-logo {
   border-radius: 0 30% 0 30%;
 }

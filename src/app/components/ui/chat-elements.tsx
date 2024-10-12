@@ -36,10 +36,158 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 
 //// Chat Elements
+interface ThreadCardProps {
+  thread: ChatThread,
+}
+
+const ThreadCard = ({ 
+  thread, 
+}: ThreadCardProps) => {
+  const dispatch = useAppDispatch()
+  const [threadTopic, setThreadTopic] = useState("")
+
+  useEffect(() => {
+    displayTextByChar(thread.topic, setThreadTopic)
+  }, [thread.topic])
+
+  return (
+    <Card
+      key={thread.id}
+      variant="surface"
+      onClick={() => selectActiveThread(dispatch, thread.id)}
+      className={cn("relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in", {
+        "bg-gray-600": thread.active,
+        "hover:bg-gray-700": !thread.active,
+      })}
+      style={{ transitionDuration: "800ms" }}
+    >
+      <Flex direction="column" gap="1" px="2">
+        <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
+          {threadTopic}
+        </Heading>
+        <Text as="span" size="1">
+          {new Date(thread.created).toLocaleDateString()}
+        </Text>
+      </Flex>
+      <CaretCircleRight
+        size={24}
+        className={cn("opacity-0", {
+          "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
+        })}
+      />
+      <DeleteButton 
+        action={removeThread} 
+        itemId={thread.id} 
+        location="threads" 
+      />
+    </Card>
+  )
+}
+
+interface ChatHistoryTabProps {
+  threads: ChatThread[]
+}
+
+const ChatHistoryTabs = ({
+  threads
+}: ChatHistoryTabProps) => {
+  return (
+    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
+      {threads.map((thread) => (
+        <ThreadCard 
+          key={thread.id} 
+          thread={thread} 
+        />
+      ))}
+    </Flex>
+  )
+}
+
+interface ChatHistoryProps {
+  messages: ChatMessage[]
+}
+
+const ChatHistory = ({
+  messages
+}: ChatHistoryProps) => {
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const { current } = scrollAreaRef
+    if (current) {
+      current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
+    }
+  }, [messages])
+
+  return (
+    <ScrollArea 
+      type="hover"
+      scrollbars="vertical"
+      ref={scrollAreaRef}
+      className="flex-1 pr-12"
+    >
+      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
+        {messages.length === 0 && (
+          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
+            <Image 
+              src={"./images/Llama.webp"}
+              alt="Llama logo"
+              width={128}
+              height={128}
+              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
+            />
+            <Text as="span">much empty in here</Text>
+          </Flex>
+        )}
+        {messages.length > 0 && messages.map((message) => (
+          <Card 
+            key={message.id} 
+            variant="surface" 
+            className={cn("relative group w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
+              "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
+            })}
+            style={{ overflowWrap: "anywhere" }}
+          >
+            <Flex gap="4" align="start">
+              {message.role === "ai" && (
+                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
+              )}
+              <Box>
+                <Text as="div" size="3">
+                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+                    {message.content}
+                  </ReactMarkdown>
+                </Text>
+                <Text as="span" size="1">
+                  {new Date(message.date).toLocaleDateString()}{" - "}
+                  {new Date(message.date).toLocaleTimeString()}
+                </Text>
+              </Box>
+              {message.role === "user" && (
+                <>
+                  <UserCircle 
+                    size={24} 
+                    weight="duotone" 
+                    className="text-gray-400" 
+                  />
+                  <DeleteButton 
+                    action={deleteMessage} 
+                    itemId={message.id} 
+                    location="chat-history" 
+                  />
+                </>
+              )}
+            </Flex>
+          </Card>
+        ))}
+      </Flex>
+    </ScrollArea>
+  )
+}
+
 interface TemperatureButtonProps {
   temperatureHot: number
   temperatureCold: number
-  active: boolean
 }
 
 const TemperatureButtons = ({
@@ -75,143 +223,6 @@ const TemperatureButtons = ({
   )
 }
 
-interface ThreadCardProps {
-  thread: ChatThread,
-}
-
-const ThreadCard = ({ 
-  thread, 
-}: ThreadCardProps) => {
-  const dispatch = useAppDispatch()
-  const [threadTopic, setThreadTopic] = useState("");
-
-  useEffect(() => {
-    displayTextByChar(thread.topic, setThreadTopic);
-  }, [thread.topic]);
-
-  return (
-    <Card
-      key={thread.id}
-      variant="surface"
-      onClick={() => selectActiveThread(dispatch, thread.id)}
-      className={cn(
-        "relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in",
-        {
-          "bg-gray-600": thread.active,
-          "hover:bg-gray-700": !thread.active,
-        }
-      )}
-      style={{ transitionDuration: "800ms" }}
-    >
-      <Flex direction="column" gap="1" px="2">
-        <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
-          {threadTopic}
-        </Heading>
-        <Text as="span" size="1">
-          {new Date(thread.created).toLocaleDateString()}
-        </Text>
-      </Flex>
-      <CaretCircleRight
-        size={24}
-        className={cn("opacity-0", {
-          "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
-        })}
-      />
-      <DeleteButton action={removeThread} itemId={thread.id} buttonLocation="threads" />
-    </Card>
-  );
-}
-
-interface ChatHistoryTabProps {
-  threads: ChatThread[]
-}
-
-const ChatHistoryTabs = ({
-  threads
-}: ChatHistoryTabProps) => {
-  return (
-    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
-      {threads.map((thread) => (
-        <ThreadCard key={thread.id} thread={thread} />
-      ))}
-    </Flex>
-  )
-}
-
-interface ChatHistoryProps {
-  messages: ChatMessage[]
-}
-
-const ChatHistory = ({
-  messages
-}: ChatHistoryProps) => {
-  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const { current } = scrollAreaRef;
-    if (current) {
-      current.scrollTo({ top: current.scrollHeight, behavior: 'smooth' });
-    }
-  }, [messages])
-
-  return (
-    <ScrollArea 
-      type="hover"
-      scrollbars="vertical"
-      ref={scrollAreaRef}
-      className="flex-1 pr-12"
-    >
-      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
-        {messages.length === 0 && (
-          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
-            <Image 
-              src={"./images/Llama.webp"}
-              alt="Llama logo"
-              width={128}
-              height={128}
-              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
-            />
-            <Text as="span">much empty in here</Text>
-          </Flex>
-        )}
-        {messages.length > 0 && messages.map((message, index) => (
-          <Card 
-            key={index} 
-            variant="surface" 
-            className={cn("relative group w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-              "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
-            })}
-            style={{ overflowWrap: "anywhere" }}
-          >
-            <Flex gap="4" align="start">
-              {message.role === "ai" && (
-                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
-              )}
-              <Box>
-                <Text as="div" size="3">
-                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                    {message.content}
-                  </ReactMarkdown>
-                </Text>
-                <Text as="span" size="1">
-                  {new Date(message.date).toLocaleDateString()}{" - "}
-                  {new Date(message.date).toLocaleTimeString()}
-                </Text>
-              </Box>
-              {message.role === "user" && (
-                <>
-                  <UserCircle size={24} weight="duotone" className="text-gray-400" />
-                  <DeleteButton action={deleteMessage} itemId={message.id} buttonLocation="chat-history" />
-                </>
-              )}
-            </Flex>
-          </Card>
-        ))}
-      </Flex>
-    </ScrollArea>
-  )
-}
-
 interface ChatInputProps {
   prompt: string,
   threads: number,
@@ -237,7 +248,10 @@ const ChatInputField = ({
       onSubmit={onSubmit} 
       className="relative flex mt-auto mb-4 mr-12"
     >
-      <TemperatureButtons temperatureHot={1.5} temperatureCold={0.5} active={true} />
+      <TemperatureButtons 
+        temperatureHot={1.5} 
+        temperatureCold={0.5} 
+      />
       <TextArea 
         variant="surface"
         size="3"

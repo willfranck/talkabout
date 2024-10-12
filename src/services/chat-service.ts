@@ -12,10 +12,16 @@ const safetyOptions = [
   { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
-];
+]
 
 
-async function ChatService({ prompt }: { prompt: string }) {
+async function ChatService({ 
+  prompt, 
+  temperature
+}: { 
+  prompt: string, 
+  temperature: number
+}) {
   if (geminiApiKey !== undefined) {
     try {
       const genAI = new GoogleGenerativeAI(geminiApiKey)
@@ -38,7 +44,7 @@ async function ChatService({ prompt }: { prompt: string }) {
         generationConfig: {
           responseMimeType: "application/json",
           responseSchema: schema,
-          temperature: 1.5
+          temperature: temperature
         },
         safetySettings: safetyOptions
       })
