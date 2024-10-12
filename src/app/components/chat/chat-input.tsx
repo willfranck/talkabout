@@ -10,7 +10,7 @@ import {
   updateThreadTopic 
 } from "@redux/reducers"
 import { ChatMessage } from "@types"
-import { ChatInputField } from "@ui/radix-elements"
+import { ChatInputField } from "@ui/chat-elements"
 
 
 export const ChatInput = () => {

@@ -1,6 +1,6 @@
 "use client"
 import { useAppSelector } from "@redux/hooks"
-import { ChatHistory } from "@ui/radix-elements"
+import { ChatHistory } from "@ui/chat-elements"
 import { useInitialThread } from "@hooks/chat-initial-thread"
 
 

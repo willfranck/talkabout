@@ -1,46 +1,22 @@
-import { useState, useEffect, useRef } from "react"
 import { cn } from "@utils/clsx"
 import Link from "next/link"
-import Image from "next/image"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { 
-  ChatThread, 
-  ChatMessage 
-} from "@types"
-import { 
-  selectActiveThread, 
-  removeThread, 
-  deleteMessage, 
-  displayTextByChar
-} from "@globals/functions"
-import { 
   Flex,
   Box, 
-  Card, 
-  Heading,  
   TabNav, 
   SegmentedControl, 
-  ScrollArea, 
   Dialog, 
-  DropdownMenu, 
   Button, 
   Text, 
-  TextArea, 
   TextField, 
   Progress, 
   Badge
 } from "@radix-ui/themes"
 import { 
-  CaretCircleRight, 
   Trash,
   ArrowDown, 
-  UserCircle, 
-  ThermometerHot, 
-  ThermometerCold,
-  PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
 
 
@@ -106,98 +82,6 @@ const DeleteButton = ({
   )
 }
 
-interface TemperatureButtonProps {
-  temperatureHot: number
-  temperatureCold: number
-  active: boolean
-}
-
-const TemperatureButtons = ({
-  temperatureHot,
-  temperatureCold,
-}: TemperatureButtonProps) => {
-  return (
-    <Flex 
-      direction="column"
-      align="center" 
-      justify="center"
-      className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
-    >
-      <Button
-        variant="ghost"
-        value={temperatureHot}
-        aria-pressed={false}
-        tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-tl-only"
-      >
-        <ThermometerHot size={20} weight="bold" />
-      </Button>
-      <Button
-        variant="ghost"
-        value={temperatureCold}
-        aria-pressed={true}
-        tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-bl-only"
-      >
-        <ThermometerCold size={20} weight="bold" />
-      </Button>
-    </Flex>
-  )
-}
-
-
-interface DropdownProps {
-  trigger: string,
-}
-
-const Dropdown = ({
-  trigger
-}: DropdownProps) => {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="soft" className="h-8 px-4 sm:px-5">
-          {trigger}
-          <DropdownMenu.TriggerIcon />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ E" : "^ E"}>
-          Edit
-        </DropdownMenu.Item>
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ D" : "^ D"}>
-          Duplicate
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        
-        <DropdownMenu.Item shortcut={process.platform === "darwin" ? "⌘ N" : "^ N"}>
-          Archive
-        </DropdownMenu.Item>
-        <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-          <DropdownMenu.SubContent>
-            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Sub>
-        <DropdownMenu.Separator />
-
-        <DropdownMenu.Item>Share</DropdownMenu.Item>
-        <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item 
-          shortcut={process.platform === "darwin" ? "⌘ ⌫" : "^ ⌫"}
-          color="red"
-        >
-          Delete
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  )
-}
 
 
 interface SCProps {
@@ -229,45 +113,6 @@ const SegmentedController = ({
 }
 
 //// Content Components ////
-interface ScrollableArticleProps {
-  elementType: "div" | "p" | "span" | "label",
-  heading?: string,
-  text: string | string[],
-}
-
-const ScrollableArticle = ({
-  elementType,
-  heading,
-  text
-}: ScrollableArticleProps) => {
-  const textElements = Array.isArray(text) ? 
-    text.map((txt, index) => (
-      <Text key={index} as={elementType}>
-        {txt}
-      </Text>
-    )) : (
-      <Text as={elementType}>
-        {text}
-      </Text>
-    )
-
-  return (
-    <ScrollArea 
-      type="auto" 
-      scrollbars="vertical"
-      className="p-2"
-    >
-      <Box p="2" pr="6">
-        <Heading size="4" mb="4" trim="start">
-          {heading}
-        </Heading>
-        <Flex direction="column" gap="4">
-          {textElements}
-        </Flex>
-      </Box>
-    </ScrollArea>
-  )
-}
 
 
 interface ModalProps {
@@ -331,192 +176,6 @@ const Modal = ({
   )
 }
 
-interface ThreadCardProps {
-  thread: ChatThread,
-}
-
-const ThreadCard = ({ 
-  thread, 
-}: ThreadCardProps) => {
-  const dispatch = useAppDispatch()
-  const [threadTopic, setThreadTopic] = useState("");
-
-  useEffect(() => {
-    displayTextByChar(thread.topic, setThreadTopic);
-  }, [thread.topic]);
-
-  return (
-    <Card
-      key={thread.id}
-      variant="surface"
-      onClick={() => selectActiveThread(dispatch, thread.id)}
-      className={cn(
-        "relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in",
-        {
-          "bg-gray-600": thread.active,
-          "hover:bg-gray-700": !thread.active,
-        }
-      )}
-      style={{ transitionDuration: "800ms" }}
-    >
-      <Flex direction="column" gap="1" px="2">
-        <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
-          {threadTopic}
-        </Heading>
-        <Text as="span" size="1">
-          {new Date(thread.created).toLocaleDateString()}
-        </Text>
-      </Flex>
-      <CaretCircleRight
-        size={24}
-        className={cn("opacity-0", {
-          "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
-        })}
-      />
-      <DeleteButton action={removeThread} itemId={thread.id} buttonLocation="threads" />
-    </Card>
-  );
-}
-
-interface ChatHistoryTabProps {
-  threads: ChatThread[]
-}
-
-const ChatHistoryTabs = ({
-  threads
-}: ChatHistoryTabProps) => {
-  return (
-    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
-      {threads.map((thread) => (
-        <ThreadCard key={thread.id} thread={thread} />
-      ))}
-    </Flex>
-  )
-}
-
-interface ChatHistoryProps {
-  messages: ChatMessage[]
-}
-
-const ChatHistory = ({
-  messages
-}: ChatHistoryProps) => {
-  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const { current } = scrollAreaRef;
-    if (current) {
-      current.scrollTo({ top: current.scrollHeight, behavior: 'smooth' });
-    }
-  }, [messages])
-
-  return (
-    <ScrollArea 
-      type="hover"
-      scrollbars="vertical"
-      ref={scrollAreaRef}
-      className="flex-1 pr-12"
-    >
-      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
-        {messages.length === 0 && (
-          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
-            <Image 
-              src={"./images/Llama.webp"}
-              alt="Llama logo"
-              width={128}
-              height={128}
-              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
-            />
-            <Text as="span">much empty in here</Text>
-          </Flex>
-        )}
-        {messages.length > 0 && messages.map((message, index) => (
-          <Card 
-            key={index} 
-            variant="surface" 
-            className={cn("relative group w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-              "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
-            })}
-            style={{ overflowWrap: "anywhere" }}
-          >
-            <Flex gap="4" align="start">
-              {message.role === "ai" && (
-                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
-              )}
-              <Box>
-                <Text as="div" size="3">
-                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                    {message.content}
-                  </ReactMarkdown>
-                </Text>
-                <Text as="span" size="1">
-                  {new Date(message.date).toLocaleDateString()}{" - "}
-                  {new Date(message.date).toLocaleTimeString()}
-                </Text>
-              </Box>
-              {message.role === "user" && (
-                <>
-                  <UserCircle size={24} weight="duotone" className="text-gray-400" />
-                  <DeleteButton action={deleteMessage} itemId={message.id} buttonLocation="chat-history" />
-                </>
-              )}
-            </Flex>
-          </Card>
-        ))}
-      </Flex>
-    </ScrollArea>
-  )
-}
-
-interface ChatInputProps {
-  prompt: string,
-  threads: number,
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-  onSubmit: () => void
-}
-
-const ChatInputField = ({ 
-  prompt,
-  threads,
-  onChange,
-  onSubmit
-}: ChatInputProps) => {
-  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault()
-      onSubmit()
-    }
-  }
-
-  return (
-    <form 
-      onSubmit={onSubmit} 
-      className="relative flex mt-auto mb-4 mr-12"
-    >
-      <TemperatureButtons temperatureHot={1.5} temperatureCold={0.5} active={true} />
-      <TextArea 
-        variant="surface"
-        size="3"
-        value={prompt}
-        placeholder="Message Llamini-Flash"
-        disabled={threads === 0}
-        onChange={onChange}
-        onKeyDown={handleSubmitKeyDown}
-        tabIndex={1}
-        className="flex-1 h-36 px-10 whitespace-pre"
-      />
-      <Button 
-        variant="soft"
-        onClick={onSubmit}
-        disabled={prompt.trim().length === 0}
-        className="absolute bottom-0 right-0 w-10 h-full rounded-right-only"
-      >
-        <PaperPlaneTilt size={20} />
-      </Button>
-    </form>
-  )
-}
-
 //// Utility Components ////
 interface ProgressProps {
   progress: number,
@@ -561,12 +220,8 @@ const BadgeX = ({
 export { 
   Nav, 
   SegmentedController, 
-  ScrollableArticle,
   Modal, 
-  Dropdown, 
-  ChatHistoryTabs, 
-  ChatHistory, 
-  ChatInputField, 
+  DeleteButton, 
   ProgressBar, 
   BadgeX,
 }

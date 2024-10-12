@@ -18,10 +18,8 @@ import {
   Button, 
   Heading, 
 } from "@radix-ui/themes"
-import { 
-  SegmentedController, 
-  ChatHistoryTabs
-} from "@ui/radix-elements"
+import { SegmentedController } from "@ui/radix-elements"
+import { ChatHistoryTabs } from "@ui/chat-elements"
 import { 
   ChatTeardropText, 
   PlusCircle 
@@ -32,7 +30,7 @@ export const ChatPanel = () => {
   const dispatch = useAppDispatch()
   const [displayedText, setDisplayedText] = useState("")
   const threads = useAppSelector((state) => state.chat.threads)
-  
+
   const sortedThreads = (threads: ChatThread[]) => {
     return [...threads].sort((a, b) => {
       const mostRecentThread = a.created
