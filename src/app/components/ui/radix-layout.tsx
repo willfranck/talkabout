@@ -1,6 +1,6 @@
 import { Flex, ScrollArea } from "@radix-ui/themes"
 
-//// Layout Components ////
+//// Layout Elements
 const PageLayout = ({
   children,
 }: {

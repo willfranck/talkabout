@@ -8,7 +8,7 @@ import {
 import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
 
-//// Redux Functions ////
+//// Redux Functions
 export function createNewThread(dispatch: AppDispatch) {
   const newThread: ChatThread = {
     id: crypto.randomUUID(),
@@ -32,7 +32,7 @@ export function deleteMessage(dispatch: AppDispatch, messageId: string) {
   dispatch(deleteMessages(messageId))
 }
 
-//// UI Functions ////
+//// UI Functions
 export function displayTextByChar(text: string, setState: React.Dispatch<React.SetStateAction<string>>) {
   let accumulatedText = ""
   text.split("").forEach((char, index) => {

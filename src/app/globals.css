@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base Styles */
+/*//// Base Styles */
 *,
 *::before,
 *::after {
@@ -55,7 +55,7 @@ body {
   overscroll-behavior-x: none;
 }
 
-/* Override default Radix CSS vars */
+/*//// Override Default Radix CSS vars */
 .radix-themes {
   --default-font-family: var(--font-kumbh-sans);
   /* --scrollarea-scrollbar-horizontal-margin-top: var(--space-3); */
@@ -89,9 +89,8 @@ body {
 .rt-BaseButton:disabled {
   cursor: not-allowed;
 }
-/*/////////////////////////////////*/
 
-/* Element Styles */
+/*//// Element Styles */
 main {
   position: relative;
 }

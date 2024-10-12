@@ -20,7 +20,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 
 
-//// Control Components ////
+//// Control Elements
 interface LinkProps {
   name: string,
   path: string,
@@ -82,8 +82,6 @@ const DeleteButton = ({
   )
 }
 
-
-
 interface SCProps {
   values: string[],
 }
@@ -112,9 +110,7 @@ const SegmentedController = ({
   )
 }
 
-//// Content Components ////
-
-
+//// Content Elements
 interface ModalProps {
   trigger: string,
   title: string,
@@ -176,7 +172,7 @@ const Modal = ({
   )
 }
 
-//// Utility Components ////
+//// Utility Elements
 interface ProgressProps {
   progress: number,
 }
