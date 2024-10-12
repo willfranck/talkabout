@@ -24,6 +24,9 @@ import {
   Text, 
   TextArea 
 } from "@radix-ui/themes"
+import {
+  DeleteButton 
+} from "@ui/radix-elements"
 import { 
   CaretCircleRight, 
   UserCircle, 
@@ -31,9 +34,6 @@ import {
   ThermometerCold,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
-import {
-  DeleteButton 
-} from "@ui/radix-elements"
 
 //// Chat Elements
 interface TemperatureButtonProps {
