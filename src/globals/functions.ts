@@ -14,7 +14,7 @@ export function createNewThread(dispatch: AppDispatch) {
     id: crypto.randomUUID(),
     topic: randomTopic(),
     messages: [],
-    created: new Date().toLocaleDateString(),
+    created: new Date().toISOString(),
     active: true,
   }
   dispatch(createThread(newThread))

@@ -38,7 +38,7 @@ async function ChatService({ prompt }: { prompt: string }) {
         generationConfig: {
           responseMimeType: "application/json",
           responseSchema: schema,
-          temperature: 2.0
+          temperature: 1.5
         },
         safetySettings: safetyOptions
       })
@@ -49,7 +49,7 @@ async function ChatService({ prompt }: { prompt: string }) {
         Objective: Users will engage you have a friendly chat, learn about new things, and just mess around;
         User Prompt: ${userPrompt};
         Topic: Give this thread a short title based on the User Prompt;
-        Response: Respond to the User Prompt in a way that balances detail, conciseness, and quirkiness.  Cite any resources when appropriate.  Give specific answers to specific questions.  Use markdown for text and code where needed;
+        Response: Respond to the User Prompt in a way that is detailed, concise, and a little quirky.  Cite any resources when appropriate.  Give specific answers to specific questions.  Use markdown for text and code where needed;
       `)
 
       if (result.response) {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { cn } from "@utils/clsx"
 import Link from "next/link"
 import Image from "next/image"
@@ -13,7 +13,8 @@ import {
 import { 
   selectActiveThread, 
   removeThread, 
-  deleteMessage 
+  deleteMessage, 
+  displayTextByChar
 } from "@globals/functions"
 import { 
   Flex,
@@ -36,7 +37,9 @@ import {
   CaretCircleRight, 
   Trash,
   ArrowDown, 
-  UserCircle,
+  UserCircle, 
+  ThermometerHot, 
+  ThermometerCold,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -92,13 +95,53 @@ const DeleteButton = ({
     <Button 
       variant="soft"
       onClick={() => action(dispatch, itemId)}
+      tabIndex={-1}
       className="absolute top-0 right-0 flex flex-col h-full opacity-0 group-hover:opacity-100 rounded-right-only bg-red-500 hover:bg-red-600"
     >
-      <Trash size={22} />
+      <Trash size={22} className={cn({"mt-1.5": buttonLocation === "chat-history"})} />
       {buttonLocation === "chat-history" && (
         <ArrowDown size={20} />
       )}
     </Button>
+  )
+}
+
+interface TemperatureButtonProps {
+  temperatureHot: number
+  temperatureCold: number
+  active: boolean
+}
+
+const TemperatureButtons = ({
+  temperatureHot,
+  temperatureCold,
+}: TemperatureButtonProps) => {
+  return (
+    <Flex 
+      direction="column"
+      align="center" 
+      justify="center"
+      className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
+    >
+      <Button
+        variant="ghost"
+        value={temperatureHot}
+        aria-pressed={false}
+        tabIndex={-1}
+        className="flex-1 my-0 py-0 rounded-tl-only"
+      >
+        <ThermometerHot size={20} weight="bold" />
+      </Button>
+      <Button
+        variant="ghost"
+        value={temperatureCold}
+        aria-pressed={true}
+        tabIndex={-1}
+        className="flex-1 my-0 py-0 rounded-bl-only"
+      >
+        <ThermometerCold size={20} weight="bold" />
+      </Button>
+    </Flex>
   )
 }
 
@@ -288,6 +331,53 @@ const Modal = ({
   )
 }
 
+interface ThreadCardProps {
+  thread: ChatThread,
+}
+
+const ThreadCard = ({ 
+  thread, 
+}: ThreadCardProps) => {
+  const dispatch = useAppDispatch()
+  const [threadTopic, setThreadTopic] = useState("");
+
+  useEffect(() => {
+    displayTextByChar(thread.topic, setThreadTopic);
+  }, [thread.topic]);
+
+  return (
+    <Card
+      key={thread.id}
+      variant="surface"
+      onClick={() => selectActiveThread(dispatch, thread.id)}
+      className={cn(
+        "relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in",
+        {
+          "bg-gray-600": thread.active,
+          "hover:bg-gray-700": !thread.active,
+        }
+      )}
+      style={{ transitionDuration: "800ms" }}
+    >
+      <Flex direction="column" gap="1" px="2">
+        <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
+          {threadTopic}
+        </Heading>
+        <Text as="span" size="1">
+          {new Date(thread.created).toLocaleDateString()}
+        </Text>
+      </Flex>
+      <CaretCircleRight
+        size={24}
+        className={cn("opacity-0", {
+          "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
+        })}
+      />
+      <DeleteButton action={removeThread} itemId={thread.id} buttonLocation="threads" />
+    </Card>
+  );
+}
+
 interface ChatHistoryTabProps {
   threads: ChatThread[]
 }
@@ -295,36 +385,10 @@ interface ChatHistoryTabProps {
 const ChatHistoryTabs = ({
   threads
 }: ChatHistoryTabProps) => {
-  const dispatch = useAppDispatch()
-
   return (
     <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
       {threads.map((thread) => (
-        <Card 
-          key={thread.id} 
-          variant="surface" 
-          onClick={() => selectActiveThread(dispatch, thread.id)}
-          className={cn("relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in", {
-            "bg-gray-600": thread.active,
-            "hover:bg-gray-700": !thread.active
-          })}
-        >
-          <Flex direction="column" gap="1" px="2">
-            <Heading size="2" trim="start" className="line-clamp-1 fade-in">
-              {thread.topic}
-            </Heading>
-            <Text as="span" size="1">
-              {thread.created}
-            </Text>
-          </Flex>
-          <CaretCircleRight 
-            size={24} 
-            className={cn("opacity-0", {
-              "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active
-            })} 
-          />
-          <DeleteButton action={removeThread} itemId={thread.id} buttonLocation="threads" />
-        </Card>
+        <ThreadCard key={thread.id} thread={thread} />
       ))}
     </Flex>
   )
@@ -386,7 +450,8 @@ const ChatHistory = ({
                   </ReactMarkdown>
                 </Text>
                 <Text as="span" size="1">
-                  {message.date}
+                  {new Date(message.date).toLocaleDateString()}{" - "}
+                  {new Date(message.date).toLocaleTimeString()}
                 </Text>
               </Box>
               {message.role === "user" && (
@@ -428,6 +493,7 @@ const ChatInputField = ({
       onSubmit={onSubmit} 
       className="relative flex mt-auto mb-4 mr-12"
     >
+      <TemperatureButtons temperatureHot={1.5} temperatureCold={0.5} active={true} />
       <TextArea 
         variant="surface"
         size="3"
@@ -437,7 +503,7 @@ const ChatInputField = ({
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
         tabIndex={1}
-        className="flex-1 h-36 pr-10 whitespace-pre"
+        className="flex-1 h-36 px-10 whitespace-pre"
       />
       <Button 
         variant="soft"
@@ -445,7 +511,7 @@ const ChatInputField = ({
         disabled={prompt.trim().length === 0}
         className="absolute bottom-0 right-0 w-10 h-full rounded-right-only"
       >
-        <PaperPlaneTilt size={18} />
+        <PaperPlaneTilt size={20} />
       </Button>
     </form>
   )

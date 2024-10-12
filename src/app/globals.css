@@ -179,6 +179,18 @@ span {
   border-radius: 0 0.375rem 0.375rem 0;
 }
 
+.rounded-left-only {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.rounded-tl-only {
+  border-radius: 0.375rem 0 0 0;
+}
+
+.rounded-bl-only {
+  border-radius: 0 0 0 0.375rem;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -211,6 +223,15 @@ span {
   }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.24s ease-out forwards;
 }
@@ -220,5 +241,9 @@ span {
 }
 
 .fade-in-left {
-  animation: fadeInFromLeft 4s ease-out forwards;
+  animation: fadeInFromLeft 0.24s ease-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.24s ease-out forwards;
 }

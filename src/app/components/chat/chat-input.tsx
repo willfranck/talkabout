@@ -30,7 +30,7 @@ export const ChatInput = () => {
           id: crypto.randomUUID(),
           role: "user", 
           content: userPrompt, 
-          date: new Date().toLocaleDateString()
+          date: new Date().toISOString()
         }
         setUserPrompt("")
         dispatch(addMessage(userMessage))
@@ -42,7 +42,7 @@ export const ChatInput = () => {
             id: crypto.randomUUID(),
             role: "ai",
             content: content,
-            date: new Date().toLocaleDateString()
+            date: new Date().toISOString()
           }
           dispatch(addMessage(aiMessage)) 
           dispatch(updateThreadTopic(topic))
