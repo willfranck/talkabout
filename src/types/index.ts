@@ -1,6 +1,6 @@
 export type ChatMessage = {
   id: string
-  role: "user" | "ai"
+  role: "user" | "model"
   content: string
   date: string
 }

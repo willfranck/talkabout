@@ -14,10 +14,11 @@ import { ChatInputField } from "@ui/chat-elements"
 
 
 export const ChatInput = () => {
+  const dispatch = useAppDispatch()
   const [userPrompt, setUserPrompt] = useState("")
   const threadCount = useAppSelector((state) => state.chat.threads.length)
   const activeThread = useAppSelector((state) => state.chat.threads.find(thread => thread.active))
-  const dispatch = useAppDispatch()
+  const messageHistory = activeThread?.messages || []
   
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUserPrompt(event.target.value)
@@ -35,12 +36,12 @@ export const ChatInput = () => {
         setUserPrompt("")
         dispatch(addMessage(userMessage))
 
-        const reply = await axios.post("/api/chat", { prompt: userPrompt, temperature: 2.0 })
+        const reply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: 0.1 })
         if (reply.data) {
           const { topic, content } = reply.data.res
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
-            role: "ai",
+            role: "model",
             content: content,
             date: new Date().toISOString()
           }
