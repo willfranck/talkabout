@@ -54,27 +54,33 @@ const ThreadCard = ({
     <Card
       key={thread.id}
       variant="surface"
-      onClick={() => selectActiveThread(dispatch, thread.id)}
-      className={cn("relative group flex items-center justify-between w-full pl-2 cursor-pointer fade-in", {
+      className={cn("relative group w-full pl-2 cursor-pointer fade-in", {
         "bg-gray-600": thread.active,
         "hover:bg-gray-700": !thread.active,
       })}
       style={{ transitionDuration: "800ms" }}
     >
-      <Flex direction="column" gap="1" px="2">
-        <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
-          {threadTopic}
-        </Heading>
-        <Text as="span" size="1">
-          {new Date(thread.created).toLocaleDateString()}
-        </Text>
+      <Flex
+        direction="row"
+        align="center"
+        justify="between"
+        onClick={() => selectActiveThread(dispatch, thread.id)}
+      >
+        <Flex direction="column" gap="1" px="2">
+          <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
+            {threadTopic}
+          </Heading>
+          <Text as="span" size="1">
+            {new Date(thread.created).toLocaleDateString()}
+          </Text>
+        </Flex>
+        <CaretCircleRight
+          size={24}
+          className={cn("opacity-0", {
+            "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
+          })}
+        />
       </Flex>
-      <CaretCircleRight
-        size={24}
-        className={cn("opacity-0", {
-          "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
-        })}
-      />
       <DeleteButton 
         action={removeThread} 
         itemId={thread.id} 
@@ -149,7 +155,7 @@ const ChatHistory = ({
             style={{ overflowWrap: "anywhere" }}
           >
             <Flex gap="4" align="start">
-              {message.role === "ai" && (
+              {message.role === "model" && (
                 <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
               )}
               <Box>

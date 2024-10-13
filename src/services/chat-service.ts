@@ -50,10 +50,12 @@ async function ChatService({
       })
       
       const userPrompt = prompt
-      const chatHistory = Array.isArray(history) ? history.map((message) => ({
-        role: message.role,
-        parts: [{ text: message.content }]
-      })) : []
+      const chatHistory = Array.isArray(history) 
+        ? history.map((message) => ({
+          role: message.role,
+          parts: [{ text: message.content }]
+        })) 
+        : []
 
       const chat = await model.startChat({
         history: chatHistory
@@ -63,7 +65,7 @@ async function ChatService({
         Identity: You are a helpful assistant.  You take the form of a wise, albeit eccentric, llama.  Have your responses reflect this identity;
         Objective: Users will engage you have a friendly chat, learn about new things, and just mess around;
         User Prompt: ${userPrompt};
-        Topic: Give this thread a short title based on the User Prompt;
+        Topic: Give this thread a short title based on the User Prompt and chat history;
         Response: Respond to the User Prompt in a way that is detailed, concise, and a little quirky.  Cite any resources when appropriate.  Give specific answers to specific questions.  Use markdown for text and code where needed;
       `)
 
