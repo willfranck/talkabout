@@ -7,6 +7,7 @@ import {
 } from "@redux/hooks"
 import { 
   addMessage, 
+  updateLastActive, 
   updateThreadTopic 
 } from "@redux/reducers"
 import { ChatMessage } from "@types"
@@ -35,8 +36,9 @@ export const ChatInput = () => {
         }
         setUserPrompt("")
         dispatch(addMessage(userMessage))
+        dispatch(updateLastActive(new Date().toISOString()))
 
-        const reply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: 0.1 })
+        const reply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: 1.0 })
         if (reply.data) {
           const { topic, content } = reply.data.res
           const aiMessage: ChatMessage = {
@@ -59,6 +61,7 @@ export const ChatInput = () => {
     <ChatInputField 
       prompt={userPrompt} 
       threads={threadCount}
+      activeThread={activeThread}
       onChange={handleInputChange}
       onSubmit={handleSubmit}
     />

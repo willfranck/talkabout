@@ -232,6 +232,7 @@ const TemperatureButtons = ({
 interface ChatInputProps {
   prompt: string,
   threads: number,
+  activeThread: ChatThread | undefined
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
   onSubmit: () => void
 }
@@ -239,6 +240,7 @@ interface ChatInputProps {
 const ChatInputField = ({ 
   prompt,
   threads,
+  activeThread,
   onChange,
   onSubmit
 }: ChatInputProps) => {
@@ -263,7 +265,7 @@ const ChatInputField = ({
         size="3"
         value={prompt}
         placeholder="Message Llamini-Flash"
-        disabled={threads === 0}
+        disabled={threads === 0 || activeThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
         tabIndex={1}

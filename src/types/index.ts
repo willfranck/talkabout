@@ -11,4 +11,5 @@ export type ChatThread = {
   messages: ChatMessage[]
   created: string
   active: boolean
+  lastActive: string
 }

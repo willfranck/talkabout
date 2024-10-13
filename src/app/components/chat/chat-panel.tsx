@@ -28,18 +28,19 @@ import { useInitialThread } from "@hooks/chat-initial-thread"
 
 
 export const ChatPanel = () => {
-  useInitialThread()
   const dispatch = useAppDispatch()
   const [displayedText, setDisplayedText] = useState("")
   const threads = useAppSelector((state) => state.chat.threads)
 
   const sortedThreads = (threads: ChatThread[]) => {
     return [...threads].sort((a, b) => {
-      const mostRecentThread = a.created
-      const oldestThread = b.created
-      return new Date(oldestThread).getTime() - new Date(mostRecentThread).getTime()
+      const oldestThread = a.created
+      const latestThread = b.created
+      return new Date(latestThread).getTime() - new Date(oldestThread).getTime()
     })
   }
+
+  useInitialThread()
 
   useEffect(() => {
     if (threads && threads.length === 1) {

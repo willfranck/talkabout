@@ -26,6 +26,14 @@ const chatSlice = createSlice({
     },
     deleteThread: (state, action: PayloadAction<string>) => {
       state.threads = state.threads.filter(thread => thread.id !== action.payload)
+      const lastActiveThread = state.threads.reduce((latest, current) => {
+        return current.lastActive > latest.lastActive ? current : latest;
+      })
+      if (lastActiveThread) {
+        state.threads.forEach(thread => {
+          thread.active = thread.id === lastActiveThread.id
+        });
+      }
     },
     updateThreadTopic: (state, action: PayloadAction<string>) => {
       const activeThread = state.threads.find(thread => thread.active)
@@ -37,6 +45,12 @@ const chatSlice = createSlice({
       state.threads.forEach(thread => {
         thread.active = thread.id === action.payload
       })
+    },
+    updateLastActive: (state, action: PayloadAction<string>) => {
+      const activeThread = state.threads.find(thread => thread.active)
+      if (activeThread) {
+        activeThread.lastActive = action.payload
+      }
     },
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
       const activeThread = state.threads.find(thread => thread.active)
@@ -67,6 +81,7 @@ export const {
   deleteThread, 
   updateThreadTopic,
   setActiveThread,
+  updateLastActive, 
   addMessage,
   deleteMessages, 
   clearMessages
