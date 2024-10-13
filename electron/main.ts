@@ -1,9 +1,11 @@
 import dotenv from "dotenv"
+import { app, shell, BrowserWindow } from "electron"
+import Store from "electron-store"
+import { createServer } from "http"
 import path from "path"
 import next from "next"
-import { app, shell, BrowserWindow } from "electron"
-import { createServer } from 'http'
 
+const __dirname = import.meta.dirname
 
 dotenv.config({
   path: app.isPackaged
@@ -11,9 +13,12 @@ dotenv.config({
     : path.resolve(process.cwd(), ".env")
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const store = new Store()
+
 const startNextApp = async () => {
   try {
-    const nextPort = parseInt(process.env.NEXTJS_SERVER_PORT || '3033', 10)
+    const nextPort = parseInt(process.env.NEXTJS_SERVER_PORT || "3033", 10)
     const webDir = path.join(app.getAppPath(), "app")
     const nextApp = next({
       dev: false,
@@ -51,7 +56,7 @@ const createMainWindow = () => {
 
   const loadURL = async () => {
     if (!app.isPackaged) {
-      mainWindow.loadURL('http://localhost:3000')
+      mainWindow.loadURL("http://localhost:3000")
     } else {
       try {
         await startNextApp()
@@ -66,7 +71,7 @@ const createMainWindow = () => {
   }
   loadURL()
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on("ready-to-show", () => {
     mainWindow.show()
   })
   
@@ -90,10 +95,8 @@ const createMainWindow = () => {
 
 app.whenReady().then(() => {
   createMainWindow()
-  app.on('activate', createMainWindow)
+  app.on("activate", createMainWindow)
 })
-
-console.log()
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit()

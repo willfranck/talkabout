@@ -5,6 +5,7 @@
   "author": {
     "name": "willfranckcodes"
   },
+  "type": "module",
   "main": "./electron-build/main.js",
   "private": true,
   "scripts": {
@@ -30,6 +31,7 @@
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
+    "electron-store": "^10.0.0",
     "next": "14.2.11",
     "next-themes": "^0.3.0",
     "react": "^18",

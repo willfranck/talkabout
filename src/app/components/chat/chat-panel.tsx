@@ -24,9 +24,11 @@ import {
   ChatTeardropText, 
   PlusCircle 
 } from "@phosphor-icons/react/dist/ssr"
+import { useInitialThread } from "@hooks/chat-initial-thread"
 
 
 export const ChatPanel = () => {
+  useInitialThread()
   const dispatch = useAppDispatch()
   const [displayedText, setDisplayedText] = useState("")
   const threads = useAppSelector((state) => state.chat.threads)

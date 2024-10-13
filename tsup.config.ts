@@ -4,7 +4,7 @@ export default defineConfig({
   entry: ["./electron/main.ts", "./electron/preload.ts"],
   outDir: "electron-build",
   external: ["electron"],
-  format: ["cjs"],
+  format: ["esm"],
   cjsInterop: true,
   target: "node20",
   clean: true,
