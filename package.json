@@ -13,7 +13,7 @@
     "next:start": "next start",
     "lint": "next lint",
     "electron:dev": "run-p electron:build-watch electron:watch",
-    "electron:watch": "cross-env NODE_ENV='development' nodemon electron .",
+    "electron:watch": "cross-env NODE_ENV='development' nodemon",
     "electron:build": "tsup",
     "electron:build-watch": "tsup --watch",
     "electron:dist": "electron-builder --mac",
