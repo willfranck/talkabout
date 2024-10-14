@@ -1,22 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
-
+Install deps:
+```bash
+npm i
+```
+To run the Electron version in Dev mode:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+* If Electron doesn't launch properly on initial run, type "rs" in the console for nodemon to restart it *
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the NextJS web only version:
+```bash
+npm run next:dev
+```
+Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
