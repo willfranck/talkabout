@@ -87,15 +87,20 @@ const DeleteButton = ({
 
 interface SCProps {
   values: string[],
+  activeTab: string,
+  onClick: (value: string) => void
 }
 
 const SegmentedController = ({
-  values
+  values, 
+  activeTab,
+  onClick
 }: SCProps) => {
   const controlElements = values.map((value) => (
     <SegmentedControl.Item 
       key={value} 
       value={value}
+      onClick={() => onClick(value)}
       className="capitalize"
     >
       {value}
@@ -104,8 +109,8 @@ const SegmentedController = ({
 
   return (
     <SegmentedControl.Root 
-      defaultValue={values[0]} 
       variant="surface"
+      value={activeTab}
       className="h-8 p-0.5"
     >
       {controlElements}

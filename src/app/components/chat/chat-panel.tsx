@@ -29,15 +29,15 @@ import { useInitialThread } from "@hooks/chat-initial-thread"
 
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
+  const threadCategories = ["active", "archived"]
+  const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
   const [displayedText, setDisplayedText] = useState("")
+  
   const threads = useAppSelector((state) => state.chat.threads)
-
   const sortedThreads = (threads: ChatThread[]) => {
-    return [...threads].sort((a, b) => {
-      const oldestThread = a.created
-      const latestThread = b.created
-      return new Date(latestThread).getTime() - new Date(oldestThread).getTime()
-    })
+    return threads
+      .filter(thread => thread.category === activeThreadCategory)
+      .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
   }
 
   useInitialThread()
@@ -56,14 +56,18 @@ export const ChatPanel = () => {
           <ChatTeardropText size={24} weight="bold" />
           <Heading>Chats</Heading>
         </Flex>
-        <SegmentedController values={["Active", "Archived"]} />
+        <SegmentedController 
+          values={threadCategories} 
+          activeTab={activeThreadCategory}
+          onClick={(value) => setActiveThreadCategory(value)} 
+        />
       </Flex>
 
       <Button 
         variant="ghost" 
         onMouseEnter={() => displayTextByChar("New Thread", setDisplayedText)}
         onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
-        onClick={() => createNewThread(dispatch)}
+        onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
         className="group mt-2 mb-1"
       >
         <Text as="span">{displayedText}</Text>
