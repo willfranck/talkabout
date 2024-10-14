@@ -24,7 +24,7 @@ To pack the standalone app, simply run:
 ```bash
 npm run dist
 ```
-
+* Currently configured in package.json to build a Mac version only  -  Remove the --mac flag to build all, or add the appropriate flags
 
 
 ## Learn More
