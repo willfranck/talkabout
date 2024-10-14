@@ -28,12 +28,12 @@ const chatSlice = createSlice({
       state.threads = state.threads.filter(thread => thread.id !== action.payload)
       if (state.threads.length > 0) {
         const lastActiveThread = state.threads.reduce((latest, current) => {
-          return current.lastActive > latest.lastActive ? current : latest;
+          return current.lastActive > latest.lastActive ? current : latest
         })
         if (lastActiveThread) {
           state.threads.forEach(thread => {
             thread.active = thread.id === lastActiveThread.id
-          });
+          })
         }
       }
     },
