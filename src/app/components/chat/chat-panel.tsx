@@ -16,13 +16,15 @@ import {
   ScrollArea, 
   Text, 
   Button, 
+  Callout, 
   Heading, 
 } from "@radix-ui/themes"
 import { SegmentedController } from "@ui/radix-elements"
 import { ChatHistoryTabs } from "@ui/chat-elements"
 import { 
   ChatTeardropText, 
-  PlusCircle 
+  PlusCircle, 
+  Info
 } from "@phosphor-icons/react/dist/ssr"
 import { useInitialThread } from "@hooks/chat-initial-thread"
 
@@ -75,13 +77,20 @@ export const ChatPanel = () => {
       </Button>
 
       {threads.length === 0 && (
-        <Text 
-          as="span" 
-          className="opacity-0 fade-in mt-1.5" 
+        <Callout.Root
+          variant="soft"
+          size="1"
+          color="sky"
+          className="opacity-0 fade-in"
           style={{ animationDelay: "360ms" }}
         >
-          Create a New Thread to Chat
-        </Text>
+          <Callout.Icon>
+            <Info size={18} />
+          </Callout.Icon>
+          <Callout.Text>
+            Create a New Thread to Chat
+          </Callout.Text>
+        </Callout.Root>
       )}
 
       <ScrollArea type="scroll" scrollbars="vertical">
