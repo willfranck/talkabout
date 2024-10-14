@@ -16,7 +16,7 @@ export function createNewThread(dispatch: AppDispatch) {
     messages: [],
     created: new Date().toISOString(),
     active: true,
-    lastActive: new Date().toISOString()
+    lastActive: ""
   }
   dispatch(createThread(newThread))
 }
