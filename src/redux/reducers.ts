@@ -25,8 +25,10 @@ const chatSlice = createSlice({
       })
     },
     deleteThread: (state, action: PayloadAction<string>) => {
-      state.threads = state.threads.filter(thread => thread.id !== action.payload)
-      if (state.threads.length > 0) {
+      const deletedThreadId = action.payload
+      const wasDeletedThreadActive = state.threads.some(thread => thread.id === deletedThreadId && thread.active)
+      state.threads = state.threads.filter(thread => thread.id !== deletedThreadId)
+      if (wasDeletedThreadActive && state.threads.length > 0) {
         const lastActiveThread = state.threads.reduce((latest, current) => {
           return current.lastActive > latest.lastActive ? current : latest
         })

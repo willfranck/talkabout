@@ -66,7 +66,7 @@ async function ChatService({
         Objective: Users will engage you have a friendly chat, learn about new things, and just mess around;
         User Prompt: ${userPrompt};
         Topic: Give this thread a short title based on the User Prompt and chat history;
-        Response: Respond to the User Prompt in a way that is detailed, concise, and a little quirky.  Send any links/resources when appropriate.  Give specific answers to specific questions.  Use markdown for text, links, and code where needed;
+        Response: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources when appropriate.  Give specific answers to specific questions.  Use markdown for text, links, and code where needed;
       `)
 
       if (result.response) {

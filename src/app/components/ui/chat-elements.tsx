@@ -54,11 +54,11 @@ const ThreadCard = ({
     <Card
       key={thread.id}
       variant="surface"
-      className={cn("relative group w-full pl-2 cursor-pointer fade-in", {
+      className={cn("relative group w-full pl-2 cursor-pointer opacity-0 fade-in", {
         "bg-gray-600": thread.active,
         "hover:bg-gray-700": !thread.active,
       })}
-      style={{ transitionDuration: "800ms" }}
+      style={{ animationDelay: "120ms" }}
     >
       <Flex
         direction="row"
