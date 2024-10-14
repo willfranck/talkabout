@@ -1,11 +1,8 @@
 import dotenv from "dotenv"
 import { app, shell, BrowserWindow } from "electron"
-import Store from "electron-store"
 import { createServer } from "http"
 import path from "path"
 import next from "next"
-
-const __dirname = import.meta.dirname
 
 dotenv.config({
   path: app.isPackaged
@@ -13,12 +10,9 @@ dotenv.config({
     : path.resolve(process.cwd(), ".env")
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const store = new Store()
-
 const startNextApp = async () => {
   try {
-    const nextPort = parseInt(process.env.NEXTJS_SERVER_PORT || "3033", 10)
+    const nextPort = parseInt(process.env.PORT || "3033", 10)
     const webDir = path.join(app.getAppPath(), "app")
     const nextApp = next({
       dev: false,
@@ -50,7 +44,6 @@ const createMainWindow = () => {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
       contextIsolation: true,
-      devTools: !app.isPackaged
     }
   })
 
@@ -61,7 +54,7 @@ const createMainWindow = () => {
       try {
         await startNextApp()
       
-        const nextServerURL = `http://localhost:${process.env.NEXTJS_SERVER_PORT || 3033}`
+        const nextServerURL = `http://localhost:${process.env.PORT || 3033}`
         mainWindow.loadURL(nextServerURL)
       
       } catch (error) {

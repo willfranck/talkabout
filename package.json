@@ -5,7 +5,6 @@
   "author": {
     "name": "willfranckcodes"
   },
-  "type": "module",
   "main": "./electron-build/main.js",
   "private": true,
   "scripts": {

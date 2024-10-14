@@ -8,8 +8,8 @@ export default function Header() {
   const pathname = usePathname()
   const links = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Login", path: "/login" },
+    // { name: "About", path: "/about" },
+    // { name: "Login", path: "/login" },
   ]
 
   

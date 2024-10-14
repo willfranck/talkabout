@@ -174,7 +174,7 @@ const ChatHistory = ({
                   <UserCircle 
                     size={24} 
                     weight="duotone" 
-                    className="text-gray-400" 
+                    className="text-gray-400 invert dark:invert-0" 
                   />
                   <DeleteButton 
                     action={deleteMessage} 

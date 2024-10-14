@@ -1,12 +1,16 @@
 import { defineConfig } from "tsup"
 
+const main = "./electron/main.ts"
+const preload = "./electron/preload.ts"
+
 export default defineConfig({
-  entry: ["./electron/main.ts", "./electron/preload.ts"],
+  entry: [main, preload],
   outDir: "electron-build",
   external: ["electron"],
-  format: ["esm"],
-  cjsInterop: true,
+  format: ["cjs"],
   target: "node20",
+  cjsInterop: true,
+  shims: true,
   clean: true,
   splitting: false,
   sourcemap: false,
