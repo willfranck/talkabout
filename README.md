@@ -11,6 +11,8 @@ To run the Electron version in Dev mode:
 npm run dev
 ```
 * If Electron doesn't launch properly on initial run, type "rs" in the console for nodemon to restart it
+* NextJS might need a CMD/CTRL + R on inital launch once the app is open
+  (I promise, it does work  😄)
 
 
 To run the NextJS web only version:
