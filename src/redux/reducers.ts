@@ -26,13 +26,15 @@ const chatSlice = createSlice({
     },
     deleteThread: (state, action: PayloadAction<string>) => {
       state.threads = state.threads.filter(thread => thread.id !== action.payload)
-      const lastActiveThread = state.threads.reduce((latest, current) => {
-        return current.lastActive > latest.lastActive ? current : latest;
-      })
-      if (lastActiveThread) {
-        state.threads.forEach(thread => {
-          thread.active = thread.id === lastActiveThread.id
-        });
+      if (state.threads.length > 0) {
+        const lastActiveThread = state.threads.reduce((latest, current) => {
+          return current.lastActive > latest.lastActive ? current : latest;
+        })
+        if (lastActiveThread) {
+          state.threads.forEach(thread => {
+            thread.active = thread.id === lastActiveThread.id
+          });
+        }
       }
     },
     updateThreadTopic: (state, action: PayloadAction<string>) => {
