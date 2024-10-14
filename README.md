@@ -4,17 +4,26 @@ Install deps:
 ```bash
 npm i
 ```
+
+
 To run the Electron version in Dev mode:
 ```bash
 npm run dev
 ```
-* If Electron doesn't launch properly on initial run, type "rs" in the console for nodemon to restart it *
+* If Electron doesn't launch properly on initial run, type "rs" in the console for nodemon to restart it
+
 
 To run the NextJS web only version:
 ```bash
 npm run next:dev
 ```
 Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+To pack the standalone app, simply run:
+```bash
+npm run dist
+```
 
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
