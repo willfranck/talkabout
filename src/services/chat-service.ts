@@ -40,7 +40,6 @@ async function ChatService({
         model: "gemini-1.5-flash",
         generationConfig: {
           responseMimeType: "text/plain",
-          // responseSchema: schema,
           temperature: temperature
         },
         systemInstruction: {
@@ -85,7 +84,6 @@ async function ChatTopic({
         model: "gemini-1.5-flash",
         generationConfig: {
           responseMimeType: "text/plain",
-          // responseSchema: schema,
         },
         systemInstruction: {
           parts: [{ text: modelInstruction }],
