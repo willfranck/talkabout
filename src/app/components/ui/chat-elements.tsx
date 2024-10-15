@@ -18,11 +18,12 @@ import {
   Flex,
   Box, 
   Card, 
-  Heading,  
   ScrollArea, 
-  Button, 
-  Text, 
-  TextArea 
+  TextArea, 
+  RadioCards, 
+  Button,
+  Heading,  
+  Text 
 } from "@radix-ui/themes"
 import {
   DeleteButton 
@@ -30,6 +31,7 @@ import {
 import { 
   CaretCircleRight, 
   UserCircle, 
+  ThermometerSimple,
   ThermometerHot, 
   ThermometerCold,
   PaperPlaneTilt
@@ -149,26 +151,29 @@ const ChatHistory = ({
           <Card 
             key={message.id} 
             variant="surface" 
-            className={cn("relative group w-fit max-w-[78%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
+            className={cn("relative group w-fit max-w-[86%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
               "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
             })}
-            style={{ overflowWrap: "anywhere" }}
           >
             <Flex gap="4" align="start">
               {message.role === "model" && (
                 <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
               )}
-              <Box>
-                <Text as="div" size="3">
+              <Flex 
+                direction="column" 
+                gap="2" 
+                className={cn({"items-end": message.role === "user"})}
+              >
+                <Flex direction="column" gap="2">
                   <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
                     {message.content}
                   </ReactMarkdown>
-                </Text>
+                </Flex>
                 <Text as="span" size="1">
                   {new Date(message.date).toLocaleDateString()}{" - "}
                   {new Date(message.date).toLocaleTimeString()}
                 </Text>
-              </Box>
+              </Flex>
               {message.role === "user" && (
                 <>
                   <UserCircle 
@@ -191,15 +196,28 @@ const ChatHistory = ({
   )
 }
 
-interface TemperatureButtonProps {
+interface TemperatureControlProps {
   temperatureHot: number
+  temperatureNormal: number
   temperatureCold: number
+  defaultTemperature: number
+  onTemperatureChange: (value: number) => void
 }
 
-const TemperatureButtons = ({
+const TemperatureControls = ({
   temperatureHot,
+  temperatureNormal,
   temperatureCold,
-}: TemperatureButtonProps) => {
+  defaultTemperature,
+  onTemperatureChange
+}: TemperatureControlProps) => {
+  const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
+    e.preventDefault()
+    setAiTemperature(value)
+    onTemperatureChange(value)
+  }
+
   return (
     <Flex 
       direction="column"
@@ -210,18 +228,30 @@ const TemperatureButtons = ({
       <Button
         variant="ghost"
         value={temperatureHot}
-        aria-pressed={false}
+        aria-pressed={temperatureHot === aiTemperature}
+        onClick={(e) => handleButtonClick(e, temperatureHot)}
         tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-tl-only"
+        className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
       >
         <ThermometerHot size={20} weight="bold" />
       </Button>
+      {/* <Button
+        variant="ghost"
+        value={temperatureNormal}
+        aria-pressed={temperatureNormal === aiTemperature}
+        onClick={(e) => handleButtonClick(e, temperatureNormal)}
+        tabIndex={-1}
+        className="flex-1 my-0 py-0 rounded-none aria-pressed:bg-[#00384B]"
+      >
+        <ThermometerSimple size={20} weight="bold" />
+      </Button> */}
       <Button
         variant="ghost"
         value={temperatureCold}
-        aria-pressed={true}
+        aria-pressed={temperatureCold === aiTemperature}
+        onClick={(e) => handleButtonClick(e, temperatureCold)}
         tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-bl-only"
+        className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
       >
         <ThermometerCold size={20} weight="bold" />
       </Button>
@@ -230,10 +260,13 @@ const TemperatureButtons = ({
 }
 
 interface ChatInputProps {
-  prompt: string,
-  threads: number,
+  prompt: string
+  threads: number
   activeThread: ChatThread | undefined
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
+  temperatureSettings: { hot: number, normal: number, cold: number }
+  defaultTemperature: number
+  onTemperatureChange: (temperature: number) => void
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
   onSubmit: () => void
 }
 
@@ -241,6 +274,9 @@ const ChatInputField = ({
   prompt,
   threads,
   activeThread,
+  temperatureSettings,
+  defaultTemperature,
+  onTemperatureChange, 
   onChange,
   onSubmit
 }: ChatInputProps) => {
@@ -256,9 +292,12 @@ const ChatInputField = ({
       onSubmit={onSubmit} 
       className="relative flex mt-auto mb-4 mr-12"
     >
-      <TemperatureButtons 
-        temperatureHot={1.5} 
-        temperatureCold={0.5} 
+      <TemperatureControls 
+        temperatureHot={temperatureSettings.hot}
+        temperatureNormal={temperatureSettings.normal}
+        temperatureCold={temperatureSettings.cold}
+        defaultTemperature={defaultTemperature}
+        onTemperatureChange={onTemperatureChange}
       />
       <TextArea 
         variant="surface"

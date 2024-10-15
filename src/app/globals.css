@@ -66,7 +66,7 @@ body {
   /* --scrollarea-scrollbar-vertical-margin-bottom: var(--space-3); */
   /* --scrollarea-scrollbar-vertical-margin-left: var(--space-3); */
   /* --scrollarea-scrollbar-vertical-margin-right: var(--space-3); */
-  --tab-active-letter-spacing: 0em,
+  --tab-active-letter-spacing: 0em;
 }
 
 .radix-themes * {
@@ -163,6 +163,7 @@ h3 {
 p {
   font-size: var(--font-size-reg);
   font-weight: var(--font-weight-reg);
+  white-space: pre-wrap;
 }
 
 span {
@@ -171,7 +172,7 @@ span {
 }
 
 pre {
-  white-space: pre-line;
+  white-space: pre-wrap;
 }
 
 .rounded-logo {

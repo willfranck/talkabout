@@ -6,13 +6,24 @@ import {
 } from "@google/generative-ai"
 import { ChatMessage } from "@types"
 
+
 const geminiApiKey = process.env.GEMINI_API_KEY
+const genAI = new GoogleGenerativeAI(geminiApiKey!)
+
 const safetyOptions = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
 ]
+
+const modelInstruction = `
+  Identity: You are a helpful assistant.  You take the form of a wise and eccentric llama.  Have your responses reflect this identity and be a little sassy.
+  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around
+  Topic: Give this thread a short title based on the User Prompt and chat history
+  Content: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources/code when appropriate
+`
+
 
 async function ChatService({
   history,  
@@ -25,26 +36,16 @@ async function ChatService({
 }) {
   if (geminiApiKey !== undefined) {
     try {
-      const genAI = new GoogleGenerativeAI(geminiApiKey)
-      const schema = {
-        type: SchemaType.OBJECT,
-        properties: {
-          topic: { 
-            type: SchemaType.STRING, 
-            description: "The topic of the chat thread" 
-          },
-          response: { 
-            type: SchemaType.STRING, 
-            description: "The model's response to the user's prompt" 
-          }
-        }
-      }
       const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
         generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: schema,
+          responseMimeType: "text/plain",
+          // responseSchema: schema,
           temperature: temperature
+        },
+        systemInstruction: {
+          parts: [{ text: modelInstruction }],
+          role: "model"
         },
         safetySettings: safetyOptions
       })
@@ -60,22 +61,57 @@ async function ChatService({
       const chat = await model.startChat({
         history: chatHistory
       })
+      const result = await chat.sendMessage(userPrompt)
 
+      if (result.response) {
+        return result.response.text()
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+
+async function ChatTopic({
+  history,  
+}: { 
+  history: ChatMessage[],
+}) {
+  if (geminiApiKey !== undefined) {
+    try {
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        generationConfig: {
+          responseMimeType: "text/plain",
+          // responseSchema: schema,
+        },
+        systemInstruction: {
+          parts: [{ text: modelInstruction }],
+          role: "model"
+        },
+        safetySettings: safetyOptions
+      })
+      
+      const chatHistory = Array.isArray(history) 
+        ? history.map((message) => ({
+          role: message.role,
+          parts: [{ text: message.content }]
+        })) 
+        : []
+
+      const chat = await model.startChat({
+        history: chatHistory
+      })
       const result = await chat.sendMessage(`
-        Identity: You are a helpful assistant.  You take the form of a wise, albeit eccentric, llama.  Have your responses reflect this identity;
-        Objective: Users will engage you have a friendly chat, learn about new things, and just mess around;
-        User Prompt: ${userPrompt};
-        Topic: Give this thread a short title based on the User Prompt and chat history;
-        Response: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources when appropriate.  Give specific answers to specific questions.  Use markdown for text, links, and code where needed;
+        Generate a title for this conversation based on the subject.
+        Omit quotes around the title.
+        Response: Title Only
       `)
 
       if (result.response) {
-        const parsedResult = JSON.parse(result.response.text())
-
-        const topic = parsedResult.topic || "Topic not parsed"
-        const content = parsedResult.response || "Error: My reply didn't get parsed correctly...oops"
-
-        return { topic, content }
+        return result.response.text()
       }
 
     } catch (error) {
@@ -86,5 +122,6 @@ async function ChatService({
 
 
 export {
-  ChatService
+  ChatService,
+  ChatTopic
 }
