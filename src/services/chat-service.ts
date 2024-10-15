@@ -2,7 +2,6 @@ import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
   HarmCategory,
-  SchemaType,
 } from "@google/generative-ai"
 import { ChatMessage } from "@types"
 

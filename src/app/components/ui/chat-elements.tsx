@@ -16,11 +16,9 @@ import {
 } from "@globals/functions"
 import { 
   Flex,
-  Box, 
   Card, 
   ScrollArea, 
   TextArea, 
-  RadioCards, 
   Button,
   Heading,  
   Text 
@@ -31,7 +29,6 @@ import {
 import { 
   CaretCircleRight, 
   UserCircle, 
-  ThermometerSimple,
   ThermometerHot, 
   ThermometerCold,
   PaperPlaneTilt
@@ -206,7 +203,6 @@ interface TemperatureControlProps {
 
 const TemperatureControls = ({
   temperatureHot,
-  temperatureNormal,
   temperatureCold,
   defaultTemperature,
   onTemperatureChange
@@ -235,16 +231,6 @@ const TemperatureControls = ({
       >
         <ThermometerHot size={20} weight="bold" />
       </Button>
-      {/* <Button
-        variant="ghost"
-        value={temperatureNormal}
-        aria-pressed={temperatureNormal === aiTemperature}
-        onClick={(e) => handleButtonClick(e, temperatureNormal)}
-        tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-none aria-pressed:bg-[#00384B]"
-      >
-        <ThermometerSimple size={20} weight="bold" />
-      </Button> */}
       <Button
         variant="ghost"
         value={temperatureCold}
