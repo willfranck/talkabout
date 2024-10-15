@@ -35,13 +35,11 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 
 //// Chat Elements
-interface ThreadCardProps {
-  thread: ChatThread,
-}
-
 const ThreadCard = ({ 
   thread, 
-}: ThreadCardProps) => {
+}: {
+  thread: ChatThread
+}) => {
   const dispatch = useAppDispatch()
   const [threadTopic, setThreadTopic] = useState("")
 
@@ -89,13 +87,11 @@ const ThreadCard = ({
   )
 }
 
-interface ChatHistoryTabProps {
-  threads: ChatThread[]
-}
-
 const ChatHistoryTabs = ({
   threads
-}: ChatHistoryTabProps) => {
+}: {
+  threads: ChatThread[]
+}) => {
   return (
     <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
       {threads.map((thread) => (
@@ -108,13 +104,11 @@ const ChatHistoryTabs = ({
   )
 }
 
-interface ChatHistoryProps {
-  messages: ChatMessage[]
-}
-
 const ChatHistory = ({
   messages
-}: ChatHistoryProps) => {
+}: {
+  messages: ChatMessage[]
+}) => {
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -195,7 +189,7 @@ const ChatHistory = ({
   )
 }
 
-interface TemperatureControlProps {
+interface ITemperature {
   temperatureHot: number
   temperatureNormal: number
   temperatureCold: number
@@ -208,7 +202,7 @@ const TemperatureControls = ({
   temperatureCold,
   defaultTemperature,
   onTemperatureChange
-}: TemperatureControlProps) => {
+}: ITemperature) => {
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
     e.preventDefault()
@@ -247,7 +241,7 @@ const TemperatureControls = ({
   )
 }
 
-interface ChatInputProps {
+interface IChatInput {
   prompt: string
   threads: number
   activeThread: ChatThread | undefined
@@ -267,7 +261,7 @@ const ChatInputField = ({
   onTemperatureChange, 
   onChange,
   onSubmit
-}: ChatInputProps) => {
+}: IChatInput) => {
   const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()

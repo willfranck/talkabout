@@ -7,6 +7,7 @@ import {
   Box, 
   TabNav, 
   SegmentedControl, 
+  Tooltip,
   Dialog, 
   Button, 
   Text, 
@@ -21,7 +22,7 @@ import {
 
 
 //// Control Elements
-interface LinkProps {
+interface INav {
   name: string,
   path: string,
   active?: boolean,
@@ -30,7 +31,7 @@ interface LinkProps {
 const Nav = ({
   links
 }: {
-  links: LinkProps[]
+  links: INav[]
 }) => {
   const linkElements = links.map((link) => (
     <TabNav.Link 
@@ -54,7 +55,7 @@ const Nav = ({
   )
 }
 
-interface DeleteButtonProps {
+interface IDeleteButton {
   action: (dispatch: AppDispatch, id: string) => void
   itemId: string
   location: "chat-history" | "threads"
@@ -64,7 +65,7 @@ const DeleteButton = ({
   action,
   itemId,
   location
-}: DeleteButtonProps) => {
+}: IDeleteButton) => {
   const dispatch = useAppDispatch()
 
   return (
@@ -85,7 +86,7 @@ const DeleteButton = ({
   )
 }
 
-interface SCProps {
+interface ISegmentedControl {
   values: string[],
   activeTab: string,
   onClick: (value: string) => void
@@ -95,7 +96,7 @@ const SegmentedController = ({
   values, 
   activeTab,
   onClick
-}: SCProps) => {
+}: ISegmentedControl) => {
   const controlElements = values.map((value) => (
     <SegmentedControl.Item 
       key={value} 
@@ -119,7 +120,17 @@ const SegmentedController = ({
 }
 
 //// Content Elements
-interface ModalProps {
+interface ITooltip {
+  iconType: "info" | "warning" | "error"
+  content: string
+}
+
+const Tool = ({
+  
+}: ITooltip) => {}
+
+
+interface IModal {
   trigger: string,
   title: string,
   description: string,
@@ -129,7 +140,7 @@ const Modal = ({
   trigger,
   title,
   description 
-}: ModalProps) => {
+}: IModal) => {
   return (    
     <Dialog.Root>
       <Dialog.Trigger>
@@ -183,13 +194,13 @@ const Modal = ({
 }
 
 //// Utility Elements
-interface ProgressProps {
+interface IProgressBar {
   progress: number,
 }
 
 const ProgressBar = ({
   progress
-}: ProgressProps) => {
+}: IProgressBar) => {
   return (
     <Box width="100%" maxWidth="24rem">
       <Progress 
@@ -202,7 +213,7 @@ const ProgressBar = ({
 }
 
 
-interface BadgeProps {
+interface IBadge {
   color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky",
   label: string,
 }
@@ -210,7 +221,7 @@ interface BadgeProps {
 const BadgeX = ({
   color,
   label
-}: BadgeProps) => {
+}: IBadge) => {
   return (
     <Badge 
       variant="soft"
