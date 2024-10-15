@@ -43,6 +43,7 @@ export const ChatInput = () => {
   }
 
   useEffect(() => {
+    // Prevents getTopic() from running when switching threads
     if (activeThreadRef.current !== activeThread?.id) {
       activeThreadRef.current = activeThread?.id
       return

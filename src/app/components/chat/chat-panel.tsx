@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react"
 import { ChatThread } from "@types"
 import { useAppDispatch } from "@redux/hooks"
-import { threadCategories } from "@globals/values"
 import { 
   createNewThread, 
   selectActiveThread, 
@@ -28,6 +27,7 @@ import {
   PlusCircle, 
   Info
 } from "@phosphor-icons/react/dist/ssr"
+import { threadCategories } from "@globals/values"
 
 
 export const ChatPanel = () => {
