@@ -40,6 +40,8 @@
     --font-weight-exlgt: 100;
 
     --foreground: #AFB4BB;
+    --foreground-tooltip: #EFEFEF;
+    --background-tooltip: #2A2A2A;
     --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
   }
 }
@@ -88,6 +90,18 @@ body {
 
 .rt-BaseButton:disabled {
   cursor: not-allowed;
+}
+
+.rt-TooltipText {
+  color: var(--foreground-tooltip);
+}
+
+.rt-TooltipContent {
+  background: var(--background-tooltip);
+}
+
+.rt-TooltipArrow {
+  fill: var(--background-tooltip);
 }
 
 /*//// Element Styles */

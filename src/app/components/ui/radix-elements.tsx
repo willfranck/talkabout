@@ -13,19 +13,22 @@ import {
   Text, 
   TextField, 
   Progress, 
-  Badge
+  Badge,
+  IconButton
 } from "@radix-ui/themes"
 import { 
   Trash,
-  ArrowDown 
+  ArrowDown,
+  Info, 
+  Warning,
+  Prohibit
 } from "@phosphor-icons/react/dist/ssr"
-
 
 //// Control Elements
 interface INav {
-  name: string,
-  path: string,
-  active?: boolean,
+  name: string
+  path: string
+  active?: boolean
 }
 
 const Nav = ({
@@ -52,6 +55,39 @@ const Nav = ({
     >
       {linkElements}
     </TabNav.Root>
+  )
+}
+
+interface ISegmentedControl {
+  values: string[]
+  activeTab: string
+  onClick: (value: string) => void
+}
+
+const SegmentedController = ({
+  values, 
+  activeTab,
+  onClick
+}: ISegmentedControl) => {
+  const controlElements = values.map((value) => (
+    <SegmentedControl.Item 
+      key={value} 
+      value={value}
+      onClick={() => onClick(value)}
+      className="capitalize"
+    >
+      {value}
+    </SegmentedControl.Item>
+  ))
+
+  return (
+    <SegmentedControl.Root 
+      variant="surface"
+      value={activeTab}
+      className="h-8 p-0.5"
+    >
+      {controlElements}
+    </SegmentedControl.Root>
   )
 }
 
@@ -86,48 +122,24 @@ const DeleteButton = ({
   )
 }
 
-interface ISegmentedControl {
-  values: string[],
-  activeTab: string,
-  onClick: (value: string) => void
-}
-
-const SegmentedController = ({
-  values, 
-  activeTab,
-  onClick
-}: ISegmentedControl) => {
-  const controlElements = values.map((value) => (
-    <SegmentedControl.Item 
-      key={value} 
-      value={value}
-      onClick={() => onClick(value)}
-      className="capitalize"
-    >
-      {value}
-    </SegmentedControl.Item>
-  ))
-
-  return (
-    <SegmentedControl.Root 
-      variant="surface"
-      value={activeTab}
-      className="h-8 p-0.5"
-    >
-      {controlElements}
-    </SegmentedControl.Root>
-  )
-}
-
 //// Content Elements
 interface ITooltip {
-  iconType: "info" | "warning" | "error"
+  side: "top" | "right" | "bottom" | "left"
   content: string
+  children: React.ReactNode
 }
 
-const Tool = ({
-  
-}: ITooltip) => {}
+const ToolTip = ({
+  side,
+  content,
+  children
+}: ITooltip) => {
+  return (
+    <Tooltip side={side} content={content}>
+      {children}
+    </Tooltip>
+  )
+}
 
 
 interface IModal {
@@ -214,8 +226,8 @@ const ProgressBar = ({
 
 
 interface IBadge {
-  color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky",
-  label: string,
+  color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky"
+  label: string
 }
 
 const BadgeX = ({
@@ -237,8 +249,9 @@ const BadgeX = ({
 export { 
   Nav, 
   SegmentedController, 
+  DeleteButton,
+  ToolTip, 
   Modal, 
-  DeleteButton, 
   ProgressBar, 
   BadgeX,
 }

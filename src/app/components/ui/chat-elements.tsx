@@ -18,13 +18,15 @@ import {
   Flex,
   Card, 
   ScrollArea, 
-  TextArea, 
+  TextArea,
+  Tooltip, 
   Button,
   Heading,  
   Text 
 } from "@radix-ui/themes"
 import {
-  DeleteButton 
+  DeleteButton, 
+  ToolTip
 } from "@ui/radix-elements"
 import { 
   CaretCircleRight, 
@@ -203,6 +205,7 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
+  const tooltipContent = `Adjust the responses to suit your mood\n\nHot - Spicy, Fun, Unhinged\nCold - Pragmatic, Drier, Serious`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
     e.preventDefault()
@@ -211,33 +214,35 @@ const TemperatureControls = ({
   }
 
   return (
-    <Flex 
-      direction="column"
-      align="center" 
-      justify="center"
-      className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
-    >
-      <Button
-        variant="ghost"
-        value={temperatureHot}
-        aria-pressed={temperatureHot === aiTemperature}
-        onClick={(e) => handleButtonClick(e, temperatureHot)}
-        tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
+    <ToolTip side="left" content={tooltipContent}>
+      <Flex 
+        direction="column"
+        align="center" 
+        justify="center"
+        className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
       >
-        <Fire size={20} weight="bold" />
-      </Button>
-      <Button
-        variant="ghost"
-        value={temperatureCold}
-        aria-pressed={temperatureCold === aiTemperature}
-        onClick={(e) => handleButtonClick(e, temperatureCold)}
-        tabIndex={-1}
-        className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
-      >
-        <Snowflake size={20} weight="bold" />
-      </Button>
-    </Flex>
+        <Button
+          variant="ghost"
+          value={temperatureHot}
+          aria-pressed={temperatureHot === aiTemperature}
+          onClick={(e) => handleButtonClick(e, temperatureHot)}
+          tabIndex={-1}
+          className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
+        >
+          <Fire size={20} weight="bold" />
+        </Button>
+        <Button
+          variant="ghost"
+          value={temperatureCold}
+          aria-pressed={temperatureCold === aiTemperature}
+          onClick={(e) => handleButtonClick(e, temperatureCold)}
+          tabIndex={-1}
+          className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
+        >
+          <Snowflake size={20} weight="bold" />
+        </Button>
+      </Flex>
+    </ToolTip>
   )
 }
 
