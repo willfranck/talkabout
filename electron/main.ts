@@ -4,6 +4,7 @@ import { createServer } from "http"
 import path from "path"
 import next from "next"
 
+
 dotenv.config({
   path: app.isPackaged
     ? path.join(process.resourcesPath, ".env")

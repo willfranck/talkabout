@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
 import { temperatureSettings } from "@globals/values"
@@ -33,6 +33,20 @@ export const ChatInput = () => {
     setUserPrompt(event.target.value)
   }
 
+  const getTopic = async () => { 
+    const reply = await axios.post("/api/chat-topic", { history: messageHistory })
+    if (reply.data.res) {
+      const topic = reply.data.res
+      dispatch(updateThreadTopic(topic))
+    }
+  }
+
+  useEffect(() => {
+    if (messageHistory.length > 0 && messageHistory.length % 4 === 2) {  
+      getTopic()
+    }
+  }, [messageHistory])
+
   const handleSubmit = async () => {
     if (activeThread) {
       try {
@@ -56,14 +70,7 @@ export const ChatInput = () => {
             date: new Date().toISOString()
           }
           dispatch(addMessage(aiMessage))
-          
-          const getTopic = await axios.post("/api/chat-topic", { history: messageHistory })
-          if (getTopic.data.res) {
-            const topic = getTopic.data.res
-            dispatch(updateThreadTopic(topic))
-          }
-        }    
-        
+        }
       } catch (error) {
         console.log(error)
       }

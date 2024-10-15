@@ -84,10 +84,6 @@ async function ChatTopic({
         generationConfig: {
           responseMimeType: "text/plain",
         },
-        systemInstruction: {
-          parts: [{ text: modelInstruction }],
-          role: "model"
-        },
         safetySettings: safetyOptions
       })
       
@@ -102,9 +98,8 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Generate a title for this conversation based on the subject.
+        Response: Generate a short cheeky title for this conversation based on the subject.
         Omit quotes around the title.
-        Response: Title Only
       `)
 
       if (result.response) {
