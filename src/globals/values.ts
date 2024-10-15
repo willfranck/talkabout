@@ -1,3 +1,9 @@
+//// Global Values
+export const threadCategories = [
+  "active",
+  "archived"
+]
+
 export const temperatureSettings = {
   hot: 2.0,
   normal: 1.0,

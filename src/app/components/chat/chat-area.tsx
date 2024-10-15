@@ -1,10 +1,10 @@
 "use client"
-import { useAppSelector } from "@redux/hooks"
 import { ChatHistory } from "@ui/chat-elements"
+import { useActiveThread } from "@hooks/chat"
 
 
 export const ChatArea = () => {
-  const activeThread = useAppSelector((state) => state.chat.threads.find(thread => thread.active))
+  const activeThread = useActiveThread()
   const messageHistory = activeThread ? activeThread.messages : []
 
   return (

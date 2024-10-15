@@ -1,16 +1,18 @@
 "use client"
 import { useState, useEffect } from "react"
 import { ChatThread } from "@types"
-import { 
-  useAppSelector, 
-  useAppDispatch 
-} from "@redux/hooks"
+import { useAppDispatch } from "@redux/hooks"
+import { threadCategories } from "@globals/values"
 import { 
   createNewThread, 
   selectActiveThread, 
   displayTextByChar, 
   removeTextByChar 
 } from "@globals/functions"
+import { 
+  useInitialThread, 
+  useThreads 
+} from "@hooks/chat"
 import { 
   Flex, 
   ScrollArea, 
@@ -26,16 +28,14 @@ import {
   PlusCircle, 
   Info
 } from "@phosphor-icons/react/dist/ssr"
-import { useInitialThread } from "@hooks/chat-initial-thread"
 
 
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
-  const threadCategories = ["active", "archived"]
   const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
   const [displayedText, setDisplayedText] = useState("")
   
-  const threads = useAppSelector((state) => state.chat.threads)
+  const threads = useThreads()
   const sortedThreads = (threads: ChatThread[]) => {
     return threads
       .filter(thread => thread.category === activeThreadCategory)

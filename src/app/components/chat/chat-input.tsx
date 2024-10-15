@@ -1,26 +1,28 @@
 "use client"
 import { useState } from "react"
 import axios from "axios"
-import { 
-  useAppSelector, 
-  useAppDispatch 
-} from "@redux/hooks"
+import { useAppDispatch } from "@redux/hooks"
+import { temperatureSettings } from "@globals/values"
 import { 
   addMessage, 
   updateLastActive, 
   updateThreadTopic 
 } from "@redux/reducers"
-import { temperatureSettings } from "@globals/values"
+import { 
+  useThreadCount, 
+  useActiveThread, 
+  useMessageHistory 
+} from "@hooks/chat"
 import { ChatMessage } from "@types"
 import { ChatInputField } from "@ui/chat-elements"
 
 
 export const ChatInput = () => {
   const dispatch = useAppDispatch()
+  const threadCount = useThreadCount()
+  const activeThread = useActiveThread()
+  const messageHistory = useMessageHistory()
   const [userPrompt, setUserPrompt] = useState("")
-  const threadCount = useAppSelector((state) => state.chat.threads.length)
-  const activeThread = useAppSelector((state) => state.chat.threads.find(thread => thread.active))
-  const messageHistory = activeThread?.messages || []
   const [aiTemperature, setAiTemperature] = useState(temperatureSettings.hot)
   
   const handleTemperatureChange = (value: number) => {
@@ -44,9 +46,9 @@ export const ChatInput = () => {
         dispatch(addMessage(userMessage))
         dispatch(updateLastActive(new Date().toISOString()))
 
-        const reply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })
-        if (reply.data.res) {
-          const content = reply.data.res
+        const aiReply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })
+        if (aiReply.data.res) {
+          const content = aiReply.data.res
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
             role: "model",
@@ -56,7 +58,7 @@ export const ChatInput = () => {
           dispatch(addMessage(aiMessage))
           
           const getTopic = await axios.post("/api/chat-topic", { history: messageHistory })
-          if (reply.data.res) {
+          if (getTopic.data.res) {
             const topic = getTopic.data.res
             dispatch(updateThreadTopic(topic))
           }
