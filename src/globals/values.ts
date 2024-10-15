@@ -1,7 +1,7 @@
 export const temperatureSettings = {
   hot: 2.0,
   normal: 1.0,
-  cold: 0.1
+  cold: 0.4
 }
 
 export const placeholderTopics = [
