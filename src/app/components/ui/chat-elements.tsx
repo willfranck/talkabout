@@ -29,8 +29,8 @@ import {
 import { 
   CaretCircleRight, 
   UserCircle, 
-  ThermometerHot, 
-  ThermometerCold,
+  Fire, 
+  Snowflake,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -120,7 +120,9 @@ const ChatHistory = ({
   useEffect(() => {
     const { current } = scrollAreaRef
     if (current) {
-      current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
+      requestAnimationFrame(() => {
+        current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
+      })
     }
   }, [messages])
 
@@ -229,7 +231,7 @@ const TemperatureControls = ({
         tabIndex={-1}
         className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
       >
-        <ThermometerHot size={20} weight="bold" />
+        <Fire size={20} weight="bold" />
       </Button>
       <Button
         variant="ghost"
@@ -239,7 +241,7 @@ const TemperatureControls = ({
         tabIndex={-1}
         className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
       >
-        <ThermometerCold size={20} weight="bold" />
+        <Snowflake size={20} weight="bold" />
       </Button>
     </Flex>
   )

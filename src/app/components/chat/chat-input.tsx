@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
 import { temperatureSettings } from "@globals/values"
@@ -21,6 +21,7 @@ export const ChatInput = () => {
   const dispatch = useAppDispatch()
   const threadCount = useThreadCount()
   const activeThread = useActiveThread()
+  const activeThreadRef = useRef<string | undefined>(undefined)
   const messageHistory = useMessageHistory()
   const [userPrompt, setUserPrompt] = useState("")
   const [aiTemperature, setAiTemperature] = useState(temperatureSettings.hot)
@@ -42,6 +43,10 @@ export const ChatInput = () => {
   }
 
   useEffect(() => {
+    if (activeThreadRef.current !== activeThread?.id) {
+      activeThreadRef.current = activeThread?.id
+      return
+    }
     if (messageHistory.length > 0 && messageHistory.length % 4 === 2) {  
       getTopic()
     }
