@@ -30,6 +30,13 @@ const useActiveThread = () => {
   return activeThread
 }
 
+const useThreadCount = () => {
+  const threadCount = useAppSelector(
+    (state) => state.chat.threads.length
+  )
+  return threadCount
+}
+
 const useMessageHistory = () => {
   const activeThread = useActiveThread()
   const messageHistory = 
@@ -38,18 +45,11 @@ const useMessageHistory = () => {
   return messageHistory
 }
 
-const useThreadCount = () => {
-  const threadCount = useAppSelector(
-    (state) => state.chat.threads.length
-  )
-  return threadCount
-}
-
 
 export {
+  useThreads,
   useInitialThread,
   useActiveThread,
-  useMessageHistory,
-  useThreads,
-  useThreadCount
+  useThreadCount,
+  useMessageHistory
 }
