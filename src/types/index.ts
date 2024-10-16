@@ -2,7 +2,7 @@ export type ChatMessage = {
   id: string
   role: "user" | "model"
   content: string
-  date: string
+  timestamp: string
 }
 
 export type ChatThread = {

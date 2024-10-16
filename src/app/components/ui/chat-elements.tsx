@@ -34,6 +34,7 @@ import {
   Snowflake,
   PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
+import { useActiveThread, useMessageHistory } from "@hooks/chat"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -110,16 +111,40 @@ const ChatHistory = ({
 }: {
   messages: ChatMessage[]
 }) => {
+  const activeThread = useActiveThread()
+  const threadRef = useRef(activeThread?.id) 
+  const messageHistory = useMessageHistory()
+  const messagesRef = useRef(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const { current } = scrollAreaRef
-    if (current) {
-      requestAnimationFrame(() => {
-        current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
-      })
+    const currentMessages = messageHistory.length
+    // Handles thread being switched
+    if (threadRef.current !== activeThread?.id) {
+      threadRef.current = activeThread?.id
+      messagesRef.current = currentMessages
+      if (current) {
+        requestAnimationFrame(() => {
+          current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+        })
+      }
+    // Handles NEW messages || page navigation
+    } else {
+      if (current) {
+        if (currentMessages > messagesRef.current) {
+          requestAnimationFrame(() => {
+            current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
+          })
+        } else {
+          requestAnimationFrame(() => {
+            current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+          })
+        }
+      }
     }
-  }, [messages])
+    messagesRef.current = currentMessages
+  }, [messages, messageHistory])
 
   return (
     <ScrollArea 
@@ -164,8 +189,8 @@ const ChatHistory = ({
                   </ReactMarkdown>
                 </Flex>
                 <Text as="span" size="1">
-                  {new Date(message.date).toLocaleDateString()}{" - "}
-                  {new Date(message.date).toLocaleTimeString()}
+                  {new Date(message.timestamp).toLocaleDateString()}{" - "}
+                  {new Date(message.timestamp).toLocaleTimeString()}
                 </Text>
               </Flex>
               {message.role === "user" && (
@@ -204,7 +229,7 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
-  const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Tame, Cheeky, Relaxed`
+  const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
     e.preventDefault()

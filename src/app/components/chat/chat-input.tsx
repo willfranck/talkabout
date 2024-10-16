@@ -21,8 +21,9 @@ export const ChatInput = () => {
   const dispatch = useAppDispatch()
   const threadCount = useThreadCount()
   const activeThread = useActiveThread()
-  const activeThreadRef = useRef<string | undefined>(undefined)
+  const threadRef = useRef<string | undefined>(undefined)
   const messageHistory = useMessageHistory()
+  const messagesRef = useRef(messageHistory.length)
   const [userPrompt, setUserPrompt] = useState("")
   const [aiTemperature, setAiTemperature] = useState(temperatureSettings.hot)
   
@@ -43,16 +44,20 @@ export const ChatInput = () => {
   }
 
   useEffect(() => {
-    // Prevents getTopic() from running when switching threads
-    if (activeThreadRef.current !== activeThread?.id) {
-      activeThreadRef.current = activeThread?.id
+    // Prevents getTopic() if active thread hasn't changed || on page navigation
+    if (threadRef.current !== activeThread?.id) {
+      threadRef.current = activeThread?.id
       return
     }
-    if (messageHistory.length > 0 && messageHistory.length % 4 === 2) {  
-      getTopic()
+    // Runs getTopic() only on NEW messages
+    const currentMessages = messageHistory.length
+    if (currentMessages > messagesRef.current) {
+      if (currentMessages > 0 && currentMessages % 4 === 2) {
+        getTopic();
+      }
     }
-  // eslint-disable-next-line
-  }, [messageHistory])
+    messagesRef.current = currentMessages
+  }, [activeThread, messageHistory])
 
   const handleSubmit = async () => {
     if (activeThread) {
@@ -61,7 +66,7 @@ export const ChatInput = () => {
           id: crypto.randomUUID(),
           role: "user", 
           content: userPrompt, 
-          date: new Date().toISOString()
+          timestamp: new Date().toISOString()
         }
         setUserPrompt("")
         dispatch(addMessage(userMessage))
@@ -74,7 +79,7 @@ export const ChatInput = () => {
             id: crypto.randomUUID(),
             role: "model",
             content: content,
-            date: new Date().toISOString()
+            timestamp: new Date().toISOString()
           }
           dispatch(addMessage(aiMessage))
         }
