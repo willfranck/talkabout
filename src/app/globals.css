@@ -26,7 +26,9 @@
   --font-weight-exlgt: 300;
 
   --foreground: #585C64;
-  --background-tb-shadow: linear-gradient(to bottom, #DADADA 0%, transparent 4%);
+  --foreground-tooltip: #2A2A2A;
+  --background-tooltip: #DADADA;
+  --shadow-b: linear-gradient(to bottom, #DADADA 0%, transparent 4%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,7 +44,7 @@
     --foreground: #AFB4BB;
     --foreground-tooltip: #EFEFEF;
     --background-tooltip: #2A2A2A;
-    --background-tb-shadow: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
+    --shadow-b: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
   }
 }
 
@@ -60,14 +62,6 @@ body {
 /*//// Override Default Radix CSS vars */
 .radix-themes {
   --default-font-family: var(--font-kumbh-sans);
-  /* --scrollarea-scrollbar-horizontal-margin-top: var(--space-3); */
-  /* --scrollarea-scrollbar-horizontal-margin-bottom: var(--space-3); */
-  /* --scrollarea-scrollbar-horizontal-margin-left: var(--space-3); */
-  /* --scrollarea-scrollbar-horizontal-margin-right: var(--space-3); */
-  /* --scrollarea-scrollbar-vertical-margin-top: var(--space-3); */
-  /* --scrollarea-scrollbar-vertical-margin-bottom: var(--space-3); */
-  /* --scrollarea-scrollbar-vertical-margin-left: var(--space-3); */
-  /* --scrollarea-scrollbar-vertical-margin-right: var(--space-3); */
   --tab-active-letter-spacing: 0em;
 }
 
@@ -82,6 +76,12 @@ body {
 
 :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
   --accent-color: "cyan",
+}
+
+a,
+.rt-TabNavLink * {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-reg);
 }
 
 .rt-BaseButton {
@@ -114,31 +114,8 @@ main::before {
   position: absolute;
   inset: 0;
   z-index: 5;
-  background: var(--background-tb-shadow);
+  background: var(--shadow-b);
   pointer-events: none;
-}
-
-a,
-a.rt-TabNavLink * {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-reg);
-  color: var(--foreground-link);
-  border-radius: 9999px;
-}
-
-a:hover,
-a.rt-TabNavLink:hover * {
-  color: var(--foreground-hover);
-  background: transparent;
-}
-
-a[data-active],
-a.rt-TabNavLink[data-active] * {
-  color: var(--foreground-secondary);
-}
-
-a:not(.rt-TabNavLink):focus-visible {
-  outline: 2px solid var(--foreground-focus);
 }
 
 img {
