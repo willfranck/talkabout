@@ -106,6 +106,56 @@ const ChatHistoryTabs = ({
   )
 }
 
+const ChatMessageCard = ({
+  message
+}: {
+  message: ChatMessage
+}) => {
+  return (
+    <Card 
+      variant="surface" 
+      className={cn("relative group w-fit max-w-[86%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
+        "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
+      })}
+    >
+      <Flex gap="4" align="start">
+        {message.role === "model" && (
+          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
+        )}
+        <Flex 
+          direction="column" 
+          gap="2" 
+          className={cn({"items-end": message.role === "user"})}
+        >
+          <Flex direction="column" gap="2">
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+              {message.content}
+            </ReactMarkdown>
+          </Flex>
+          <Text as="span" size="1">
+            {new Date(message.timestamp).toLocaleDateString()}{" - "}
+            {new Date(message.timestamp).toLocaleTimeString()}
+          </Text>
+        </Flex>
+        {message.role === "user" && (
+          <>
+            <UserCircle 
+              size={24} 
+              weight="duotone" 
+              className="text-gray-400 invert dark:invert-0" 
+            />
+            <DeleteButton 
+              action={deleteMessage} 
+              itemId={message.id} 
+              location="chat-history" 
+            />
+          </>
+        )}
+      </Flex>
+    </Card>
+  )
+}
+
 const ChatHistory = ({
   messages
 }: {
@@ -167,48 +217,7 @@ const ChatHistory = ({
           </Flex>
         )}
         {messages.length > 0 && messages.map((message) => (
-          <Card 
-            key={message.id} 
-            variant="surface" 
-            className={cn("relative group w-fit max-w-[86%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-              "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
-            })}
-          >
-            <Flex gap="4" align="start">
-              {message.role === "model" && (
-                <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
-              )}
-              <Flex 
-                direction="column" 
-                gap="2" 
-                className={cn({"items-end": message.role === "user"})}
-              >
-                <Flex direction="column" gap="2">
-                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                    {message.content}
-                  </ReactMarkdown>
-                </Flex>
-                <Text as="span" size="1">
-                  {new Date(message.timestamp).toLocaleDateString()}{" - "}
-                  {new Date(message.timestamp).toLocaleTimeString()}
-                </Text>
-              </Flex>
-              {message.role === "user" && (
-                <>
-                  <UserCircle 
-                    size={24} 
-                    weight="duotone" 
-                    className="text-gray-400 invert dark:invert-0" 
-                  />
-                  <DeleteButton 
-                    action={deleteMessage} 
-                    itemId={message.id} 
-                    location="chat-history" 
-                  />
-                </>
-              )}
-            </Flex>
-          </Card>
+          <ChatMessageCard key={message.id} message={message} />
         ))}
       </Flex>
     </ScrollArea>
