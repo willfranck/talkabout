@@ -13,15 +13,11 @@ import {
   Text, 
   TextField, 
   Progress, 
-  Badge,
-  IconButton
+  Badge
 } from "@radix-ui/themes"
 import { 
   Trash,
-  ArrowDown,
-  Info, 
-  Warning,
-  Prohibit
+  ArrowDown
 } from "@phosphor-icons/react/dist/ssr"
 
 //// Control Elements
@@ -135,7 +131,7 @@ const ToolTip = ({
   children
 }: ITooltip) => {
   return (
-    <Tooltip side={side} content={content}>
+    <Tooltip side={side} content={content} style={{ transitionDelay: "5000ms", animationDelay: "5000ms" }}>
       {children}
     </Tooltip>
   )

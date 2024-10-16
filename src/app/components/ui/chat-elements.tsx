@@ -19,7 +19,6 @@ import {
   Card, 
   ScrollArea, 
   TextArea,
-  Tooltip, 
   Button,
   Heading,  
   Text 
@@ -205,7 +204,7 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
-  const tooltipContent = `Adjust the responses to suit your mood\n\nHot - Spicy, Fun, Unhinged\nCold - Pragmatic, Drier, Serious`
+  const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Tame, Cheeky, Relaxed`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
     e.preventDefault()

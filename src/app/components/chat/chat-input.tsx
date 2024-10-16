@@ -51,6 +51,7 @@ export const ChatInput = () => {
     if (messageHistory.length > 0 && messageHistory.length % 4 === 2) {  
       getTopic()
     }
+  // eslint-disable-next-line
   }, [messageHistory])
 
   const handleSubmit = async () => {

@@ -26,8 +26,8 @@
   --font-weight-exlgt: 300;
 
   --foreground: #585C64;
-  --foreground-tooltip: #2A2A2A;
-  --background-tooltip: #DADADA;
+  --foreground-tooltip: #1A1A1A;
+  --background-tooltip: #EFEFEF;
   --shadow-b: linear-gradient(to bottom, #DADADA 0%, transparent 4%);
 }
 
@@ -43,9 +43,66 @@
 
     --foreground: #AFB4BB;
     --foreground-tooltip: #EFEFEF;
-    --background-tooltip: #2A2A2A;
+    --background-tooltip: #1A1A1A;
     --shadow-b: linear-gradient(to bottom, #0A0A0A 0%, transparent 4%);
   }
+}
+
+/*//// Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInFromLeft {
+  from {
+    width: 0;
+    transform: translateX(-0.4rem);
+  }
+  to {
+    width: 100%;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.24s ease-out forwards;
+}
+
+.fade-in-right {
+  animation: fadeInFromRight 0.24s ease-out forwards;
+}
+
+.fade-in-left {
+  animation: fadeInFromLeft 0.24s ease-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.24s ease-out forwards;
 }
 
 html {
@@ -97,11 +154,16 @@ a,
 }
 
 .rt-TooltipContent {
+  opacity: 0;
+  animation: fadeIn 0.24s ease-out forwards;
+  animation-delay: 360ms;
+  padding: 0.5rem 1rem;
   background: var(--background-tooltip);
+  border: 1px solid #585C64;
 }
 
 .rt-TooltipArrow {
-  fill: var(--background-tooltip);
+  fill: #585C64;
 }
 
 /*//// Element Styles */
@@ -184,61 +246,4 @@ pre {
 
 .rounded-bl-only {
   border-radius: 0 0 0 0.375rem;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(0.4rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInFromLeft {
-  from {
-    width: 0;
-    transform: translateX(-0.4rem);
-  }
-  to {
-    width: 100%;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.24s ease-out forwards;
-}
-
-.fade-in-right {
-  animation: fadeInFromRight 0.24s ease-out forwards;
-}
-
-.fade-in-left {
-  animation: fadeInFromLeft 0.24s ease-out forwards;
-}
-
-.fade-out {
-  animation: fadeOut 0.24s ease-out forwards;
 }
