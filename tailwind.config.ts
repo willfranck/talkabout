@@ -15,6 +15,9 @@ const config: Config = {
       height: {
         "page-content": "calc(100vh - 4rem)",
       },
+      maxHeight: {
+        "page-content": "calc(100vh - 4rem)",
+      },
     },
   },
   plugins: [],

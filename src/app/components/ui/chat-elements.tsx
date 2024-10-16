@@ -201,7 +201,7 @@ const ChatHistory = ({
       type="hover"
       scrollbars="vertical"
       ref={scrollAreaRef}
-      className="flex-1 pr-12"
+      className="flex-1 md:pr-12"
     >
       <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
         {messages.length === 0 && (
@@ -310,7 +310,7 @@ const ChatInputField = ({
   return (
     <form 
       onSubmit={onSubmit} 
-      className="relative flex mt-auto mb-4 mr-12"
+      className="relative flex h-24 md:h-36 mt-auto md:mr-12 bg-gray-950"
     >
       <TemperatureControls 
         temperatureHot={temperatureSettings.hot}
@@ -328,7 +328,7 @@ const ChatInputField = ({
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
         tabIndex={1}
-        className="flex-1 h-36 px-10 whitespace-pre"
+        className="flex-1 px-10 whitespace-pre"
       />
       <Button 
         variant="soft"
