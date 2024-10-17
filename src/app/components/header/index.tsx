@@ -34,7 +34,12 @@ export default function Header() {
         }))} 
       />
       
-      <Flex align="center" justify="center" width="2.5rem" height="2.5rem">
+      <Flex 
+        align="center" 
+        justify="center" 
+        width="2.5rem" 
+        height="2.5rem"
+      >
         <SignOut size={24} />
       </Flex>
     </header>
