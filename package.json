@@ -22,7 +22,10 @@
     "dist": "run-s build electron:dist"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@google/generative-ai": "^0.21.0",
+    "@mui/material": "^6.1.4",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/themes": "^3.1.4",
     "@reduxjs/toolkit": "^2.2.7",

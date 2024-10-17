@@ -10,22 +10,9 @@ import Header from "@header/index"
 
 export const metadata: Metadata = {
   title: "Talkabout",
-  description: "AI Powered NextJS Electron App",
+  description: "AI Chat with Llamini-Flash - A llama powered by Google Gemini",
   keywords: "AI, Chat, Productivity, Application, NextJS, Electron",
   robots: "index, follow",
-  openGraph: {
-    title: "Talkabout",
-    description: "AI Powered NextJS Electron App",
-    url: "https://talkabout.vercel.app",
-    images: "https://talkabout.vercel.app/image.png",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Talkabout",
-    description: "AI Powered NextJS Electron App",
-    images: "https://talkabout.vercel.app/image.png",
-  },
 }
 
 const kumbhSans = Kumbh_Sans({
