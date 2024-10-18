@@ -16,11 +16,15 @@ import {
   Flex, 
   ScrollArea, 
   Text, 
-  Button, 
   Callout, 
   Heading, 
 } from "@radix-ui/themes"
-import { SegmentedController } from "@ui/radix-elements"
+import {
+  Box,
+  Button,
+  Typography,
+} from "@mui/material"
+import { FlexBox } from "@ui/mui-elements"
 import { ChatHistoryTabs } from "@ui/chat-elements"
 import { 
   ChatTeardropText, 
@@ -28,6 +32,7 @@ import {
   Info
 } from "@phosphor-icons/react/dist/ssr"
 import { threadCategories } from "@globals/values"
+import { ToggleGroup } from "@ui/mui-elements"
 
 
 export const ChatPanel = () => {
@@ -52,35 +57,42 @@ export const ChatPanel = () => {
   }, [dispatch, threads])
 
   return (
-    <aside className="flex flex-col items-center shrink-0 w-96 md:h-page-content gap-4 pt-8 pb-2 bg-gray-400/50 dark:bg-gray-950/30">
-      <Flex 
-        direction="row" 
-        align="center" 
-        justify="between" 
-        width="100%" 
-        px="4"
-      >
-        <Flex 
-          direction="row" 
-          align="center" 
-          gap="1"
-        >
+    <FlexBox as="aside"
+      sx={{
+        flexDirection: "column",
+        justifyContent: "start",
+        flexShrink: "0",
+        gap: "1rem",
+        width: "24rem",
+        height: "100%",
+        paddingTop: "2rem",
+        paddingBottom: "1rem"
+      }} 
+      className="bg-gray-400/50 dark:bg-gray-950/30"
+    >
+      <FlexBox sx={{
+        justifyContent: "space-between",
+        width: "100%",
+        paddingX: "1rem"
+      }}>
+        <FlexBox sx={{
+          gap: "0.25rem"
+        }}>
           <ChatTeardropText size={24} weight="bold" />
-          <Heading>Chats</Heading>
-        </Flex>
-        <SegmentedController 
+          <Typography variant="h5" fontWeight="700">Chats</Typography>
+        </FlexBox>
+        <ToggleGroup 
           values={threadCategories} 
           activeTab={activeThreadCategory}
           onClick={(value) => setActiveThreadCategory(value)} 
         />
-      </Flex>
+      </FlexBox>
 
       <Button 
-        variant="ghost" 
         onMouseEnter={() => displayTextByChar("New Thread", setDisplayedText)}
         onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
-        className="group mt-2 mb-1"
+        className="group"
       >
         <Text as="span">{displayedText}</Text>
         <PlusCircle size={24} />
@@ -103,12 +115,12 @@ export const ChatPanel = () => {
         </Callout.Root>
       )}
 
-      <ScrollArea 
-        type="scroll" 
-        scrollbars="vertical"
-      >
+      <Box sx={{
+        width: "100%",
+        overflowY: "scroll",
+      }}>
         <ChatHistoryTabs threads={sortedThreads(threads)} />
-      </ScrollArea>
-    </aside>  
+      </Box>
+    </FlexBox>  
   )
 }

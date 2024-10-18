@@ -14,25 +14,25 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
-import { 
-  Flex,
-  Card, 
-  ScrollArea, 
-  TextArea,
-  Button,
-  Heading,  
-  Text 
-} from "@radix-ui/themes"
 import {
+  Card,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  Input,
+} from "@mui/material"
+import {
+  FlexBox,
   DeleteButton, 
-  ToolTip
-} from "@ui/radix-elements"
+} from "@ui/mui-elements"
 import { 
   CaretCircleRight, 
   UserCircle, 
   Fire, 
   Snowflake,
-  PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
 import { useActiveThread, useMessageHistory } from "@hooks/chat"
 
@@ -50,36 +50,54 @@ const ThreadCard = ({
   }, [thread.topic])
 
   return (
-    <Card
+    <Card 
       key={thread.id}
-      variant="surface"
-      className={cn("relative group w-full pl-2 cursor-pointer opacity-0 fade-in", {
-        "bg-gray-600": thread.active,
-        "hover:bg-gray-700": !thread.active,
-      })}
-      style={{ animationDelay: "120ms" }}
+      elevation={2}
+      sx={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        padding: "0.5rem 1rem 0.5rem 0.5rem",
+        cursor: "pointer",
+        opacity: "0"
+      }}
+      className="group fade-in"
+      style={{ animationDelay: "180ms" }}
     >
-      <Flex
-        direction="row"
-        align="center"
-        justify="between"
+      <FlexBox 
         onClick={() => selectActiveThread(dispatch, thread.id)}
+        sx={{
+          justifyContent: "space-between",
+          width: "100%",
+        }}
       >
-        <Flex direction="column" gap="1" px="2">
-          <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
+        <FlexBox sx={{
+          flexDirection: "column",
+          alignItems: "start",
+          gap: "0.25rem",
+          paddingX: "0.5rem"
+        }}>
+          <Typography 
+            variant="body1" 
+            sx={{
+              minHeight: "1rem",
+            }}
+            className="line-clamp-1 fade-in"
+          >
             {threadTopic}
-          </Heading>
-          <Text as="span" size="1">
+          </Typography>
+          <Typography variant="body2">
             {new Date(thread.created).toLocaleDateString()}
-          </Text>
-        </Flex>
+          </Typography>
+        </FlexBox>
         <CaretCircleRight
           size={24}
           className={cn("opacity-0", {
             "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
           })}
         />
-      </Flex>
+      </FlexBox>
       <DeleteButton 
         action={removeThread} 
         itemId={thread.id} 
@@ -95,14 +113,20 @@ const ChatHistoryTabs = ({
   threads: ChatThread[]
 }) => {
   return (
-    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
+    <FlexBox sx={{
+      flexDirection: "column",
+      gap: "0.5rem",
+      width: "100%",
+      paddingX: "1rem",
+      paddingBottom: "0.5rem"
+    }}>
       {threads.map((thread) => (
         <ThreadCard 
           key={thread.id} 
           thread={thread} 
         />
       ))}
-    </Flex>
+    </FlexBox>
   )
 }
 
@@ -112,38 +136,47 @@ const ChatMessageCard = ({
   message: ChatMessage
 }) => {
   return (
-    <Card 
-      variant="surface" 
-      className={cn("relative group w-fit max-w-[86%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-        "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
-      })}
+    <Card sx={{
+      position: "relative",
+      alignSelf: (message.role === "user" ? "end" : "start"),
+      flexShrink: "0",
+      width: "fit-content",
+      maxWidth: "86%",
+      padding: "1rem",
+      bgcolor: (message.role === "user" ? "rgba(31, 41, 55, 0.6)" : "rgba(5, 15, 29, 0.6)")
+    }}
+      className="group fade-in"
     >
-      <Flex gap="4" align="start">
+      <FlexBox sx={{
+        alignItems: "start",
+        gap: "1rem",
+      }}>
         {message.role === "model" && (
-          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
+          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" />
         )}
-        <Flex 
-          direction="column" 
-          gap="2" 
-          className={cn({"items-end": message.role === "user"})}
-        >
-          <Flex direction="column" gap="2">
+        <FlexBox sx={{
+          flexDirection: "column",
+          alignItems: (message.role === "model" ? "start" : "end"),
+          gap: "0.5rem",
+        }}>
+          <FlexBox sx={{
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "0.5rem",
+            width: "100%",
+          }}>
             <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
               {message.content}
             </ReactMarkdown>
-          </Flex>
-          <Text as="span" size="1">
+          </FlexBox>
+          <Typography variant="body2">
             {new Date(message.timestamp).toLocaleDateString()}{" - "}
             {new Date(message.timestamp).toLocaleTimeString()}
-          </Text>
-        </Flex>
+          </Typography>
+        </FlexBox>
         {message.role === "user" && (
           <>
-            <UserCircle 
-              size={24} 
-              weight="duotone" 
-              className="text-gray-400 invert dark:invert-0" 
-            />
+            <UserCircle size={24} weight="duotone" />
             <DeleteButton 
               action={deleteMessage} 
               itemId={message.id} 
@@ -151,7 +184,7 @@ const ChatMessageCard = ({
             />
           </>
         )}
-      </Flex>
+      </FlexBox>
     </Card>
   )
 }
@@ -197,15 +230,32 @@ const ChatHistory = ({
   }, [messages, messageHistory])
 
   return (
-    <ScrollArea 
-      type="hover"
-      scrollbars="vertical"
-      ref={scrollAreaRef}
-      className="flex-1 md:pr-12"
-    >
-      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
+    // <Box sx={{
+    //   overflowY: "auto"
+    // }} 
+    //   ref={scrollAreaRef}
+    // >
+      <FlexBox 
+        ref={scrollAreaRef}
+        sx={{
+          flexDirection: "column",
+          justifyContent: "start",
+          gap: "1.5rem",
+          paddingY: "1.5rem",
+          width: "100%",
+          height: "100%",
+          overflowY: "auto"
+        }}
+      >
         {messages.length === 0 && (
-          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
+          <FlexBox sx={{
+            flexDirection: "column",
+            gap: "1rem",
+            width: "100%",
+            height: "100%"
+          }}
+            className="fade-in"
+          >
             <Image 
               src={"./images/Llama.webp"}
               alt="Llama logo"
@@ -213,14 +263,14 @@ const ChatHistory = ({
               height={128}
               className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
             />
-            <Text as="span">much empty in here</Text>
-          </Flex>
+            <Typography variant="body2">much empty in here</Typography>
+          </FlexBox>
         )}
         {messages.length > 0 && messages.map((message) => (
           <ChatMessageCard key={message.id} message={message} />
         ))}
-      </Flex>
-    </ScrollArea>
+      </FlexBox>
+    // </Box>
   )
 }
 
@@ -240,42 +290,47 @@ const TemperatureControls = ({
 }: ITemperature) => {
   const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLElement>, value: number) => {
     e.preventDefault()
     setAiTemperature(value)
     onTemperatureChange(value)
   }
 
   return (
-    <ToolTip side="left" content={tooltipContent}>
-      <Flex 
-        direction="column"
-        align="center" 
-        justify="center"
-        className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
+    // <Tooltip title={tooltipContent}>
+      <ToggleButtonGroup 
+        orientation="vertical"
+        exclusive
+        sx={{
+          width: "1.8rem",
+          height: "6rem",
+          borderRadius: "2px"
+        }}
       >
-        <Button
-          variant="ghost"
+        <ToggleButton sx={{
+          height: "50%",
+          borderRadius: "0.4rem"
+        }}
+          selected={temperatureHot === aiTemperature}
           value={temperatureHot}
-          aria-pressed={temperatureHot === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureHot)}
-          tabIndex={-1}
-          className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
+          // className="aria-pressed:bg-[#00384B]"
         >
           <Fire size={20} weight="bold" />
-        </Button>
-        <Button
-          variant="ghost"
+        </ToggleButton>
+        <ToggleButton sx={{
+          height: "50%",
+          borderRadius: "0.4rem"
+        }}
           value={temperatureCold}
-          aria-pressed={temperatureCold === aiTemperature}
+          selected={temperatureCold === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureCold)}
-          tabIndex={-1}
-          className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
+          // className="aria-pressed:bg-[#00384B]"
         >
           <Snowflake size={20} weight="bold" />
-        </Button>
-      </Flex>
-    </ToolTip>
+        </ToggleButton>
+      </ToggleButtonGroup>
+    // </Tooltip>
   )
 }
 
@@ -286,7 +341,7 @@ interface IChatInput {
   temperatureSettings: { hot: number, normal: number, cold: number }
   defaultTemperature: number
   onTemperatureChange: (temperature: number) => void
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+  onChange: (event: React.ChangeEvent<HTMLElement>) => void
   onSubmit: () => void
 }
 
@@ -300,7 +355,7 @@ const ChatInputField = ({
   onChange,
   onSubmit
 }: IChatInput) => {
-  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
       onSubmit()
@@ -308,37 +363,39 @@ const ChatInputField = ({
   }
 
   return (
-    <form 
-      onSubmit={onSubmit} 
-      className="relative flex h-24 md:h-36 mt-auto md:mr-12 bg-gray-950"
+    <FormControl 
+      component="form"
+      variant="outlined"
+      onSubmit={onSubmit}
+      sx={{
+        width: "100%",
+        padding: "0 0.5rem",
+      }}
     >
-      <TemperatureControls 
-        temperatureHot={temperatureSettings.hot}
-        temperatureNormal={temperatureSettings.normal}
-        temperatureCold={temperatureSettings.cold}
-        defaultTemperature={defaultTemperature}
-        onTemperatureChange={onTemperatureChange}
-      />
-      <TextArea 
-        variant="surface"
-        size="3"
+      <InputLabel htmlFor="input-with-icon-adornment">
+        Chat
+      </InputLabel>
+      <Input
+        multiline
+        rows="5"
+        startAdornment={
+          <InputAdornment position="start" sx={{ marginRight: "1rem" }}>
+            <TemperatureControls 
+              temperatureHot={temperatureSettings.hot}
+              temperatureNormal={temperatureSettings.normal}
+              temperatureCold={temperatureSettings.cold}
+              defaultTemperature={defaultTemperature}
+              onTemperatureChange={onTemperatureChange}
+            />
+          </InputAdornment>
+        }
         value={prompt}
         placeholder="Message Llamini-Flash"
         disabled={threads === 0 || activeThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
-        tabIndex={1}
-        className="flex-1 px-10 whitespace-pre"
       />
-      <Button 
-        variant="soft"
-        onClick={onSubmit}
-        disabled={prompt.trim().length === 0}
-        className="absolute bottom-0 right-0 w-10 h-full rounded-right-only"
-      >
-        <PaperPlaneTilt size={20} />
-      </Button>
-    </form>
+    </FormControl>
   )
 }
 

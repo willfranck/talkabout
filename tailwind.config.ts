@@ -13,10 +13,10 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       height: {
-        "page-content": "calc(100vh - 4rem)",
+        "page-content": "calc(100vh - 4.3rem)",
       },
       maxHeight: {
-        "page-content": "calc(100vh - 4rem)",
+        "page-content": "calc(100vh - 4.3rem)",
       },
     },
   },
