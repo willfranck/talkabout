@@ -68,7 +68,9 @@ const Nav = ({
         label={link.icon}
         sx={{ 
           color: (link.path === pathname ? "primary.light" : "secondary.light"),
-          "&:hover": { color: "secondary.contrastText" }
+          "&:hover": { 
+            color: "secondary.contrastText" 
+          }
         }}
       />
     </Link>

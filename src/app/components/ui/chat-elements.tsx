@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
 import { useAppDispatch } from "@redux/hooks"
 import { 
   useActiveThread, 
@@ -40,6 +38,8 @@ import {
   Fire, 
   Snowflake,
 } from "@phosphor-icons/react/dist/ssr"
+import ReactMarkdown from "react-markdown"
+import rehypeHighlight from "rehype-highlight"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -66,10 +66,9 @@ const ThreadCard = ({
         padding: "0.5rem 1rem 0.5rem 0.5rem",
         cursor: "pointer",
         opacity: "0",
-        color: (thread.active ? "secondary.contrastText" : "secondary.light"),
         bgcolor: (thread.active ? "primary.dark" : ""),
         "&:hover": {
-          backgroundColor: (thread.active ? "" : theme.palette.accent.dark)
+          backgroundColor: (thread.active ? "" : alpha(theme.palette.accent.dark, 0.9))
         }
       }}
       className="group fade-in"
@@ -92,7 +91,8 @@ const ThreadCard = ({
             variant="body1" 
             sx={{
               minHeight: "1rem",
-            }}
+              color: (thread.active ? "secondary.contrastText" : "secondary.light"),
+            }}  
             className="line-clamp-1 fade-in"
           >
             {threadTopic}

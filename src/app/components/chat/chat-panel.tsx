@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { ChatThread } from "@types"
+import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
 import { 
   createNewThread, 
@@ -18,15 +19,18 @@ import {
   Typography,
   Alert
 } from "@mui/material"
-import { FlexBox } from "@ui/mui-elements"
-import { ChatHistoryTabs } from "@ui/chat-elements"
+import { 
+  FlexBox, 
+  ToggleGroup 
+} from "@ui/mui-elements"
+import { 
+  ChatHistoryTabs 
+} from "@ui/chat-elements"
 import { 
   ChatTeardropText, 
   PlusCircle, 
   Info
 } from "@phosphor-icons/react/dist/ssr"
-import { threadCategories } from "@globals/values"
-import { ToggleGroup } from "@ui/mui-elements"
 
 
 export const ChatPanel = () => {
