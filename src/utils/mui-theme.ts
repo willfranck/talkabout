@@ -2,7 +2,9 @@
 import { createTheme, alpha } from "@mui/material/styles"
 import { grey, cyan } from "@mui/material/colors"
 
+
 const theme = createTheme({
+  //// MUI Palette
   palette: {
     mode: 'dark',
     primary: {
@@ -23,7 +25,7 @@ const theme = createTheme({
     },
     divider: '#37474F',
   },
-
+  //// MUI Typography
   typography: (palette) => ({
     fontFamily: "var(--font-kumbh-sans)",
     h1: {
@@ -46,7 +48,7 @@ const theme = createTheme({
       color: palette.secondary.main,
     },
   }),
-
+  //// MUI Components
   components: {
     MuiContainer: {
       defaultProps: {
@@ -83,13 +85,6 @@ const theme = createTheme({
           textTransform: "none",
           borderRadius: "9999px",
         }
-      }
-    },
-    MuiToggleButtonGroup: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          borderBlockColor: "#FFFFFF"
-        })
       }
     },
     MuiToggleButton: {

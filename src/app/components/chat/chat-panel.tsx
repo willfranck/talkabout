@@ -13,11 +13,8 @@ import {
   useThreads 
 } from "@hooks/chat"
 import { 
-  Flex, 
-  ScrollArea, 
   Text, 
   Callout, 
-  Heading, 
 } from "@radix-ui/themes"
 import {
   Box,
@@ -94,8 +91,13 @@ export const ChatPanel = () => {
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
         className="group"
       >
-        <Text as="span">{displayedText}</Text>
-        <PlusCircle size={24} />
+        <Typography 
+          variant="body2"
+          color="primary.main"
+        >
+          {displayedText}
+        </Typography>
+        <PlusCircle size={24} weight="bold" />
       </Button>
 
       {threads.length === 0 && (

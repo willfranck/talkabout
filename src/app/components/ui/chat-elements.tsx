@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from "react"
-import { cn } from "@utils/clsx"
 import Image from "next/image"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
 import { useAppDispatch } from "@redux/hooks"
+import { 
+  useActiveThread, 
+  useMessageHistory 
+} from "@hooks/chat"
 import { 
   ChatThread, 
   ChatMessage 
@@ -14,9 +17,7 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
-import theme from "@utils/mui-theme"
 import {
-  alpha,
   Card,
   ToggleButtonGroup,
   ToggleButton,
@@ -25,19 +26,18 @@ import {
   InputLabel,
   InputAdornment,
   Input,
+  Tooltip
 } from "@mui/material"
 import {
   FlexBox,
   DeleteButton, 
 } from "@ui/mui-elements"
-import { ArrowCircleRightOutlined,  } from "@mui/icons-material"
 import { 
   CaretCircleRight, 
   UserCircle, 
   Fire, 
   Snowflake,
 } from "@phosphor-icons/react/dist/ssr"
-import { useActiveThread, useMessageHistory } from "@hooks/chat"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -97,7 +97,7 @@ const ThreadCard = ({
           </Typography>
         </FlexBox>
         {thread.active && (
-          <ArrowCircleRightOutlined />
+          <CaretCircleRight size={24} />
         )}
       </FlexBox>
       <DeleteButton 
@@ -234,47 +234,41 @@ const ChatHistory = ({
   }, [messages, messageHistory])
 
   return (
-    // <Box sx={{
-    //   overflowY: "auto"
-    // }} 
-    //   ref={scrollAreaRef}
-    // >
-      <FlexBox 
-        ref={scrollAreaRef}
-        sx={{
+    <FlexBox 
+      ref={scrollAreaRef}
+      sx={{
+        flexDirection: "column",
+        justifyContent: "start",
+        gap: "1.5rem",
+        paddingY: "1.5rem",
+        width: "100%",
+        height: "100%",
+        overflowY: "auto"
+      }}
+    >
+      {messages.length === 0 && (
+        <FlexBox sx={{
           flexDirection: "column",
-          justifyContent: "start",
-          gap: "1.5rem",
-          paddingY: "1.5rem",
+          gap: "1rem",
           width: "100%",
-          height: "100%",
-          overflowY: "auto"
+          height: "100%"
         }}
-      >
-        {messages.length === 0 && (
-          <FlexBox sx={{
-            flexDirection: "column",
-            gap: "1rem",
-            width: "100%",
-            height: "100%"
-          }}
-            className="fade-in"
-          >
-            <Image 
-              src={"./images/Llama.webp"}
-              alt="Llama logo"
-              width={128}
-              height={128}
-              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
-            />
-            <Typography variant="body2">much empty in here</Typography>
-          </FlexBox>
-        )}
-        {messages.length > 0 && messages.map((message) => (
-          <ChatMessageCard key={message.id} message={message} />
-        ))}
-      </FlexBox>
-    // </Box>
+          className="fade-in"
+        >
+          <Image 
+            src={"./images/Llama.webp"}
+            alt="Llama logo"
+            width={128}
+            height={128}
+            className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
+          />
+          <Typography variant="body2">much empty in here</Typography>
+        </FlexBox>
+      )}
+      {messages.length > 0 && messages.map((message) => (
+        <ChatMessageCard key={message.id} message={message} />
+      ))}
+    </FlexBox>
   )
 }
 
@@ -301,7 +295,7 @@ const TemperatureControls = ({
   }
 
   return (
-    // <Tooltip title={tooltipContent}>
+    <Tooltip title={tooltipContent} placement="left" arrow>
       <ToggleButtonGroup 
         orientation="vertical"
         exclusive
@@ -318,7 +312,6 @@ const TemperatureControls = ({
           selected={temperatureHot === aiTemperature}
           value={temperatureHot}
           onClick={(e) => handleButtonClick(e, temperatureHot)}
-          // className="aria-pressed:bg-[#00384B]"
         >
           <Fire size={20} weight="bold" />
         </ToggleButton>
@@ -329,12 +322,11 @@ const TemperatureControls = ({
           value={temperatureCold}
           selected={temperatureCold === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureCold)}
-          // className="aria-pressed:bg-[#00384B]"
         >
           <Snowflake size={20} weight="bold" />
         </ToggleButton>
       </ToggleButtonGroup>
-    // </Tooltip>
+    </Tooltip>
   )
 }
 

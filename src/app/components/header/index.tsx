@@ -39,11 +39,11 @@ function ResponsiveAppBar() {
               className="w-10 h-10 rounded-logo invert dark:invert-0"
             />
           </Link>
-          <FlexBox sx={{ flexGrow: 1, display: { justifyContent: "center" } }}>
+          <FlexBox sx={{ flexGrow: 1 }}>
             <Nav links={links}  />
           </FlexBox>
           <FlexBox>
-            <SignIn size={24} />
+            <SignIn size={24} weight="bold" />
           </FlexBox>
         </Toolbar>
       </Container>
