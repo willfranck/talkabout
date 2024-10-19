@@ -89,7 +89,7 @@ export const ChatPanel = () => {
       </FlexBox>
 
       <Button 
-        onMouseEnter={() => displayTextByChar("New Thread", setDisplayedText)}
+        onMouseEnter={() => displayTextByChar("New Thread ", setDisplayedText)}
         onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
         className="group"

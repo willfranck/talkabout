@@ -4,7 +4,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { Kumbh_Sans } from "next/font/google"
 import theme from "@utils/mui-theme"
-// import "@radix-ui/themes/styles.css"
 import "./globals.css"
 import Header from "@header/index"
 
@@ -31,18 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${kumbhSans.variable}`}>
-        {/* <ThemeProvider 
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        > */}
-          {/* <Theme 
-            appearance="inherit"
-            accentColor="cyan"
-            grayColor="slate" 
-            radius="full" 
-            scaling="100%"
-          > */}
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -50,7 +37,6 @@ export default function RootLayout({
               <Header />
               {children}
             </ReduxProvider>
-          {/* </Theme> */}
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

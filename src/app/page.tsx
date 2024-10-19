@@ -73,7 +73,7 @@ export default function Home() {
               textTransform: "none"
             }}>
               <AppleLogo size={24} weight="fill" className="mr-2" />
-              <Typography variant="body2">Download for Mac</Typography>
+              <Typography variant="body2" color="primary.main">Download for Mac</Typography>
             </Button>
             <Button variant="outlined" sx={{
               width: "16rem",
@@ -81,7 +81,7 @@ export default function Home() {
               textTransform: "none"
             }}>
               <WindowsLogo size={24} weight="fill" className="mr-2" />
-              <Typography variant="body2">Download for Windows</Typography>
+              <Typography variant="body2" color="primary.main">Download for Windows</Typography>
             </Button>
           </Box>
         </Box>

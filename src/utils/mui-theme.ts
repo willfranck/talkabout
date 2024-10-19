@@ -1,47 +1,52 @@
 "use client"
-import { createTheme } from "@mui/material/styles"
-import { cyan } from "@mui/material/colors"
+import { createTheme, alpha } from "@mui/material/styles"
+import { grey, cyan } from "@mui/material/colors"
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: cyan[500],
+      main: cyan[700],
+      dark: cyan[900],
+      light: cyan[400],
+      contrastText: cyan[200],
     },
     secondary: {
-      main: cyan[300],
+      main: grey[600],
+      dark: grey[900],
+      light: grey[300],
+      contrastText: grey[50],
     },
     background: {
-      default: "#121212",
-      paper: '#161616',
-    },
-    text: {
-      primary: '#EFEFEF',
-      secondary: '#B0BEC5',
+      default: "#101010",
+      paper: "181818",
     },
     divider: '#37474F',
   },
-  typography: {
+
+  typography: (palette) => ({
     fontFamily: "var(--font-kumbh-sans)",
     h1: {
       fontSize: '2.2rem',
       fontWeight: 600,
+      color: palette.secondary.light,
     },
     h2: {
       fontSize: '2rem',
       fontWeight: 500,
+      color: palette.primary.light,
     },
     body1: {
-      fontSize: '1rem',
-      color: '#EFEFEF',
+      fontSize: '0.95rem',
+      color: palette.secondary.light,
       whiteSpace: "pre-wrap",
     },
     body2: {
-      fontSize: '0.875rem',
-      color: '#8A8A8A',
+      fontSize: '0.85rem',
+      color: palette.secondary.main,
     },
-  },
-  
+  }),
+
   components: {
     MuiContainer: {
       defaultProps: {
@@ -57,17 +62,18 @@ const theme = createTheme({
     },
     MuiCard: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.dark,
           borderRadius: "10px",
-        }
+        })
       }
     },
     MuiFormControl: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          backgroundColor: alpha(theme.palette.secondary.dark, 0.3),
           borderRadius: "0.5rem",
-          backgroundColor: "#0A0A0AAA",
-        }
+        })
       }
     },
     MuiButton: {
@@ -79,21 +85,39 @@ const theme = createTheme({
         }
       }
     },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderBlockColor: "#FFFFFF"
+        })
+      }
+    },
     MuiToggleButton: {
       defaultProps: {
         tabIndex: 0,
       },
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          backgroundColor: theme.palette.secondary.dark,
           textTransform: "none",
-          borderRadius: "9999px"
-        },
-        selected: {
-          color: "I want the secondary color here",
-        }
+          borderRadius: "9999px",
+          "&:hover": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.primary.dark,
+          },
+          "&.Mui-selected": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.primary.main,
+            "&:hover": {
+              color: theme.palette.secondary.light,
+              backgroundColor: theme.palette.primary.main,
+            }
+          }
+        })
       }
-    },
-  },
+    }
+  }
 })
 
 export default theme

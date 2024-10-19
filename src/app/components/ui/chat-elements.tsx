@@ -14,7 +14,9 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
+import theme from "@utils/mui-theme"
 import {
+  alpha,
   Card,
   ToggleButtonGroup,
   ToggleButton,
@@ -28,6 +30,7 @@ import {
   FlexBox,
   DeleteButton, 
 } from "@ui/mui-elements"
+import { ArrowCircleRightOutlined,  } from "@mui/icons-material"
 import { 
   CaretCircleRight, 
   UserCircle, 
@@ -60,7 +63,8 @@ const ThreadCard = ({
         width: "100%",
         padding: "0.5rem 1rem 0.5rem 0.5rem",
         cursor: "pointer",
-        opacity: "0"
+        opacity: "0",
+        bgcolor: (thread.active ? "primary.dark" : "")
       }}
       className="group fade-in"
       style={{ animationDelay: "180ms" }}
@@ -80,6 +84,7 @@ const ThreadCard = ({
         }}>
           <Typography 
             variant="body1" 
+            color={thread.active ? "secondary.contrastText" : "secondary.light"}
             sx={{
               minHeight: "1rem",
             }}
@@ -87,16 +92,13 @@ const ThreadCard = ({
           >
             {threadTopic}
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" color={thread.active ? "primary.light" : "primary.main"}>
             {new Date(thread.created).toLocaleDateString()}
           </Typography>
         </FlexBox>
-        <CaretCircleRight
-          size={24}
-          className={cn("opacity-0", {
-            "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
-          })}
-        />
+        {thread.active && (
+          <ArrowCircleRightOutlined />
+        )}
       </FlexBox>
       <DeleteButton 
         action={removeThread} 
@@ -143,9 +145,11 @@ const ChatMessageCard = ({
       width: "fit-content",
       maxWidth: "86%",
       padding: "1rem",
-      bgcolor: (message.role === "user" ? "rgba(31, 41, 55, 0.6)" : "rgba(5, 15, 29, 0.6)")
+      bgcolor: (message.role === "user" ? "" : "primary.dark"),
+      opacity: 0
     }}
       className="group fade-in"
+      style={{ animationDelay: "120ms" }}
     >
       <FlexBox sx={{
         alignItems: "start",
@@ -169,7 +173,7 @@ const ChatMessageCard = ({
               {message.content}
             </ReactMarkdown>
           </FlexBox>
-          <Typography variant="body2">
+          <Typography variant="body2" color={message.role === "user" ? "primary.main" : "primary.light"}>
             {new Date(message.timestamp).toLocaleDateString()}{" - "}
             {new Date(message.timestamp).toLocaleTimeString()}
           </Typography>

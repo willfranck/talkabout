@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
@@ -26,6 +28,7 @@ const FlexBox = styled(Box)<BoxProps>(({}) => ({
 interface INav {
   name: string
   path: string
+  icon: React.ReactNode
 }
 
 const Nav = ({
@@ -33,19 +36,29 @@ const Nav = ({
 }: {
   links: INav[]
 }) => {
+  const pathname = usePathname()
+  const currentPath = links.findIndex(link => link.path === pathname)
+  const [tabIndex, setTabIndex] = useState(currentPath)
+
+  useEffect(() => {
+    setTabIndex(currentPath)
+  }, [currentPath])
+
   const linkElements = links.map((link) => (
-    <Link href={link.path}>
-      <Tab sx={{ 
-        padding: "0.25rem" 
-      }}
+    <Link href={link.path} className="outline-none">
+      <Tab 
         key={link.name} 
-        label={link.name}
+        label={link.icon}
+        sx={{ 
+          color: (link.path === pathname ? "primary.light" : "secondary.light"),
+          "&:hover": { color: "secondary.contrastText" }
+        }}
       />
     </Link>
   ))
   
   return (
-    <Tabs>
+    <Tabs value={tabIndex}>
       {linkElements}
     </Tabs>
   )
@@ -114,12 +127,13 @@ const DeleteButton = ({
         width: "3.5rem",
         height: "100%",
         borderRadius: "0",
-        bgcolor: "rgb(220, 38, 38)",
+        color: "secondary.contrastText",
+        bgcolor: "#C12114",
         opacity: "0",
       }} 
       className="group-hover:opacity-100"
     >
-      <Trash size={23} />
+      <Trash size={23} color="currentColor" />
       {location === "chat-history" && (
         <ArrowDown size={20} />
       )}
