@@ -26,11 +26,11 @@ import {
   InputLabel,
   InputAdornment,
   Input,
-  Tooltip
 } from "@mui/material"
 import {
   FlexBox,
-  DeleteButton, 
+  ToolTip, 
+  DeleteButton
 } from "@ui/mui-elements"
 import { 
   CaretCircleRight, 
@@ -295,7 +295,7 @@ const TemperatureControls = ({
   }
 
   return (
-    <Tooltip title={tooltipContent} placement="left" arrow>
+    <ToolTip title={tooltipContent} placement="left" arrow>
       <ToggleButtonGroup 
         orientation="vertical"
         exclusive
@@ -326,7 +326,7 @@ const TemperatureControls = ({
           <Snowflake size={20} weight="bold" />
         </ToggleButton>
       </ToggleButtonGroup>
-    </Tooltip>
+    </ToolTip>
   )
 }
 

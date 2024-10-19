@@ -4,13 +4,17 @@ import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import {
+  alpha,
   Box,
   BoxProps,
   Button,
   Tabs,
   Tab,
   ToggleButtonGroup,
-  ToggleButton
+  ToggleButton,
+  Tooltip,
+  TooltipProps,
+  tooltipClasses
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { 
@@ -23,6 +27,19 @@ const FlexBox = styled(Box)<BoxProps>(({}) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center"
+}))
+
+const ToolTip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: alpha(theme.palette.info.dark, 0.3),
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: alpha(theme.palette.info.dark, 0.3),
+    textAlign: "center",
+    padding: "0.5rem",
+  },
 }))
 
 interface INav {
@@ -144,6 +161,7 @@ const DeleteButton = ({
 
 export {
   FlexBox,
+  ToolTip,
   Nav,
   ToggleGroup,
   DeleteButton,
