@@ -1,6 +1,7 @@
 import { AppDispatch } from "@redux/store"
 import { 
   createThread, 
+  archiveThread,
   deleteThread, 
   setActiveThread, 
   deleteMessages
@@ -20,6 +21,10 @@ function createNewThread(dispatch: AppDispatch) {
     lastActive: ""
   }
   dispatch(createThread(newThread))
+}
+
+function archiveChat(dispatch: AppDispatch, threadId: string) {
+  dispatch(archiveThread(threadId))
 }
 
 function removeThread(dispatch: AppDispatch, threadId: string) {
@@ -58,6 +63,7 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 
 export {
   createNewThread,
+  archiveChat,
   removeThread,
   selectActiveThread,
   deleteMessage,

@@ -21,7 +21,8 @@ import {
 } from "@mui/material"
 import { 
   FlexBox, 
-  ToggleGroup 
+  ToggleGroup, 
+  ToolTip
 } from "@ui/mui-elements"
 import { 
   ChatHistoryTabs 
@@ -29,6 +30,7 @@ import {
 import { 
   ChatTeardropText, 
   PlusCircle, 
+  StackPlus,
   Info
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -100,7 +102,7 @@ export const ChatPanel = () => {
         </Typography>
         <PlusCircle size={24} weight="bold" />
       </Button>
-
+        
       {threads.length === 0 && (
         <Alert 
           icon={<Info />} 

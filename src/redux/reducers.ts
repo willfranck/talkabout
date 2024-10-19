@@ -57,6 +57,23 @@ const chatSlice = createSlice({
         activeThread.lastActive = action.payload
       }
     },
+    archiveThread: (state, action: PayloadAction<string>) => {
+      const threadToArchive = state.threads.find(thread => thread.id === action.payload)
+      if (threadToArchive) {
+        threadToArchive.category = "archived"
+        if (threadToArchive.active && state.threads.length > 0) {
+          threadToArchive.active = false
+          const lastActiveThread = state.threads.reduce((latest, current) => {
+            return current.lastActive > latest.lastActive ? current : latest
+          })
+          if (lastActiveThread) {
+            state.threads.forEach(thread => {
+              thread.active = thread.id === lastActiveThread.id;
+            })
+          }
+        }
+      }
+    },
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
       const activeThread = state.threads.find(thread => thread.active)
       if (activeThread) {
@@ -77,12 +94,13 @@ const chatSlice = createSlice({
       if (activeThread) {
         activeThread.messages = []
       }
-    }
+    },
   }
 })
 
 export const {
   createThread, 
+  archiveThread,
   deleteThread, 
   updateThreadTopic,
   setActiveThread,

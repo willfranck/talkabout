@@ -12,7 +12,7 @@ const PageLayout = ({
       sx={{ 
         padding: { xs: "0" }
       }} 
-      className="h-page-content"
+      className="h-page-content fade-in"
     >
       <Box 
         component="section" 

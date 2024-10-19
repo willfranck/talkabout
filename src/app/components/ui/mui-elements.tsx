@@ -19,8 +19,10 @@ import {
 import { styled } from "@mui/material/styles"
 import { 
   Trash, 
-  ArrowDown 
+  ArrowDown, 
+  Archive
 } from "@phosphor-icons/react/dist/ssr"
+import theme from "@utils/mui-theme"
 
 
 const FlexBox = styled(Box)<BoxProps>(({}) => ({
@@ -37,6 +39,7 @@ const ToolTip = styled(({ className, ...props }: TooltipProps) => (
   },
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: alpha(theme.palette.info.light, 0.3),
+    backdropFilter: "blur(20px)",
     textAlign: "center",
     padding: "0.5rem",
   },
@@ -62,18 +65,20 @@ const Nav = ({
   }, [currentPath])
 
   const linkElements = links.map((link) => (
-    <Link href={link.path} className="outline-none">
-      <Tab 
-        key={link.name} 
-        label={link.icon}
-        sx={{ 
-          color: (link.path === pathname ? "primary.light" : "secondary.light"),
-          "&:hover": { 
-            color: "secondary.contrastText" 
-          }
-        }}
-      />
-    </Link>
+    <ToolTip title={link.name} placement="bottom" arrow>
+      <Link href={link.path} className="outline-none">
+        <Tab 
+          key={link.name} 
+          label={link.icon}
+          sx={{ 
+            color: (link.path === pathname ? "highlight.main" : "secondary.main"),
+            "&:hover": { 
+              color: (link.path !== pathname ? "highlight.light" : "")
+            }
+          }}
+        />
+      </Link>
+    </ToolTip>
   ))
   
   return (
@@ -122,7 +127,7 @@ const ToggleGroup = ({
 interface IDeleteButton {
   action: (dispatch: AppDispatch, id: string) => void
   itemId: string
-  location: "chat-history" | "threads"
+  location: "chat-history" | "threads",
 }
 
 const DeleteButton = ({
@@ -140,22 +145,62 @@ const DeleteButton = ({
         position: "absolute",
         top: "0",
         right: "0",
-        display: "flex",
+        zIndex: "10",
+        display: "none",
         flexDirection: "column",
         gap: "0.25rem",
-        width: "3.5rem",
+        width: "2.5rem",
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: "#C12114",
+        bgcolor: alpha(theme.palette.error.dark, 0.7),
+        backdropFilter: "blur(20px)",
         opacity: "0",
+        animation: "fadeInFromRight 240ms ease-out forwards"
       }} 
-      className="group-hover:opacity-100"
     >
       <Trash size={23} color="currentColor" />
       {location === "chat-history" && (
         <ArrowDown size={20} />
       )}
+    </Button>
+  )
+}
+
+interface IArchiveButton {
+  action: (dispatch: AppDispatch, id: string) => void
+  itemId: string
+}
+
+const ArchiveButton = ({
+  action,
+  itemId,
+}: IArchiveButton) => {
+  const dispatch = useAppDispatch()
+
+  return (
+    <Button 
+      onClick={() => action(dispatch, itemId)}
+      tabIndex={-1}
+      sx={{
+        position: "absolute",
+        top: "0",
+        right: "2.5rem",
+        zIndex: "10",
+        display: "none",
+        flexDirection: "column",
+        gap: "0.25rem",
+        width: "2.5rem",
+        height: "100%",
+        borderRadius: "0",
+        color: "secondary.contrastText",
+        bgcolor: alpha(theme.palette.info.dark, 0.3),
+        backdropFilter: "blur(20px)",
+        opacity: "0",
+        animation: "fadeInFromRight 240ms ease-out forwards"
+      }} 
+    >
+      <Archive size={23} color="currentColor" />
     </Button>
   )
 }
@@ -167,4 +212,5 @@ export {
   Nav,
   ToggleGroup,
   DeleteButton,
+  ArchiveButton
 }

@@ -5,11 +5,11 @@ import { grey, cyan } from "@mui/material/colors"
 
 declare module '@mui/material/styles' {
   interface Palette {
-    accent: Palette['primary']
+    highlight: Palette['primary']
   }
 
   interface PaletteOptions {
-    accent?: PaletteOptions['primary']
+    highlight?: PaletteOptions['primary']
   }
 }
 
@@ -29,7 +29,7 @@ const theme = createTheme({
       light: grey[300],
       contrastText: grey[50],
     },
-    accent: {
+    highlight: {
       main: cyan[600],
       dark: cyan[800],
       light: cyan[300]

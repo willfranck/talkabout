@@ -11,6 +11,7 @@ import {
 } from "@types"
 import { 
   selectActiveThread, 
+  archiveChat, 
   removeThread, 
   deleteMessage, 
   displayTextByChar
@@ -19,6 +20,7 @@ import theme from "@utils/mui-theme"
 import {
   alpha,
   Card,
+  Button,
   ToggleButtonGroup,
   ToggleButton,
   Typography,
@@ -30,10 +32,12 @@ import {
 import {
   FlexBox,
   ToolTip, 
-  DeleteButton
+  DeleteButton,
+  ArchiveButton
 } from "@ui/mui-elements"
 import { 
-  CaretCircleRight, 
+  CaretCircleRight,
+  StackPlus, 
   UserCircle, 
   Fire, 
   Snowflake,
@@ -49,68 +53,80 @@ const ThreadCard = ({
 }) => {
   const dispatch = useAppDispatch()
   const [threadTopic, setThreadTopic] = useState("")
+  const [hovered, setHovered] = useState(false)
 
   useEffect(() => {
     displayTextByChar(thread.topic, setThreadTopic)
   }, [thread.topic])
 
   return (
-    <Card 
-      key={thread.id}
-      elevation={2}
-      sx={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        padding: "0.5rem 1rem 0.5rem 0.5rem",
-        cursor: "pointer",
-        opacity: "0",
-        bgcolor: (thread.active ? "primary.dark" : ""),
-        "&:hover": {
-          backgroundColor: (thread.active ? "" : alpha(theme.palette.accent.dark, 0.9))
-        }
-      }}
-      className="group fade-in"
-      style={{ animationDelay: "180ms" }}
-    >
-      <FlexBox 
-        onClick={() => selectActiveThread(dispatch, thread.id)}
+    <ToolTip title={thread.topic.length >= 42 && thread.topic} placement="right" arrow>
+      <Card 
+        id="ThreadCard"
+        key={thread.id}
+        elevation={2}
         sx={{
-          justifyContent: "space-between",
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
           width: "100%",
+          padding: "0.5rem 1rem 0.5rem 0.5rem",
+          cursor: "pointer",
+          opacity: "0",
+          bgcolor: (thread.active ? "primary.dark" : ""),
+          overflow: "hidden",
+          "&:hover": {
+            backgroundColor: (thread.active ? "" : alpha(theme.palette.highlight.dark, 0.9)),
+            "& .MuiButtonBase-root": {
+              display: "flex",
+            },
+          },
         }}
+        className="group fade-in"
+        style={{ animationDelay: "180ms" }}
       >
-        <FlexBox sx={{
-          flexDirection: "column",
-          alignItems: "start",
-          gap: "0.25rem",
-          paddingX: "0.5rem"
-        }}>
-          <Typography 
-            variant="body1" 
-            sx={{
-              minHeight: "1rem",
-              color: (thread.active ? "secondary.contrastText" : "secondary.light"),
-            }}  
-            className="line-clamp-1 fade-in"
-          >
-            {threadTopic}
-          </Typography>
-          <Typography variant="body2" color="primary.light">
-            {new Date(thread.created).toLocaleDateString()}
-          </Typography>
+        <FlexBox 
+          onClick={() => selectActiveThread(dispatch, thread.id)}
+          sx={{
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <FlexBox sx={{
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "0.25rem",
+            paddingX: "0.5rem"
+          }}>
+            <Typography 
+              variant="body1" 
+              sx={{
+                minHeight: "1rem",
+                color: (thread.active ? "secondary.contrastText" : "secondary.light"),
+              }}  
+              className="line-clamp-1 fade-in"
+            >
+              {threadTopic}
+            </Typography>
+            <Typography id="threadCreated" variant="body2" color="primary.light">
+              {new Date(thread.created).toLocaleDateString()}
+            </Typography>
+          </FlexBox>
+          {thread.active && (
+            <CaretCircleRight size={24} />
+          )}
         </FlexBox>
-        {thread.active && (
-          <CaretCircleRight size={24} />
-        )}
-      </FlexBox>
-      <DeleteButton 
-        action={removeThread} 
-        itemId={thread.id} 
-        location="threads" 
-      />
-    </Card>
+        <ArchiveButton 
+          action={archiveChat} 
+          itemId={thread.id} 
+        />
+        <DeleteButton 
+          action={removeThread} 
+          itemId={thread.id} 
+          location="threads" 
+        />
+      </Card>
+    </ToolTip>
   )
 }
 
@@ -292,7 +308,7 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
-  const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative`
+  const tooltipContent = `Adjust the responses to suit the mood\n-\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative\n_`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLElement>, value: number) => {
     e.preventDefault()
