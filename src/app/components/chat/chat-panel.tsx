@@ -12,14 +12,11 @@ import {
   useInitialThread, 
   useThreads 
 } from "@hooks/chat"
-import { 
-  Text, 
-  Callout, 
-} from "@radix-ui/themes"
 import {
   Box,
   Button,
   Typography,
+  Alert
 } from "@mui/material"
 import { FlexBox } from "@ui/mui-elements"
 import { ChatHistoryTabs } from "@ui/chat-elements"
@@ -101,20 +98,17 @@ export const ChatPanel = () => {
       </Button>
 
       {threads.length === 0 && (
-        <Callout.Root
-          variant="soft"
-          size="1"
-          color="sky"
-          className="opacity-0 fade-in"
-          style={{ animationDelay: "360ms" }}
+        <Alert 
+          icon={<Info />} 
+          severity="info" 
+          sx={{ 
+            opacity: 0, 
+            animationDelay: "240ms" 
+          }} 
+          className="fade-in"
         >
-          <Callout.Icon>
-            <Info size={18} />
-          </Callout.Icon>
-          <Callout.Text>
-            Create a New Thread to Chat
-          </Callout.Text>
-        </Callout.Root>
+          Create a New Thread to Chat
+        </Alert>
       )}
 
       <Box sx={{
