@@ -17,7 +17,9 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
+import theme from "@utils/mui-theme"
 import {
+  alpha,
   Card,
   ToggleButtonGroup,
   ToggleButton,
@@ -64,7 +66,11 @@ const ThreadCard = ({
         padding: "0.5rem 1rem 0.5rem 0.5rem",
         cursor: "pointer",
         opacity: "0",
-        bgcolor: (thread.active ? "primary.dark" : "")
+        color: (thread.active ? "secondary.contrastText" : "secondary.light"),
+        bgcolor: (thread.active ? "primary.dark" : ""),
+        "&:hover": {
+          backgroundColor: (thread.active ? "" : theme.palette.accent.dark)
+        }
       }}
       className="group fade-in"
       style={{ animationDelay: "180ms" }}
@@ -84,7 +90,6 @@ const ThreadCard = ({
         }}>
           <Typography 
             variant="body1" 
-            color={thread.active ? "secondary.contrastText" : "secondary.light"}
             sx={{
               minHeight: "1rem",
             }}
@@ -92,7 +97,7 @@ const ThreadCard = ({
           >
             {threadTopic}
           </Typography>
-          <Typography variant="body2" color={thread.active ? "primary.light" : "primary.main"}>
+          <Typography variant="body2" color="primary.light">
             {new Date(thread.created).toLocaleDateString()}
           </Typography>
         </FlexBox>
@@ -145,7 +150,8 @@ const ChatMessageCard = ({
       width: "fit-content",
       maxWidth: "86%",
       padding: "1rem",
-      bgcolor: (message.role === "user" ? "" : "primary.dark"),
+      bgcolor: (message.role === "user" ? alpha(theme.palette.secondary.dark, 0.4) : alpha(theme.palette.primary.dark, 0.4)),
+      backdropFilter: "blur(12px)",
       opacity: 0
     }}
       className="group fade-in"
@@ -173,7 +179,7 @@ const ChatMessageCard = ({
               {message.content}
             </ReactMarkdown>
           </FlexBox>
-          <Typography variant="body2" color={message.role === "user" ? "primary.main" : "primary.light"}>
+          <Typography variant="body2" color="primary.main">
             {new Date(message.timestamp).toLocaleDateString()}{" - "}
             {new Date(message.timestamp).toLocaleTimeString()}
           </Typography>

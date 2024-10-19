@@ -1,7 +1,17 @@
 "use client"
-import { createTheme, alpha } from "@mui/material/styles"
+import { createTheme, alpha, extendTheme } from "@mui/material/styles"
 import { grey, cyan } from "@mui/material/colors"
 
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    accent: Palette['primary']
+  }
+
+  interface PaletteOptions {
+    accent?: PaletteOptions['primary']
+  }
+}
 
 const theme = createTheme({
   //// MUI Palette
@@ -18,6 +28,11 @@ const theme = createTheme({
       dark: grey[900],
       light: grey[300],
       contrastText: grey[50],
+    },
+    accent: {
+      main: cyan[600],
+      dark: cyan[800],
+      light: cyan[300]
     },
     background: {
       default: "#101010",
@@ -115,4 +130,6 @@ const theme = createTheme({
   }
 })
 
+
 export default theme
+
