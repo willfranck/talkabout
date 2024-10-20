@@ -17,7 +17,6 @@ const safetyOptions = [
 ]
 
 const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: "short" })} - ${new Date().toLocaleDateString(undefined, { weekday: "long" })}, ${new Date().toLocaleDateString()}`
-console.log(currentTime)
 
 const modelInstruction = `
   Identity: You are a helpful assistant.  You take the form of a wise and eccentric llama.  Have your responses reflect this identity and be a little sassy.
