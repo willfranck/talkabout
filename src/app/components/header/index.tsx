@@ -5,6 +5,7 @@ import {
   Container,
   AppBar,
   Toolbar,
+  Button
 } from "@mui/material"
 import { 
   FlexBox, 
@@ -49,9 +50,13 @@ function ResponsiveAppBar() {
             <Nav links={links}  />
           </FlexBox>
           <ToolTip title="Sign In" placement="bottom" arrow>
-            <FlexBox>
+            <Button sx={{
+              "&:hover": {
+                color: "highlight.light"
+              }
+            }}>
               <SignIn size={24} weight="bold" />
-            </FlexBox>
+            </Button>
           </ToolTip>
         </Toolbar>
       </Container>

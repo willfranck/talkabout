@@ -71,9 +71,9 @@ const Nav = ({
           key={link.name} 
           label={link.icon}
           sx={{ 
-            color: (link.path === pathname ? "highlight.main" : "secondary.main"),
+            color: (link.path === pathname ? "highlight.light" : "primary.main"),
             "&:hover": { 
-              color: (link.path !== pathname ? "highlight.light" : "")
+              color: (link.path !== pathname ? "highlight.main" : "")
             }
           }}
         />
@@ -141,12 +141,12 @@ const DeleteButton = ({
     <Button 
       onClick={() => action(dispatch, itemId)}
       tabIndex={-1}
+      className="actionButton"
       sx={{
         position: "absolute",
         top: "0",
         right: "0",
         zIndex: "10",
-        display: "none",
         flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
@@ -154,7 +154,6 @@ const DeleteButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: "error.dark",
-        opacity: "0",
         animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "error.main",
@@ -184,12 +183,12 @@ const ArchiveButton = ({
     <Button 
       onClick={() => action(dispatch, itemId)}
       tabIndex={-1}
+      className="actionButton"
       sx={{
         position: "absolute",
         top: "0",
         right: "2.5rem",
         zIndex: "10",
-        display: "none",
         flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
@@ -197,7 +196,6 @@ const ArchiveButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: "primary.main",
-        opacity: "0",
         animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "primary.light",
@@ -219,12 +217,12 @@ const RestoreButton = ({
     <Button 
       onClick={() => action(dispatch, itemId)}
       tabIndex={-1}
+      className="actionButton"
       sx={{
         position: "absolute",
         top: "0",
         right: "2.5rem",
         zIndex: "10",
-        display: "none",
         flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
@@ -232,7 +230,6 @@ const RestoreButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: "primary.main",
-        opacity: "0",
         animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "primary.light",

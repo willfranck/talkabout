@@ -107,9 +107,8 @@ export const ChatPanel = () => {
           severity="info" 
           sx={{ 
             opacity: 0, 
-            animationDelay: "240ms" 
+            animation: "fadeInFromBottom 240ms ease-out 360ms forwards" 
           }} 
-          className="fade-in"
         >
           Create a New Thread to Chat
         </Alert>

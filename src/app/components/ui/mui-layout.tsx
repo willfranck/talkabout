@@ -12,7 +12,7 @@ const PageLayout = ({
       sx={{ 
         padding: { xs: "0" }
       }} 
-      className="h-page-content fade-in"
+      className="h-page-content"
     >
       <Box 
         component="section" 
@@ -24,6 +24,8 @@ const PageLayout = ({
           gap: "2rem",
           width: "100%",
           height: "100%",
+          opacity: "0",
+          animation: "fadeIn 240ms ease-out forwards"
         }}
       >
         {children}

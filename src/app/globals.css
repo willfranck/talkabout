@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*//// Base Styles */
 *,
 *::before,
 *::after {
@@ -41,6 +40,28 @@
   }
 }
 
+@keyframes fadeInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeOut {
   from {
     opacity: 1;
@@ -50,22 +71,51 @@
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.24s ease-out forwards;
+@keyframes fadeOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
-.fade-in-right {
-  animation: fadeInFromRight 0.24s ease-out forwards;
+@keyframes fadeOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
 }
 
-.fade-in-left {
-  animation: fadeInFromLeft 0.24s ease-out forwards;
+@keyframes fadeOutToBottom {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(20%);
+  }
 }
 
-.fade-out {
-  animation: fadeOut 0.24s ease-out forwards;
+@keyframes fadeOutToTop {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-20%);
+  }
 }
 
+/*//// Base Styles */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

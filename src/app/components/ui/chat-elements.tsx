@@ -72,19 +72,23 @@ const ThreadCard = ({
           alignItems: "center",
           width: "100%",
           padding: "0.5rem 1rem 0.5rem 0.5rem",
-          cursor: "pointer",
-          opacity: "0",
           bgcolor: (thread.selected ? "primary.dark" : ""),
+          opacity: "0",
+          animation: "fadeInFromLeft 240ms ease-out forwards",
+          cursor: "pointer",
           overflow: "hidden",
+          "& .actionButton": {
+            opacity: "0",
+            animation: "fadeOutToRight 240ms ease-out forwards"
+          },
           "&:hover": {
             backgroundColor: (thread.selected ? "" : alpha(theme.palette.highlight.dark, 0.9)),
-            "& .MuiButtonBase-root": {
-              display: "flex",
+            "& .actionButton": {
+              visibility: "visible",
+              animation: "fadeInFromRight 240ms ease-out forwards"
             },
           },
         }}
-        className="group fade-in"
-        style={{ animationDelay: "180ms" }}
       >
         <FlexBox 
           onClick={() => selectActiveThread(dispatch, thread.id)}
@@ -104,8 +108,8 @@ const ThreadCard = ({
               sx={{
                 minHeight: "1rem",
                 color: (thread.selected ? "secondary.contrastText" : "secondary.light"),
+                lineClamp: "1"
               }}  
-              className="line-clamp-1 fade-in"
             >
               {threadTopic}
             </Typography>
@@ -178,15 +182,18 @@ const ChatMessageCard = ({
       bgcolor: (message.role === "user" ? alpha(theme.palette.secondary.dark, 0.4) : alpha(theme.palette.primary.dark, 0.4)),
       backdropFilter: "blur(20px)",
       opacity: 0,
+      animation: "fadeIn 240ms ease-out forwards",
+      "& .actionButton": {
+        opacity: "0",
+        animation: "fadeOutToRight 240ms ease-out forwards"
+      },
       "&:hover": {
-        "& .MuiButtonBase-root": {
-          display: "flex",
+        "& .actionButton": {
+          visibility: "visible",
+          animation: "fadeInFromRight 240ms ease-out forwards"
         },
       },
-    }}
-      className="group fade-in"
-      style={{ animationDelay: "120ms" }}
-    >
+    }}>
       <FlexBox sx={{
         alignItems: "start",
         gap: "1rem",
@@ -287,10 +294,9 @@ const ChatHistory = ({
           flexDirection: "column",
           gap: "1rem",
           width: "100%",
-          height: "100%"
-        }}
-          className="fade-in"
-        >
+          height: "100%",
+          animation: "fadeIn 240ms ease-out forwards"
+        }}>
           <Image 
             src={"./images/Llama.webp"}
             alt="Llama logo"
