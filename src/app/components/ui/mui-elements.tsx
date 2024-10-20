@@ -20,9 +20,9 @@ import { styled } from "@mui/material/styles"
 import { 
   Trash, 
   ArrowDown, 
-  Archive
+  Archive,
+  ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
-import theme from "@utils/mui-theme"
 
 
 const FlexBox = styled(Box)<BoxProps>(({}) => ({
@@ -153,10 +153,12 @@ const DeleteButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.error.dark, 0.7),
-        backdropFilter: "blur(20px)",
+        bgcolor: "error.dark",
         opacity: "0",
-        animation: "fadeInFromRight 240ms ease-out forwards"
+        animation: "fadeInFromRight 240ms ease-out forwards",
+        "&:hover": {
+          bgcolor: "error.main",
+        }
       }} 
     >
       <Trash size={23} color="currentColor" />
@@ -194,13 +196,50 @@ const ArchiveButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.info.dark, 0.3),
-        backdropFilter: "blur(20px)",
+        bgcolor: "primary.main",
         opacity: "0",
-        animation: "fadeInFromRight 240ms ease-out forwards"
+        animation: "fadeInFromRight 240ms ease-out forwards",
+        "&:hover": {
+          bgcolor: "primary.light",
+        }
       }} 
     >
       <Archive size={23} color="currentColor" />
+    </Button>
+  )
+}
+
+const RestoreButton = ({
+  action,
+  itemId,
+}: IArchiveButton) => {
+  const dispatch = useAppDispatch()
+
+  return (
+    <Button 
+      onClick={() => action(dispatch, itemId)}
+      tabIndex={-1}
+      sx={{
+        position: "absolute",
+        top: "0",
+        right: "2.5rem",
+        zIndex: "10",
+        display: "none",
+        flexDirection: "column",
+        gap: "0.25rem",
+        width: "2.5rem",
+        height: "100%",
+        borderRadius: "0",
+        color: "secondary.contrastText",
+        bgcolor: "primary.main",
+        opacity: "0",
+        animation: "fadeInFromRight 240ms ease-out forwards",
+        "&:hover": {
+          bgcolor: "primary.light",
+        }
+      }} 
+    >
+      <ArrowCounterClockwise size={22} color="currentColor" />
     </Button>
   )
 }
@@ -211,6 +250,7 @@ export {
   ToolTip,
   Nav,
   ToggleGroup,
+  ArchiveButton,
+  RestoreButton,
   DeleteButton,
-  ArchiveButton
 }

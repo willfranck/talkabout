@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useAppDispatch } from "@redux/hooks"
 import { 
-  useActiveThread, 
+  useSelectedThread, 
   useMessageHistory 
 } from "@hooks/chat"
 import { 
@@ -11,8 +11,9 @@ import {
 } from "@types"
 import { 
   selectActiveThread, 
-  archiveChat, 
   removeThread, 
+  archiveThread,
+  restoreThread,
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
@@ -20,7 +21,6 @@ import theme from "@utils/mui-theme"
 import {
   alpha,
   Card,
-  Button,
   ToggleButtonGroup,
   ToggleButton,
   Typography,
@@ -32,8 +32,9 @@ import {
 import {
   FlexBox,
   ToolTip, 
-  DeleteButton,
-  ArchiveButton
+  ArchiveButton,
+  RestoreButton,
+  DeleteButton
 } from "@ui/mui-elements"
 import { 
   CaretCircleRight,
@@ -73,10 +74,10 @@ const ThreadCard = ({
           padding: "0.5rem 1rem 0.5rem 0.5rem",
           cursor: "pointer",
           opacity: "0",
-          bgcolor: (thread.active ? "primary.dark" : ""),
+          bgcolor: (thread.selected ? "primary.dark" : ""),
           overflow: "hidden",
           "&:hover": {
-            backgroundColor: (thread.active ? "" : alpha(theme.palette.highlight.dark, 0.9)),
+            backgroundColor: (thread.selected ? "" : alpha(theme.palette.highlight.dark, 0.9)),
             "& .MuiButtonBase-root": {
               display: "flex",
             },
@@ -102,7 +103,7 @@ const ThreadCard = ({
               variant="body1" 
               sx={{
                 minHeight: "1rem",
-                color: (thread.active ? "secondary.contrastText" : "secondary.light"),
+                color: (thread.selected ? "secondary.contrastText" : "secondary.light"),
               }}  
               className="line-clamp-1 fade-in"
             >
@@ -112,14 +113,22 @@ const ThreadCard = ({
               {new Date(thread.created).toLocaleDateString()}
             </Typography>
           </FlexBox>
-          {thread.active && (
+          {thread.selected && (
             <CaretCircleRight size={24} />
           )}
         </FlexBox>
-        <ArchiveButton 
-          action={archiveChat} 
-          itemId={thread.id} 
-        />
+        {thread.category === "active" && (
+          <ArchiveButton 
+            action={archiveThread} 
+            itemId={thread.id} 
+          />
+        )}
+        {thread.category === "archived" && (
+          <RestoreButton 
+            action={restoreThread} 
+            itemId={thread.id} 
+          />
+        )}
         <DeleteButton 
           action={removeThread} 
           itemId={thread.id} 
@@ -167,8 +176,13 @@ const ChatMessageCard = ({
       maxWidth: "86%",
       padding: "1rem",
       bgcolor: (message.role === "user" ? alpha(theme.palette.secondary.dark, 0.4) : alpha(theme.palette.primary.dark, 0.4)),
-      backdropFilter: "blur(12px)",
-      opacity: 0
+      backdropFilter: "blur(20px)",
+      opacity: 0,
+      "&:hover": {
+        "& .MuiButtonBase-root": {
+          display: "flex",
+        },
+      },
     }}
       className="group fade-in"
       style={{ animationDelay: "120ms" }}
@@ -220,8 +234,8 @@ const ChatHistory = ({
 }: {
   messages: ChatMessage[]
 }) => {
-  const activeThread = useActiveThread()
-  const threadRef = useRef(activeThread?.id) 
+  const selectedThread = useSelectedThread()
+  const threadRef = useRef(selectedThread?.id) 
   const messageHistory = useMessageHistory()
   const messagesRef = useRef(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
@@ -230,8 +244,8 @@ const ChatHistory = ({
     const { current } = scrollAreaRef
     const currentMessages = messageHistory.length
     // Handles thread being switched
-    if (threadRef.current !== activeThread?.id) {
-      threadRef.current = activeThread?.id
+    if (threadRef.current !== selectedThread?.id) {
+      threadRef.current = selectedThread?.id
       messagesRef.current = currentMessages
       if (current) {
         requestAnimationFrame(() => {
@@ -355,18 +369,18 @@ const TemperatureControls = ({
 interface IChatInput {
   prompt: string
   threads: number
-  activeThread: ChatThread | undefined
+  selectedThread: ChatThread | undefined
   temperatureSettings: { hot: number, normal: number, cold: number }
   defaultTemperature: number
   onTemperatureChange: (temperature: number) => void
-  onChange: (event: React.ChangeEvent<HTMLElement>) => void
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
   onSubmit: () => void
 }
 
 const ChatInputField = ({ 
   prompt,
   threads,
-  activeThread,
+  selectedThread,
   temperatureSettings,
   defaultTemperature,
   onTemperatureChange, 
@@ -409,7 +423,7 @@ const ChatInputField = ({
         }
         value={prompt}
         placeholder="Message Llamini-Flash"
-        disabled={threads === 0 || activeThread === undefined}
+        disabled={threads === 0 || selectedThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
       />

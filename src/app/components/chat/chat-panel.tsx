@@ -21,8 +21,7 @@ import {
 } from "@mui/material"
 import { 
   FlexBox, 
-  ToggleGroup, 
-  ToolTip
+  ToggleGroup
 } from "@ui/mui-elements"
 import { 
   ChatHistoryTabs 
@@ -30,7 +29,6 @@ import {
 import { 
   ChatTeardropText, 
   PlusCircle, 
-  StackPlus,
   Info
 } from "@phosphor-icons/react/dist/ssr"
 

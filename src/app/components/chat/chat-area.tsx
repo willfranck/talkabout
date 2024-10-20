@@ -1,13 +1,13 @@
 "use client"
-import { useActiveThread } from "@hooks/chat"
+import { useSelectedThread } from "@hooks/chat"
 import { FlexBox } from "@ui/mui-elements"
 import { ChatHistory } from "@ui/chat-elements"
 import { ChatInput } from "@chat/chat-input"
 
 
 export const ChatArea = () => {
-  const activeThread = useActiveThread()
-  const messageHistory = activeThread ? activeThread.messages : []
+  const selectedThread = useSelectedThread()
+  const messageHistory = selectedThread ? selectedThread.messages : []
 
   return (
     <FlexBox sx={{

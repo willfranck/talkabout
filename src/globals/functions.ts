@@ -1,9 +1,10 @@
 import { AppDispatch } from "@redux/store"
 import { 
   createThread, 
-  archiveThread,
   deleteThread, 
-  setActiveThread, 
+  setActiveThread,
+  setArchivedThread, 
+  setRestoreThread,
   deleteMessages
 } from "@redux/reducers"
 import { ChatThread } from "@types"
@@ -17,14 +18,10 @@ function createNewThread(dispatch: AppDispatch) {
     messages: [],
     category: "active",
     created: new Date().toISOString(),
-    active: true,
+    selected: true,
     lastActive: ""
   }
   dispatch(createThread(newThread))
-}
-
-function archiveChat(dispatch: AppDispatch, threadId: string) {
-  dispatch(archiveThread(threadId))
 }
 
 function removeThread(dispatch: AppDispatch, threadId: string) {
@@ -33,6 +30,14 @@ function removeThread(dispatch: AppDispatch, threadId: string) {
 
 function selectActiveThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setActiveThread(threadId))
+}
+
+function archiveThread(dispatch: AppDispatch, threadId: string) {
+  dispatch(setArchivedThread(threadId))
+}
+
+function restoreThread(dispatch: AppDispatch, threadId: string) {
+  dispatch(setRestoreThread(threadId))
 }
 
 function deleteMessage(dispatch: AppDispatch, messageId: string) {
@@ -63,9 +68,10 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 
 export {
   createNewThread,
-  archiveChat,
   removeThread,
   selectActiveThread,
+  archiveThread,
+  restoreThread,
   deleteMessage,
   displayTextByChar,
   removeTextByChar

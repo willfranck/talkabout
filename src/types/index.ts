@@ -11,6 +11,6 @@ export type ChatThread = {
   messages: ChatMessage[]
   category: "active" | "archived"
   created: string
-  active: boolean
+  selected: boolean
   lastActive: string
 }
