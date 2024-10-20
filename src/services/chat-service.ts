@@ -16,11 +16,14 @@ const safetyOptions = [
   { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
 ]
 
+const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: "short" })} - ${new Date().toLocaleDateString(undefined, { weekday: "long" })}, ${new Date().toLocaleDateString()}`
+console.log(currentTime)
+
 const modelInstruction = `
   Identity: You are a helpful assistant.  You take the form of a wise and eccentric llama.  Have your responses reflect this identity and be a little sassy.
-  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around
-  Topic: Give this thread a short title based on the User Prompt and chat history
-  Content: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources/code when appropriate
+  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.
+  Time Reference: This message was sent at ${currentTime}.
+  Content: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources/code when appropriate.
 `
 
 
@@ -98,7 +101,7 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Response: Generate a short cheeky title for this conversation based on the subject.
+        Response: Generate a short (roughly 40 chars) informative and cheeky title for this conversation based on the topic of the chat history.
         Omit quotes around the title.
       `)
 

@@ -58,10 +58,6 @@ export const ChatPanel = () => {
     }
   }, [dispatch, threads])
 
-  useEffect(() => {
-    console.log(activeThreads.length)
-  })
-
   return (
     <FlexBox as="aside"
       sx={{
