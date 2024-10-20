@@ -72,7 +72,8 @@ const ThreadCard = ({
           alignItems: "center",
           width: "100%",
           padding: "0.5rem 1rem 0.5rem 0.5rem",
-          bgcolor: (thread.selected ? "primary.dark" : ""),
+          bgcolor: (thread.selected ? alpha(theme.palette.primary.main, 0.45) : ""),
+          backdropFilter: "blur(20px)",
           opacity: "0",
           animation: "fadeInFromLeft 240ms ease-out forwards",
           cursor: "pointer",
@@ -82,7 +83,7 @@ const ThreadCard = ({
             animation: "fadeOutToRight 240ms ease-out forwards"
           },
           "&:hover": {
-            backgroundColor: (thread.selected ? "" : alpha(theme.palette.highlight.dark, 0.9)),
+            backgroundColor: (!thread.selected ? alpha(theme.palette.info.dark, 0.5) : ""),
             "& .actionButton": {
               visibility: "visible",
               animation: "fadeInFromRight 240ms ease-out 60ms forwards"
@@ -113,7 +114,11 @@ const ThreadCard = ({
             >
               {threadTopic}
             </Typography>
-            <Typography id="threadCreated" variant="body2" color="primary.light">
+            <Typography 
+              id="threadCreated" 
+              variant="body2" 
+              color={thread.selected ? "highlight.light" : "highlight.main"}
+            >
               {new Date(thread.created).toLocaleDateString()}
             </Typography>
           </FlexBox>
@@ -179,7 +184,7 @@ const ChatMessageCard = ({
       width: "fit-content",
       maxWidth: "86%",
       padding: "1rem",
-      bgcolor: (message.role === "user" ? alpha(theme.palette.secondary.dark, 0.4) : alpha(theme.palette.primary.dark, 0.4)),
+      bgcolor: (message.role === "user" ? alpha(theme.palette.primary.dark, 0.1) : alpha(theme.palette.primary.dark, 0.25)),
       backdropFilter: "blur(20px)",
       opacity: 0,
       animation: "fadeIn 240ms ease-out forwards",

@@ -10,6 +10,12 @@ const useThreads = () => {
   return threads
 }
 
+const useActiveThreads = () => {
+  const threads = useThreads()
+  const activeThreads = threads.filter(thread => thread.category === "active")
+  return activeThreads
+}
+
 const useInitialThread = () => {
   const dispatch = useAppDispatch()
   const threads = useThreads()
@@ -48,6 +54,7 @@ const useMessageHistory = () => {
 
 export {
   useThreads,
+  useActiveThreads,
   useInitialThread,
   useSelectedThread,
   useThreadCount,

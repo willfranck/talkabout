@@ -1,6 +1,6 @@
 "use client"
-import { createTheme, alpha, extendTheme } from "@mui/material/styles"
-import { grey, cyan } from "@mui/material/colors"
+import { createTheme, alpha } from "@mui/material/styles"
+import { grey, cyan, blueGrey, red } from "@mui/material/colors"
 
 
 declare module '@mui/material/styles' {
@@ -24,7 +24,7 @@ const theme = createTheme({
       contrastText: cyan[200],
     },
     secondary: {
-      main: grey[600],
+      main: grey[500],
       dark: grey[900],
       light: grey[300],
       contrastText: grey[50],
@@ -32,11 +32,21 @@ const theme = createTheme({
     highlight: {
       main: cyan[600],
       dark: cyan[800],
-      light: cyan[300]
+      light: cyan[100],
     },
     background: {
       default: "#101010",
-      paper: "181818",
+      paper: "#121212",
+    },
+    info: {
+      main: blueGrey[400],
+      dark: blueGrey[600],
+      light: blueGrey[300],
+    },
+    error: {
+      main: red[700],
+      dark: red[800],
+      light: red[500],
     },
     divider: '#37474F',
   },

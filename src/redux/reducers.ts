@@ -29,10 +29,11 @@ const chatSlice = createSlice({
       state.threads = state.threads.filter(thread => 
         thread.id !== action.payload
       )
-      if (wasDeletedThreadSelected && state.threads.length > 0) {
-        const lastActiveThread = state.threads.reduce((latest, current) => {
+      const activeThreads = state.threads.filter(thread => thread.category === "active")
+      if (wasDeletedThreadSelected && activeThreads.length > 0) {
+        const lastActiveThread = activeThreads.reduce((latest, current) => {
           return current.lastActive > latest.lastActive ? current : latest
-        })
+        }, state.threads[0])
         if (lastActiveThread) {
           state.threads.forEach(thread => {
             thread.selected = thread.id === lastActiveThread.id
@@ -62,15 +63,16 @@ const chatSlice = createSlice({
       if (threadToArchive) {
         threadToArchive.selected = false
         threadToArchive.category = "archived"
-        if (threadToArchive.selected && state.threads.length > 0) {
-          const lastActiveThread = state.threads.reduce((latest, current) => {
-            return current.lastActive > latest.lastActive ? current : latest
+      }
+      const activeThreads = state.threads.filter(thread => thread.category === "active")
+      if (activeThreads.length > 0) {
+        const lastActiveThread = activeThreads.reduce((latest, current) => {
+          return current.lastActive > latest.lastActive ? current : latest
+        })
+        if (lastActiveThread) {
+          state.threads.forEach(thread => {
+            thread.selected = thread.id === lastActiveThread.id;
           })
-          if (lastActiveThread) {
-            state.threads.forEach(thread => {
-              thread.selected = thread.id === lastActiveThread.id;
-            })
-          }
         }
       }
     },

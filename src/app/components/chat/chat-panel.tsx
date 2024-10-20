@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { ChatThread } from "@types"
 import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
+import theme from "@utils/mui-theme"
 import { 
   createNewThread, 
   selectActiveThread, 
@@ -11,9 +12,11 @@ import {
 } from "@globals/functions"
 import { 
   useInitialThread, 
-  useThreads 
+  useThreads ,
+  useActiveThreads
 } from "@hooks/chat"
 import {
+  alpha,
   Box,
   Button,
   Typography,
@@ -39,6 +42,7 @@ export const ChatPanel = () => {
   const [displayedText, setDisplayedText] = useState("")
   
   const threads = useThreads()
+  const activeThreads = useActiveThreads()
   const sortedThreads = (threads: ChatThread[]) => {
     return threads
       .filter(thread => thread.category === activeThreadCategory)
@@ -54,6 +58,10 @@ export const ChatPanel = () => {
     }
   }, [dispatch, threads])
 
+  useEffect(() => {
+    console.log(activeThreads.length)
+  })
+
   return (
     <FlexBox as="aside"
       sx={{
@@ -64,9 +72,9 @@ export const ChatPanel = () => {
         width: "24rem",
         height: "100%",
         paddingTop: "2rem",
-        paddingBottom: "1rem"
+        paddingBottom: "1rem",
+        backgroundColor: alpha(theme.palette.primary.dark, 0.08)
       }} 
-      className="bg-gray-400/50 dark:bg-gray-950/30"
     >
       <FlexBox sx={{
         justifyContent: "space-between",
@@ -90,7 +98,6 @@ export const ChatPanel = () => {
         onMouseEnter={() => displayTextByChar("New Thread ", setDisplayedText)}
         onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
-        className="group"
       >
         <Typography 
           variant="body2"
@@ -101,10 +108,10 @@ export const ChatPanel = () => {
         <PlusCircle size={24} weight="bold" />
       </Button>
         
-      {threads.length === 0 && (
+      {activeThreads.length === 0 && activeThreadCategory === "active" && (
         <Alert 
           icon={<Info />} 
-          severity="info" 
+          severity="info"
           sx={{ 
             opacity: 0, 
             animation: "fadeInFromBottom 240ms ease-out 360ms forwards" 

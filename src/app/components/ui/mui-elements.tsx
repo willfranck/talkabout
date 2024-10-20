@@ -36,10 +36,10 @@ const ToolTip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: alpha(theme.palette.info.light, 0.3),
+    color: alpha(theme.palette.info.dark, 0.4),
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: alpha(theme.palette.info.light, 0.3),
+    backgroundColor: alpha(theme.palette.info.dark, 0.4),
     backdropFilter: "blur(20px)",
     textAlign: "center",
     padding: "0.5rem",
@@ -154,9 +154,9 @@ const DeleteButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: "error.dark",
+        bgcolor: alpha(theme.palette.error.dark, 0.9),
         "&:hover": {
-          bgcolor: "error.main",
+          bgcolor: alpha(theme.palette.error.main, 0.9),
         }
       }} 
     >
@@ -195,9 +195,9 @@ const ArchiveButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.primary.dark, 0.5),
+        bgcolor: alpha(theme.palette.info.main, 0.9),
         "&:hover": {
-          bgcolor: "primary.dark",
+          bgcolor: alpha(theme.palette.info.light, 0.9),
         }
       }} 
     >
@@ -228,9 +228,9 @@ const RestoreButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.primary.dark, 0.5),
+        bgcolor: alpha(theme.palette.info.main, 0.9),
         "&:hover": {
-          bgcolor: "primary.dark",
+          bgcolor: alpha(theme.palette.info.light, 0.9),
         }
       }} 
     >
