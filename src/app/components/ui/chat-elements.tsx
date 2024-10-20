@@ -107,9 +107,9 @@ const ThreadCard = ({
               variant="body1" 
               sx={{
                 minHeight: "1rem",
-                color: (thread.selected ? "secondary.contrastText" : "secondary.light"),
-                lineClamp: "1"
-              }}  
+                color: (thread.selected ? "secondary.contrastText" : "secondary.light")
+              }}
+              className="line-clamp-1"
             >
               {threadTopic}
             </Typography>

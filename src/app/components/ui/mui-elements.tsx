@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
+import theme from "@utils/mui-theme"
 import {
   alpha,
   Box,
@@ -195,10 +196,10 @@ const ArchiveButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: "primary.main",
+        bgcolor: alpha(theme.palette.primary.dark, 0.5),
         animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
-          bgcolor: "primary.light",
+          bgcolor: "primary.dark",
         }
       }} 
     >
@@ -229,10 +230,10 @@ const RestoreButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: "primary.main",
+        bgcolor: alpha(theme.palette.primary.dark, 0.5),
         animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
-          bgcolor: "primary.light",
+          bgcolor: "primary.dark",
         }
       }} 
     >
