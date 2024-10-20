@@ -85,7 +85,7 @@ const ThreadCard = ({
             backgroundColor: (thread.selected ? "" : alpha(theme.palette.highlight.dark, 0.9)),
             "& .actionButton": {
               visibility: "visible",
-              animation: "fadeInFromRight 240ms ease-out forwards"
+              animation: "fadeInFromRight 240ms ease-out 60ms forwards"
             },
           },
         }}
@@ -190,7 +190,7 @@ const ChatMessageCard = ({
       "&:hover": {
         "& .actionButton": {
           visibility: "visible",
-          animation: "fadeInFromRight 240ms ease-out forwards"
+          animation: "fadeInFromRight 240ms ease-out 60ms forwards"
         },
       },
     }}>

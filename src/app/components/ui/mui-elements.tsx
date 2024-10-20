@@ -155,7 +155,6 @@ const DeleteButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: "error.dark",
-        animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "error.main",
         }
@@ -197,7 +196,6 @@ const ArchiveButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: alpha(theme.palette.primary.dark, 0.5),
-        animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "primary.dark",
         }
@@ -231,7 +229,6 @@ const RestoreButton = ({
         borderRadius: "0",
         color: "secondary.contrastText",
         bgcolor: alpha(theme.palette.primary.dark, 0.5),
-        animation: "fadeInFromRight 240ms ease-out forwards",
         "&:hover": {
           bgcolor: "primary.dark",
         }
