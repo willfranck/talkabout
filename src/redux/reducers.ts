@@ -60,9 +60,9 @@ const chatSlice = createSlice({
     setArchivedThread: (state, action: PayloadAction<string>) => {
       const threadToArchive = state.threads.find(thread => thread.id === action.payload)
       if (threadToArchive) {
+        threadToArchive.selected = false
         threadToArchive.category = "archived"
         if (threadToArchive.selected && state.threads.length > 0) {
-          threadToArchive.selected = false
           const lastActiveThread = state.threads.reduce((latest, current) => {
             return current.lastActive > latest.lastActive ? current : latest
           })
