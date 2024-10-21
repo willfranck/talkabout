@@ -418,9 +418,7 @@ const ChatInputField = ({
       variant="outlined"
       onSubmit={onSubmit}
       sx={{
-        width: "100%",
-        padding: "0 0.5rem",
-        marginX: { xs: "0.75rem", md: "none" }
+        width: { xs: "90%", md: "100%" }
       }}
     >
       <InputLabel htmlFor="input-with-icon-adornment">

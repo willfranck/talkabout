@@ -9,8 +9,16 @@ import {
   Box,
   BoxProps,
   Button,
+  IconButton,
   Tabs,
   Tab,
+  Menu,
+  MenuList,
+  ListSubheader,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
   ToggleButtonGroup,
   ToggleButton,
   Tooltip,
@@ -19,6 +27,8 @@ import {
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { 
+  DotsThreeCircleVertical,
+  SignIn,
   Trash, 
   ArrowDown, 
   Archive,
@@ -85,6 +95,94 @@ const Nav = ({
     <Tabs value={tabIndex}>
       {linkElements}
     </Tabs>
+  )
+}
+
+const MenuNav = ({
+  links
+}: {
+  links: INav[]
+}) => {
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(menuAnchorEl)
+
+  const handleMenuBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchorEl(event.currentTarget);
+  }
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null)
+  }
+
+  const linkElements = links.map((link) => (
+    <Link href={link.path}>
+      <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
+        <ListItemIcon sx={{ minWidth: "2.25rem" }}>
+          {link.icon}
+        </ListItemIcon>
+        <ListItemText primary={link.name} />
+      </ListItemButton>
+    </Link>
+  ))
+
+  return (
+    <Box sx={{ 
+      display: {xs: "block", md: "none" }
+    }}>
+      <IconButton
+        size="medium"
+        aria-label="Menu Anchor"
+        aria-controls="appbar-menu"
+        aria-haspopup="true"
+        onClick={handleMenuBtnClick}
+        color="primary"
+      >
+        <DotsThreeCircleVertical size={24} />
+      </IconButton>
+      <Menu 
+        open={open}
+        onClose={handleMenuClose}
+        elevation={1}
+        anchorEl={menuAnchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+      >
+        <MenuList 
+          subheader={
+            <ListSubheader sx={{
+              lineHeight: "2rem",
+              color: "primary.dark"
+            }}>
+              Pages
+            </ListSubheader>
+          }
+          sx={{ 
+            display: "flex", 
+            flexDirection: "column",
+            padding: "0"
+          }}
+        >
+          {linkElements}
+          <Divider sx={{ 
+            alignSelf: "center", 
+            width: "90%", 
+            marginY: "0.5rem",
+            borderColor: "secondary.main"
+          }}/>
+          <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
+            <ListItemIcon sx={{ minWidth: "2.25rem"}}>
+              <SignIn size={24} weight="bold" /> 
+            </ListItemIcon>
+            <ListItemText primary="Sign In" />
+          </ListItemButton>
+        </MenuList>
+      </Menu>
+    </Box>
   )
 }
 
@@ -217,6 +315,7 @@ export {
   FlexBox,
   ToolTip,
   Nav,
+  MenuNav,
   ToggleGroup,
   ArchiveButton,
   DeleteButton,
