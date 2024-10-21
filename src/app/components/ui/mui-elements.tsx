@@ -27,7 +27,7 @@ import {
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { 
-  DotsThreeCircleVertical,
+  DotsThreeVertical,
   SignIn,
   Trash, 
   ArrowDown, 
@@ -136,7 +136,7 @@ const MenuNav = ({
         onClick={handleMenuBtnClick}
         color="primary"
       >
-        <DotsThreeCircleVertical size={24} />
+        <DotsThreeVertical size={24} weight="bold" color={theme.palette.primary.light} />
       </IconButton>
       <Menu 
         open={open}
@@ -175,7 +175,7 @@ const MenuNav = ({
             borderColor: "secondary.main"
           }}/>
           <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
-            <ListItemIcon sx={{ minWidth: "2.25rem"}}>
+            <ListItemIcon sx={{ minWidth: "2.25rem" }}>
               <SignIn size={24} weight="bold" /> 
             </ListItemIcon>
             <ListItemText primary="Sign In" />
