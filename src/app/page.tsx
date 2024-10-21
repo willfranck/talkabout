@@ -1,13 +1,12 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
-import { PageLayout} from "@ui/radix-layout"
+import { PageLayout } from "@ui/mui-layout"
+import { FlexBox } from "@ui/mui-elements"
 import { 
-  Flex,
-  Box, 
-  Heading, 
-  Text, 
-  Button 
-} from "@radix-ui/themes"
+  Typography, 
+  Button
+} from "@mui/material"
 import { 
   AppleLogo, 
   ArrowRight, 
@@ -18,12 +17,16 @@ import {
 export default function Home() {
   return (
     <PageLayout>
-      <Box className="flex flex-col items-center justify-around gap-24 md:gap-32 mx-8">
-        <Flex 
-          direction="column" 
-          align="center" 
-          gap="4"
-        >
+      <FlexBox sx={{
+        flexDirection: "column",
+        height: "100%",
+        gap: { xs: "6rem", md: "8rem" },
+        marginX: "2rem"
+      }}>
+        <FlexBox sx={{
+          flexDirection: "column",
+          gap: "0.5rem"
+        }}>
           <Image 
             src={"/images/Llama.webp"}
             alt="Talkabout Logo - a llama"
@@ -31,56 +34,77 @@ export default function Home() {
             height={176}
             className="w-36 md:w-44 h-auto rounded-logo invert dark:invert-0"
           />
-          <Heading
-            as="h1"
-            size="8"
-            weight="medium"
-          >
-            Talkabout
-          </Heading>
-        </Flex>
+          <Typography variant="h1">Talkabout</Typography>
+        </FlexBox>
 
-        <Text as="span" className="text-center">
-          The world's mysteries unraveled through the eyes of a llama
-        </Text>
-
-        <Flex 
-          direction="column" 
-          align="center" 
-          gap="8"
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            textAlign: "center" 
+          }}
         >
+          The world&apos;s mysteries unraveled through the eyes of a llama
+        </Typography>
+
+        <FlexBox sx={{
+          flexDirection: "column",
+          gap: "2rem",
+        }}>
           <Link href={"/chat"}>
             <Button 
-              variant="ghost" 
-              className="group flex gap-2 px-6"
+              variant="text" 
+              sx={{
+                display: "flex",
+                gap: "0.5rem",
+                paddingX: "1.5rem",
+                borderRadius: "9999px",
+                textTransform: "none",
+              }}
+              className="group"
             >
-              <Text as="p">Try it now</Text>
+              <Typography variant="body1">Try it now</Typography>
               <ArrowRight size={18} className="group-hover:translate-x-0.5" />
             </Button>
           </Link>
-          <Flex 
-            direction={{ initial: "column", sm: "row" }} 
-            gap="4"
-          >
+          <FlexBox sx={{
+            flexDirection: { xs: "column", sm: "row" },
+            gap: "1rem"
+          }}>
             <Button 
-              variant="surface" 
-              size="2" 
-              className="flex-1 w-56"
+              variant="outlined" 
+              sx={{
+                width: "16rem",
+                borderRadius: "9999px",
+                textTransform: "none"
+              }}
             >
-              <AppleLogo size={24} weight="fill" />
-              <Text as="span" size="2">Download for Mac</Text>
+              <AppleLogo size={24} weight="fill" className="mr-2" />
+              <Typography 
+                variant="body2" 
+                color="primary.main"
+              >
+                Download for Mac
+              </Typography>
             </Button>
             <Button 
-              variant="surface" 
-              size="2" 
-              className="flex-1 w-56"
+              variant="outlined" 
+              sx={{
+                width: "16rem",
+                borderRadius: "9999px",
+                textTransform: "none"
+              }}
             >
-              <WindowsLogo size={24} weight="fill" />
-              <Text as="span" size="2">Download for Windows</Text>
+              <WindowsLogo size={24} weight="fill" className="mr-2" />
+              <Typography 
+                variant="body2" 
+                color="primary.main"
+              >
+                Download for Windows
+              </Typography>
             </Button>
-          </Flex>
-        </Flex>
-      </Box>
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
     </PageLayout>
   )
 }

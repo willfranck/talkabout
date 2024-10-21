@@ -10,7 +10,7 @@ import {
 } from "@redux/reducers"
 import { 
   useThreadCount, 
-  useActiveThread, 
+  useSelectedThread, 
   useMessageHistory 
 } from "@hooks/chat"
 import { ChatMessage } from "@types"
@@ -20,7 +20,7 @@ import { ChatInputField } from "@ui/chat-elements"
 export const ChatInput = () => {
   const dispatch = useAppDispatch()
   const threadCount = useThreadCount()
-  const activeThread = useActiveThread()
+  const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(undefined)
   const messageHistory = useMessageHistory()
   const messagesRef = useRef(messageHistory.length)
@@ -44,9 +44,9 @@ export const ChatInput = () => {
   }
 
   useEffect(() => {
-    // Prevents getTopic() if active thread hasn't changed || on page navigation
-    if (threadRef.current !== activeThread?.id) {
-      threadRef.current = activeThread?.id
+    // Prevents getTopic() if selected thread hasn't changed || on page navigation
+    if (threadRef.current !== selectedThread?.id) {
+      threadRef.current = selectedThread?.id
       return
     }
     // Runs getTopic() only on NEW messages
@@ -57,10 +57,10 @@ export const ChatInput = () => {
       }
     }
     messagesRef.current = currentMessages
-  }, [activeThread, messageHistory])
+  }, [selectedThread, messageHistory])
 
   const handleSubmit = async () => {
-    if (activeThread) {
+    if (selectedThread) {
       try {
         const userMessage: ChatMessage = { 
           id: crypto.randomUUID(),
@@ -93,7 +93,7 @@ export const ChatInput = () => {
     <ChatInputField 
       prompt={userPrompt} 
       threads={threadCount}
-      activeThread={activeThread}
+      selectedThread={selectedThread}
       temperatureSettings={temperatureSettings}
       defaultTemperature={aiTemperature}
       onTemperatureChange={handleTemperatureChange}

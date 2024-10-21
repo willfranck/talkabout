@@ -1,4 +1,4 @@
-import { PageLayout} from "@ui/radix-layout"
+import { PageLayout} from "@ui/mui-layout"
 
 
 export default function AboutPage() {

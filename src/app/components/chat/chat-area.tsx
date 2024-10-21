@@ -1,24 +1,24 @@
 "use client"
-import { useActiveThread } from "@hooks/chat"
-import { Flex } from "@radix-ui/themes"
+import { useSelectedThread } from "@hooks/chat"
+import { FlexBox } from "@ui/mui-elements"
 import { ChatHistory } from "@ui/chat-elements"
 import { ChatInput } from "@chat/chat-input"
 
 
 export const ChatArea = () => {
-  const activeThread = useActiveThread()
-  const messageHistory = activeThread ? activeThread.messages : []
+  const selectedThread = useSelectedThread()
+  const messageHistory = selectedThread ? selectedThread.messages : []
 
   return (
-    <Flex 
-      direction="column" 
-      gap="6" 
-      flexGrow="1" 
-      pb="4" 
-      className="flex-1 h-page-content"
-    >
+    <FlexBox sx={{
+      flexDirection: "column",
+      flexGrow: "1",
+      height: "100%",
+      gap: "1rem",
+      padding: "0 2rem 1rem 0"
+    }}>
       <ChatHistory messages={messageHistory} />
       <ChatInput />
-    </Flex>
+    </FlexBox>
   )
 }

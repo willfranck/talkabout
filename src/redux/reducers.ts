@@ -17,67 +17,90 @@ const chatSlice = createSlice({
   reducers: {
     createThread: (state, action: PayloadAction<ChatThread>) => {
       state.threads.forEach(thread => {
-        thread.active = false
+        thread.selected = false
       })
       state.threads.push({
         ...action.payload,
-        active: true
+        selected: true
       })
     },
     deleteThread: (state, action: PayloadAction<string>) => {
-      const wasDeletedThreadActive = state.threads.some(thread => thread.id === action.payload && thread.active)
+      const wasDeletedThreadSelected = state.threads.some(thread => thread.id === action.payload && thread.selected)
       state.threads = state.threads.filter(thread => 
         thread.id !== action.payload
       )
-      if (wasDeletedThreadActive && state.threads.length > 0) {
-        const lastActiveThread = state.threads.reduce((latest, current) => {
+      const activeThreads = state.threads.filter(thread => thread.category === "active")
+      if (wasDeletedThreadSelected && activeThreads.length > 0) {
+        const lastActiveThread = activeThreads.reduce((latest, current) => {
           return current.lastActive > latest.lastActive ? current : latest
-        })
+        }, state.threads[0])
         if (lastActiveThread) {
           state.threads.forEach(thread => {
-            thread.active = thread.id === lastActiveThread.id
+            thread.selected = thread.id === lastActiveThread.id
           })
         }
       }
     },
     updateThreadTopic: (state, action: PayloadAction<string>) => {
-      const activeThread = state.threads.find(thread => thread.active)
-      if (activeThread) {
-        activeThread.topic = action.payload
+      const selectedThread = state.threads.find(thread => thread.selected)
+      if (selectedThread) {
+        selectedThread.topic = action.payload
       }
     },
     setActiveThread: (state, action: PayloadAction<string>) => {
       state.threads.forEach(thread => {
-        thread.active = thread.id === action.payload
+        thread.selected = thread.id === action.payload
       })
     },
     updateLastActive: (state, action: PayloadAction<string>) => {
-      const activeThread = state.threads.find(thread => thread.active)
-      if (activeThread) {
-        activeThread.lastActive = action.payload
+      const selectedThread = state.threads.find(thread => thread.selected)
+      if (selectedThread) {
+        selectedThread.lastActive = action.payload
       }
     },
+    setArchivedThread: (state, action: PayloadAction<string>) => {
+      const threadToArchive = state.threads.find(thread => thread.id === action.payload)
+      if (threadToArchive) {
+        threadToArchive.selected = false
+        threadToArchive.category = "archived"
+      }
+      const activeThreads = state.threads.filter(thread => thread.category === "active")
+      if (activeThreads.length > 0) {
+        const lastActiveThread = activeThreads.reduce((latest, current) => {
+          return current.lastActive > latest.lastActive ? current : latest
+        })
+        if (lastActiveThread) {
+          state.threads.forEach(thread => {
+            thread.selected = thread.id === lastActiveThread.id;
+          })
+        }
+      }
+    },
+    setRestoreThread: (state, action: PayloadAction<string>) => {
+      const threadToRestore = state.threads.find(thread => thread.id === action.payload)
+      if (threadToRestore) threadToRestore.category = "active"
+    },
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
-      const activeThread = state.threads.find(thread => thread.active)
-      if (activeThread) {
-        activeThread.messages.push(action.payload)
+      const selectedThread = state.threads.find(thread => thread.selected)
+      if (selectedThread) {
+        selectedThread.messages.push(action.payload)
       }
     },
     deleteMessages: (state, action: PayloadAction<string>) => {
-      const activeThread = state.threads.find(thread => thread.active)
-      if (activeThread) {
-        const messageIndex = activeThread.messages.findIndex(message => message.id === action.payload)
+      const selectedThread = state.threads.find(thread => thread.selected)
+      if (selectedThread) {
+        const messageIndex = selectedThread.messages.findIndex(message => message.id === action.payload)
         if (messageIndex !== -1) {
-          activeThread.messages = activeThread.messages.slice(0, messageIndex)
+          selectedThread.messages = selectedThread.messages.slice(0, messageIndex)
         }
       }
     },
     clearMessages: (state) => {
-      const activeThread = state.threads.find(thread => thread.active)
-      if (activeThread) {
-        activeThread.messages = []
+      const selectedThread = state.threads.find(thread => thread.selected)
+      if (selectedThread) {
+        selectedThread.messages = []
       }
-    }
+    },
   }
 })
 
@@ -87,6 +110,8 @@ export const {
   updateThreadTopic,
   setActiveThread,
   updateLastActive, 
+  setArchivedThread,
+  setRestoreThread,
   addMessage,
   deleteMessages, 
   clearMessages

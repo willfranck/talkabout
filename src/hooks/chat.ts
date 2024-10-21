@@ -10,6 +10,12 @@ const useThreads = () => {
   return threads
 }
 
+const useActiveThreads = () => {
+  const threads = useThreads()
+  const activeThreads = threads.filter(thread => thread.category === "active")
+  return activeThreads
+}
+
 const useInitialThread = () => {
   const dispatch = useAppDispatch()
   const threads = useThreads()
@@ -23,11 +29,11 @@ const useInitialThread = () => {
   }, [dispatch, threads])
 }
 
-const useActiveThread = () => {
-  const activeThread = useAppSelector(
-    (state) => state.chat.threads.find(thread => thread.active)
+const useSelectedThread = () => {
+  const selectedThread = useAppSelector(
+    (state) => state.chat.threads.find(thread => thread.selected)
   )
-  return activeThread
+  return selectedThread
 }
 
 const useThreadCount = () => {
@@ -38,9 +44,9 @@ const useThreadCount = () => {
 }
 
 const useMessageHistory = () => {
-  const activeThread = useActiveThread()
+  const selectedThread = useSelectedThread()
   const messageHistory = 
-    activeThread?.messages 
+    selectedThread?.messages 
     || []
   return messageHistory
 }
@@ -48,8 +54,9 @@ const useMessageHistory = () => {
 
 export {
   useThreads,
+  useActiveThreads,
   useInitialThread,
-  useActiveThread,
+  useSelectedThread,
   useThreadCount,
   useMessageHistory
 }

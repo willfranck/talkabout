@@ -26,7 +26,8 @@
       "@header/*": ["./src/app/components/header/*"],
       "@ui/*": ["./src/app/components/ui/*"],
       "@redux/*": ["./src/redux/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

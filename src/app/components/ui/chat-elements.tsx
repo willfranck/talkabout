@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react"
-import { cn } from "@utils/clsx"
 import Image from "next/image"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
 import { useAppDispatch } from "@redux/hooks"
+import { 
+  useSelectedThread, 
+  useMessageHistory 
+} from "@hooks/chat"
 import { 
   ChatThread, 
   ChatMessage 
@@ -11,30 +12,39 @@ import {
 import { 
   selectActiveThread, 
   removeThread, 
+  archiveThread,
+  restoreThread,
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
-import { 
-  Flex,
-  Card, 
-  ScrollArea, 
-  TextArea,
-  Button,
-  Heading,  
-  Text 
-} from "@radix-ui/themes"
+import theme from "@utils/mui-theme"
 import {
-  DeleteButton, 
-  ToolTip
-} from "@ui/radix-elements"
+  alpha,
+  Card,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  Input,
+} from "@mui/material"
+import {
+  FlexBox,
+  ToolTip, 
+  ArchiveButton,
+  RestoreButton,
+  DeleteButton
+} from "@ui/mui-elements"
 import { 
-  CaretCircleRight, 
+  CaretCircleRight,
+  StackPlus, 
   UserCircle, 
   Fire, 
   Snowflake,
-  PaperPlaneTilt
 } from "@phosphor-icons/react/dist/ssr"
-import { useActiveThread, useMessageHistory } from "@hooks/chat"
+import ReactMarkdown from "react-markdown"
+import rehypeHighlight from "rehype-highlight"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -44,48 +54,97 @@ const ThreadCard = ({
 }) => {
   const dispatch = useAppDispatch()
   const [threadTopic, setThreadTopic] = useState("")
+  const [hovered, setHovered] = useState(false)
 
   useEffect(() => {
     displayTextByChar(thread.topic, setThreadTopic)
   }, [thread.topic])
 
   return (
-    <Card
-      key={thread.id}
-      variant="surface"
-      className={cn("relative group w-full pl-2 cursor-pointer opacity-0 fade-in", {
-        "bg-gray-600": thread.active,
-        "hover:bg-gray-700": !thread.active,
-      })}
-      style={{ animationDelay: "120ms" }}
-    >
-      <Flex
-        direction="row"
-        align="center"
-        justify="between"
-        onClick={() => selectActiveThread(dispatch, thread.id)}
+    <ToolTip title={thread.topic.length >= 42 && thread.topic} placement="right" arrow>
+      <Card 
+        id="ThreadCard"
+        key={thread.id}
+        elevation={2}
+        sx={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          padding: "0.5rem 1rem 0.5rem 0.5rem",
+          bgcolor: (thread.selected ? alpha(theme.palette.primary.main, 0.45) : ""),
+          backdropFilter: "blur(20px)",
+          opacity: "0",
+          animation: "fadeInFromLeft 240ms ease-out forwards",
+          cursor: "pointer",
+          overflow: "hidden",
+          "& .actionButton": {
+            opacity: "0",
+            animation: "fadeOutToRight 240ms ease-out forwards"
+          },
+          "&:hover": {
+            backgroundColor: (!thread.selected ? alpha(theme.palette.info.dark, 0.5) : ""),
+            "& .actionButton": {
+              visibility: "visible",
+              animation: "fadeInFromRight 240ms ease-out 60ms forwards"
+            },
+          },
+        }}
       >
-        <Flex direction="column" gap="1" px="2">
-          <Heading size="2" trim="start" className="min-h-4 line-clamp-1 fade-in">
-            {threadTopic}
-          </Heading>
-          <Text as="span" size="1">
-            {new Date(thread.created).toLocaleDateString()}
-          </Text>
-        </Flex>
-        <CaretCircleRight
-          size={24}
-          className={cn("opacity-0", {
-            "opacity-100 text-[#0A0A0A] dark:text-[#EDEDED]": thread.active,
-          })}
+        <FlexBox 
+          onClick={() => selectActiveThread(dispatch, thread.id)}
+          sx={{
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <FlexBox sx={{
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "0.25rem",
+            paddingX: "0.5rem"
+          }}>
+            <Typography 
+              variant="body1" 
+              sx={{
+                minHeight: "1rem",
+                color: (thread.selected ? "secondary.contrastText" : "secondary.light")
+              }}
+              className="line-clamp-1"
+            >
+              {threadTopic}
+            </Typography>
+            <Typography 
+              id="threadCreated" 
+              variant="body2" 
+              color={thread.selected ? "highlight.light" : "highlight.main"}
+            >
+              {new Date(thread.created).toLocaleDateString()}
+            </Typography>
+          </FlexBox>
+          {thread.selected && (
+            <CaretCircleRight size={24} />
+          )}
+        </FlexBox>
+        {thread.category === "active" && (
+          <ArchiveButton 
+            action={archiveThread} 
+            itemId={thread.id} 
+          />
+        )}
+        {thread.category === "archived" && (
+          <RestoreButton 
+            action={restoreThread} 
+            itemId={thread.id} 
+          />
+        )}
+        <DeleteButton 
+          action={removeThread} 
+          itemId={thread.id} 
+          location="threads" 
         />
-      </Flex>
-      <DeleteButton 
-        action={removeThread} 
-        itemId={thread.id} 
-        location="threads" 
-      />
-    </Card>
+      </Card>
+    </ToolTip>
   )
 }
 
@@ -95,14 +154,20 @@ const ChatHistoryTabs = ({
   threads: ChatThread[]
 }) => {
   return (
-    <Flex direction="column" align="center" gap="2" px="4" pb="2" width="100%">
+    <FlexBox sx={{
+      flexDirection: "column",
+      gap: "0.5rem",
+      width: "100%",
+      paddingX: "1rem",
+      paddingBottom: "0.5rem"
+    }}>
       {threads.map((thread) => (
         <ThreadCard 
           key={thread.id} 
           thread={thread} 
         />
       ))}
-    </Flex>
+    </FlexBox>
   )
 }
 
@@ -112,38 +177,58 @@ const ChatMessageCard = ({
   message: ChatMessage
 }) => {
   return (
-    <Card 
-      variant="surface" 
-      className={cn("relative group w-fit max-w-[86%] bg-gray-600/80 dark:bg-gray-600/20 fade-in", {
-        "self-end bg-gray-800/80 dark:bg-gray-800/20": message.role === "user"
-      })}
-    >
-      <Flex gap="4" align="start">
+    <Card sx={{
+      position: "relative",
+      alignSelf: (message.role === "user" ? "end" : "start"),
+      flexShrink: "0",
+      width: "fit-content",
+      maxWidth: "86%",
+      padding: "1rem",
+      bgcolor: (message.role === "user" ? alpha(theme.palette.primary.dark, 0.1) : alpha(theme.palette.primary.dark, 0.25)),
+      backdropFilter: "blur(20px)",
+      opacity: 0,
+      animation: "fadeIn 240ms ease-out forwards",
+      "& .actionButton": {
+        opacity: "0",
+        animation: "fadeOutToRight 240ms ease-out forwards"
+      },
+      "&:hover": {
+        "& .actionButton": {
+          visibility: "visible",
+          animation: "fadeInFromRight 240ms ease-out 60ms forwards"
+        },
+      },
+    }}>
+      <FlexBox sx={{
+        alignItems: "start",
+        gap: "1rem",
+      }}>
         {message.role === "model" && (
-          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 ml-1 rounded-full invert dark:invert-0" />
+          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" />
         )}
-        <Flex 
-          direction="column" 
-          gap="2" 
-          className={cn({"items-end": message.role === "user"})}
-        >
-          <Flex direction="column" gap="2">
+        <FlexBox sx={{
+          flexDirection: "column",
+          alignItems: (message.role === "model" ? "start" : "end"),
+          gap: "0.5rem",
+        }}>
+          <FlexBox sx={{
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "0.5rem",
+            width: "100%",
+          }}>
             <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
               {message.content}
             </ReactMarkdown>
-          </Flex>
-          <Text as="span" size="1">
+          </FlexBox>
+          <Typography variant="body2" color="primary.main">
             {new Date(message.timestamp).toLocaleDateString()}{" - "}
             {new Date(message.timestamp).toLocaleTimeString()}
-          </Text>
-        </Flex>
+          </Typography>
+        </FlexBox>
         {message.role === "user" && (
           <>
-            <UserCircle 
-              size={24} 
-              weight="duotone" 
-              className="text-gray-400 invert dark:invert-0" 
-            />
+            <UserCircle size={24} weight="duotone" />
             <DeleteButton 
               action={deleteMessage} 
               itemId={message.id} 
@@ -151,7 +236,7 @@ const ChatMessageCard = ({
             />
           </>
         )}
-      </Flex>
+      </FlexBox>
     </Card>
   )
 }
@@ -161,8 +246,8 @@ const ChatHistory = ({
 }: {
   messages: ChatMessage[]
 }) => {
-  const activeThread = useActiveThread()
-  const threadRef = useRef(activeThread?.id) 
+  const selectedThread = useSelectedThread()
+  const threadRef = useRef(selectedThread?.id) 
   const messageHistory = useMessageHistory()
   const messagesRef = useRef(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
@@ -171,8 +256,8 @@ const ChatHistory = ({
     const { current } = scrollAreaRef
     const currentMessages = messageHistory.length
     // Handles thread being switched
-    if (threadRef.current !== activeThread?.id) {
-      threadRef.current = activeThread?.id
+    if (threadRef.current !== selectedThread?.id) {
+      threadRef.current = selectedThread?.id
       messagesRef.current = currentMessages
       if (current) {
         requestAnimationFrame(() => {
@@ -197,30 +282,40 @@ const ChatHistory = ({
   }, [messages, messageHistory])
 
   return (
-    <ScrollArea 
-      type="hover"
-      scrollbars="vertical"
+    <FlexBox 
       ref={scrollAreaRef}
-      className="flex-1 md:pr-12"
+      sx={{
+        flexDirection: "column",
+        justifyContent: "start",
+        gap: "1.5rem",
+        paddingY: "1.5rem",
+        width: "100%",
+        height: "100%",
+        overflowY: "auto"
+      }}
     >
-      <Flex direction="column" gap="6" pt="6" width="100%" height="100%">
-        {messages.length === 0 && (
-          <Flex direction="column" align="center" justify="center" gap="4" width="100%" height="100%" className="flex-1 fade-in">
-            <Image 
-              src={"./images/Llama.webp"}
-              alt="Llama logo"
-              width={128}
-              height={128}
-              className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
-            />
-            <Text as="span">much empty in here</Text>
-          </Flex>
-        )}
-        {messages.length > 0 && messages.map((message) => (
-          <ChatMessageCard key={message.id} message={message} />
-        ))}
-      </Flex>
-    </ScrollArea>
+      {messages.length === 0 && (
+        <FlexBox sx={{
+          flexDirection: "column",
+          gap: "1rem",
+          width: "100%",
+          height: "100%",
+          animation: "fadeIn 240ms ease-out forwards"
+        }}>
+          <Image 
+            src={"./images/Llama.webp"}
+            alt="Llama logo"
+            width={128}
+            height={128}
+            className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
+          />
+          <Typography variant="body2">much empty in here</Typography>
+        </FlexBox>
+      )}
+      {messages.length > 0 && messages.map((message) => (
+        <ChatMessageCard key={message.id} message={message} />
+      ))}
+    </FlexBox>
   )
 }
 
@@ -238,43 +333,46 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
-  const tooltipContent = `Adjust the responses to suit the mood\n\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative`
+  const tooltipContent = `Adjust the responses to suit the mood\n-\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative\n_`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>, value: number) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLElement>, value: number) => {
     e.preventDefault()
     setAiTemperature(value)
     onTemperatureChange(value)
   }
 
   return (
-    <ToolTip side="left" content={tooltipContent}>
-      <Flex 
-        direction="column"
-        align="center" 
-        justify="center"
-        className="absolute top-0 left-0 w-10 h-full py-px rounded-left-only"
+    <ToolTip title={tooltipContent} placement="left" arrow>
+      <ToggleButtonGroup 
+        orientation="vertical"
+        exclusive
+        sx={{
+          width: "1.8rem",
+          height: "6rem",
+          borderRadius: "2px"
+        }}
       >
-        <Button
-          variant="ghost"
+        <ToggleButton sx={{
+          height: "50%",
+          borderRadius: "0.4rem"
+        }}
+          selected={temperatureHot === aiTemperature}
           value={temperatureHot}
-          aria-pressed={temperatureHot === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureHot)}
-          tabIndex={-1}
-          className="flex-1 my-0 py-0 rounded-tl-only aria-pressed:bg-[#00384B]"
         >
           <Fire size={20} weight="bold" />
-        </Button>
-        <Button
-          variant="ghost"
+        </ToggleButton>
+        <ToggleButton sx={{
+          height: "50%",
+          borderRadius: "0.4rem"
+        }}
           value={temperatureCold}
-          aria-pressed={temperatureCold === aiTemperature}
+          selected={temperatureCold === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureCold)}
-          tabIndex={-1}
-          className="flex-1 my-0 py-0 rounded-bl-only aria-pressed:bg-[#00384B]"
         >
           <Snowflake size={20} weight="bold" />
-        </Button>
-      </Flex>
+        </ToggleButton>
+      </ToggleButtonGroup>
     </ToolTip>
   )
 }
@@ -282,7 +380,7 @@ const TemperatureControls = ({
 interface IChatInput {
   prompt: string
   threads: number
-  activeThread: ChatThread | undefined
+  selectedThread: ChatThread | undefined
   temperatureSettings: { hot: number, normal: number, cold: number }
   defaultTemperature: number
   onTemperatureChange: (temperature: number) => void
@@ -293,14 +391,14 @@ interface IChatInput {
 const ChatInputField = ({ 
   prompt,
   threads,
-  activeThread,
+  selectedThread,
   temperatureSettings,
   defaultTemperature,
   onTemperatureChange, 
   onChange,
   onSubmit
 }: IChatInput) => {
-  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
       onSubmit()
@@ -308,37 +406,39 @@ const ChatInputField = ({
   }
 
   return (
-    <form 
-      onSubmit={onSubmit} 
-      className="relative flex h-24 md:h-36 mt-auto md:mr-12 bg-gray-950"
+    <FormControl 
+      component="form"
+      variant="outlined"
+      onSubmit={onSubmit}
+      sx={{
+        width: "100%",
+        padding: "0 0.5rem",
+      }}
     >
-      <TemperatureControls 
-        temperatureHot={temperatureSettings.hot}
-        temperatureNormal={temperatureSettings.normal}
-        temperatureCold={temperatureSettings.cold}
-        defaultTemperature={defaultTemperature}
-        onTemperatureChange={onTemperatureChange}
-      />
-      <TextArea 
-        variant="surface"
-        size="3"
+      <InputLabel htmlFor="input-with-icon-adornment">
+        Chat
+      </InputLabel>
+      <Input
+        multiline
+        rows="5"
+        startAdornment={
+          <InputAdornment position="start" sx={{ marginRight: "1rem" }}>
+            <TemperatureControls 
+              temperatureHot={temperatureSettings.hot}
+              temperatureNormal={temperatureSettings.normal}
+              temperatureCold={temperatureSettings.cold}
+              defaultTemperature={defaultTemperature}
+              onTemperatureChange={onTemperatureChange}
+            />
+          </InputAdornment>
+        }
         value={prompt}
         placeholder="Message Llamini-Flash"
-        disabled={threads === 0 || activeThread === undefined}
+        disabled={threads === 0 || selectedThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
-        tabIndex={1}
-        className="flex-1 px-10 whitespace-pre"
       />
-      <Button 
-        variant="soft"
-        onClick={onSubmit}
-        disabled={prompt.trim().length === 0}
-        className="absolute bottom-0 right-0 w-10 h-full rounded-right-only"
-      >
-        <PaperPlaneTilt size={20} />
-      </Button>
-    </form>
+    </FormControl>
   )
 }
 

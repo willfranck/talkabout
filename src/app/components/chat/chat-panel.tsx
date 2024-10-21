@@ -1,7 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
 import { ChatThread } from "@types"
+import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
+import theme from "@utils/mui-theme"
 import { 
   createNewThread, 
   selectActiveThread, 
@@ -10,24 +12,28 @@ import {
 } from "@globals/functions"
 import { 
   useInitialThread, 
-  useThreads 
+  useThreads ,
+  useActiveThreads
 } from "@hooks/chat"
+import {
+  alpha,
+  Box,
+  Button,
+  Typography,
+  Alert
+} from "@mui/material"
 import { 
-  Flex, 
-  ScrollArea, 
-  Text, 
-  Button, 
-  Callout, 
-  Heading, 
-} from "@radix-ui/themes"
-import { SegmentedController } from "@ui/radix-elements"
-import { ChatHistoryTabs } from "@ui/chat-elements"
+  FlexBox, 
+  ToggleGroup
+} from "@ui/mui-elements"
+import { 
+  ChatHistoryTabs 
+} from "@ui/chat-elements"
 import { 
   ChatTeardropText, 
   PlusCircle, 
   Info
 } from "@phosphor-icons/react/dist/ssr"
-import { threadCategories } from "@globals/values"
 
 
 export const ChatPanel = () => {
@@ -36,6 +42,7 @@ export const ChatPanel = () => {
   const [displayedText, setDisplayedText] = useState("")
   
   const threads = useThreads()
+  const activeThreads = useActiveThreads()
   const sortedThreads = (threads: ChatThread[]) => {
     return threads
       .filter(thread => thread.category === activeThreadCategory)
@@ -52,63 +59,70 @@ export const ChatPanel = () => {
   }, [dispatch, threads])
 
   return (
-    <aside className="flex flex-col items-center shrink-0 w-96 md:h-page-content gap-4 pt-8 pb-2 bg-gray-400/50 dark:bg-gray-950/30">
-      <Flex 
-        direction="row" 
-        align="center" 
-        justify="between" 
-        width="100%" 
-        px="4"
-      >
-        <Flex 
-          direction="row" 
-          align="center" 
-          gap="1"
-        >
+    <FlexBox as="aside"
+      sx={{
+        flexDirection: "column",
+        justifyContent: "start",
+        flexShrink: "0",
+        gap: "1rem",
+        width: "24rem",
+        height: "100%",
+        paddingTop: "2rem",
+        paddingBottom: "1rem",
+        backgroundColor: alpha(theme.palette.primary.dark, 0.08)
+      }} 
+    >
+      <FlexBox sx={{
+        justifyContent: "space-between",
+        width: "100%",
+        paddingX: "1rem"
+      }}>
+        <FlexBox sx={{
+          gap: "0.25rem"
+        }}>
           <ChatTeardropText size={24} weight="bold" />
-          <Heading>Chats</Heading>
-        </Flex>
-        <SegmentedController 
+          <Typography variant="h5" fontWeight="700">Chats</Typography>
+        </FlexBox>
+        <ToggleGroup 
           values={threadCategories} 
           activeTab={activeThreadCategory}
           onClick={(value) => setActiveThreadCategory(value)} 
         />
-      </Flex>
+      </FlexBox>
 
       <Button 
-        variant="ghost" 
-        onMouseEnter={() => displayTextByChar("New Thread", setDisplayedText)}
+        onMouseEnter={() => displayTextByChar("New Thread ", setDisplayedText)}
         onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
-        className="group mt-2 mb-1"
       >
-        <Text as="span">{displayedText}</Text>
-        <PlusCircle size={24} />
-      </Button>
-
-      {threads.length === 0 && (
-        <Callout.Root
-          variant="soft"
-          size="1"
-          color="sky"
-          className="opacity-0 fade-in"
-          style={{ animationDelay: "360ms" }}
+        <Typography 
+          variant="body2"
+          color="primary.main"
         >
-          <Callout.Icon>
-            <Info size={18} />
-          </Callout.Icon>
-          <Callout.Text>
-            Create a New Thread to Chat
-          </Callout.Text>
-        </Callout.Root>
+          {displayedText}
+        </Typography>
+        <PlusCircle size={24} weight="bold" />
+      </Button>
+        
+      {activeThreads.length === 0 && activeThreadCategory === "active" && (
+        <Alert 
+          icon={<Info />} 
+          severity="info"
+          sx={{ 
+            opacity: 0, 
+            animation: "fadeInFromBottom 240ms ease-out 360ms forwards" 
+          }} 
+        >
+          Create a New Thread to Chat
+        </Alert>
       )}
 
-      <ScrollArea 
-        type="scroll" 
-        scrollbars="vertical"
-      >
+      <Box sx={{
+        width: "100%",
+        overflowY: "scroll",
+      }}>
         <ChatHistoryTabs threads={sortedThreads(threads)} />
-      </ScrollArea>
-    </aside>  
+      </Box>
+    </FlexBox>  
   )
 }
