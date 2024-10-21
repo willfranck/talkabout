@@ -57,7 +57,7 @@ export const ChatInput = () => {
       }
     }
     messagesRef.current = currentMessages
-  }, [selectedThread, messageHistory])
+  }, [selectedThread, messageHistory, getTopic])
 
   const handleSubmit = async () => {
     if (selectedThread) {

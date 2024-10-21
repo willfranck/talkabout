@@ -38,7 +38,6 @@ import {
 } from "@ui/mui-elements"
 import { 
   CaretCircleRight,
-  StackPlus, 
   UserCircle, 
   Fire, 
   Snowflake,
@@ -54,7 +53,6 @@ const ThreadCard = ({
 }) => {
   const dispatch = useAppDispatch()
   const [threadTopic, setThreadTopic] = useState("")
-  const [hovered, setHovered] = useState(false)
 
   useEffect(() => {
     displayTextByChar(thread.topic, setThreadTopic)
@@ -279,7 +277,7 @@ const ChatHistory = ({
       }
     }
     messagesRef.current = currentMessages
-  }, [messages, messageHistory])
+  }, [messages, messageHistory, selectedThread])
 
   return (
     <FlexBox 

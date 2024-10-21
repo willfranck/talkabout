@@ -66,10 +66,9 @@ const Nav = ({
   }, [currentPath])
 
   const linkElements = links.map((link) => (
-    <ToolTip title={link.name} placement="bottom" arrow>
+    <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
       <Link href={link.path} className="outline-none">
         <Tab 
-          key={link.name} 
           label={link.icon}
           sx={{ 
             color: (link.path === pathname ? "highlight.main" : "primary.main"),
