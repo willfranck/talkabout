@@ -21,9 +21,9 @@ import {
 
 
 const links = [
-  { name: 'Home', path: '/', icon: <House size={24} weight="fill" /> },
-  { name: 'Chat', path: '/chat', icon: <ChatTeardropText size={24} weight="fill" /> },
-  { name: 'About', path: '/about', icon: <Info size={24} weight="fill" /> }
+  { name: "Home", path: "/", icon: <House size={24} weight="fill" /> },
+  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} weight="fill" /> },
+  { name: "About", path: "/about", icon: <Info size={24} weight="fill" /> },
 ]
 
 function ResponsiveAppBar() {
