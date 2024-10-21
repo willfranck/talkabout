@@ -127,7 +127,7 @@ const ToggleGroup = ({
 interface IDeleteButton {
   action: (dispatch: AppDispatch, id: string) => void
   itemId: string
-  location: "chat-history" | "threads",
+  location: "threads" | "chat-history",
 }
 
 const DeleteButton = ({
@@ -170,11 +170,13 @@ const DeleteButton = ({
 interface IArchiveButton {
   action: (dispatch: AppDispatch, id: string) => void
   itemId: string
+  location: "active" | "archived"
 }
 
 const ArchiveButton = ({
   action,
   itemId,
+  location
 }: IArchiveButton) => {
   const dispatch = useAppDispatch()
 
@@ -200,40 +202,12 @@ const ArchiveButton = ({
         }
       }} 
     >
-      <Archive size={23} color="currentColor" />
-    </Button>
-  )
-}
-
-const RestoreButton = ({
-  action,
-  itemId,
-}: IArchiveButton) => {
-  const dispatch = useAppDispatch()
-
-  return (
-    <Button 
-      onClick={() => action(dispatch, itemId)}
-      tabIndex={-1}
-      className="actionButton"
-      sx={{
-        position: "absolute",
-        top: "0",
-        right: "2.5rem",
-        zIndex: "10",
-        flexDirection: "column",
-        gap: "0.25rem",
-        width: "2.5rem",
-        height: "100%",
-        borderRadius: "0",
-        color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.info.main, 0.9),
-        "&:hover": {
-          bgcolor: alpha(theme.palette.info.light, 0.9),
-        }
-      }} 
-    >
-      <ArrowCounterClockwise size={22} color="currentColor" />
+      {location === "active" && (
+        <Archive size={23} color="currentColor" />
+      )}
+      {location === "archived" && (
+        <ArrowCounterClockwise size={22} color="currentColor" />
+      )}
     </Button>
   )
 }
@@ -245,6 +219,5 @@ export {
   Nav,
   ToggleGroup,
   ArchiveButton,
-  RestoreButton,
   DeleteButton,
 }

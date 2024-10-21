@@ -33,7 +33,6 @@ import {
   FlexBox,
   ToolTip, 
   ArchiveButton,
-  RestoreButton,
   DeleteButton
 } from "@ui/mui-elements"
 import { 
@@ -125,18 +124,17 @@ const ThreadCard = ({
             <CaretCircleRight size={24} />
           )}
         </FlexBox>
-        {thread.category === "active" && (
-          <ArchiveButton 
-            action={archiveThread} 
-            itemId={thread.id} 
-          />
-        )}
-        {thread.category === "archived" && (
-          <RestoreButton 
-            action={restoreThread} 
-            itemId={thread.id} 
-          />
-        )}
+        <ArchiveButton 
+          action={
+            thread.category === "active" 
+            ? archiveThread 
+              : thread.category === "archived" 
+              ? restoreThread 
+                : () => {}
+          } 
+          itemId={thread.id} 
+          location={thread.category}
+        />
         <DeleteButton 
           action={removeThread} 
           itemId={thread.id} 
@@ -183,7 +181,11 @@ const ChatMessageCard = ({
       width: "fit-content",
       maxWidth: { xs: "92%", md: "86%" },
       padding: "1rem",
-      bgcolor: (message.role === "user" ? alpha(theme.palette.primary.dark, 0.1) : alpha(theme.palette.primary.dark, 0.25)),
+      bgcolor: (
+        message.role === "user" 
+        ? alpha(theme.palette.primary.dark, 0.1) 
+        : alpha(theme.palette.primary.dark, 0.25)
+      ),
       backdropFilter: "blur(20px)",
       opacity: 0,
       animation: "fadeIn 240ms ease-out forwards",
@@ -203,7 +205,13 @@ const ChatMessageCard = ({
         gap: "1rem",
       }}>
         {message.role === "model" && (
-          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" />
+          <Image 
+            src={"/images/Llama.webp"} 
+            alt="Llama logo" 
+            width={20} 
+            height={20} 
+            className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" 
+          />
         )}
         <FlexBox sx={{
           flexDirection: "column",
@@ -412,6 +420,7 @@ const ChatInputField = ({
       sx={{
         width: "100%",
         padding: "0 0.5rem",
+        marginX: { xs: "0.75rem", md: "none" }
       }}
     >
       <InputLabel htmlFor="input-with-icon-adornment">
