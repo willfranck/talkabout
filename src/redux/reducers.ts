@@ -34,9 +34,16 @@ const chatSlice = createSlice({
         const lastActiveThread = activeThreads.reduce((latest, current) => {
           return current.lastActive > latest.lastActive ? current : latest
         }, state.threads[0])
-        if (lastActiveThread) {
+        if (lastActiveThread && lastActiveThread.lastActive !== "") {
           state.threads.forEach(thread => {
             thread.selected = thread.id === lastActiveThread.id
+          })
+        } else {
+          const lastCreatedThread = activeThreads.reduce((latest, current) => {
+            return current.created > latest.created ? current : latest
+          })
+          state.threads.forEach(thread => {
+            thread.selected = thread.id === lastCreatedThread.id
           })
         }
       }
@@ -68,10 +75,17 @@ const chatSlice = createSlice({
       if (activeThreads.length > 0) {
         const lastActiveThread = activeThreads.reduce((latest, current) => {
           return current.lastActive > latest.lastActive ? current : latest
-        })
-        if (lastActiveThread) {
+        }, state.threads[0])
+        if (lastActiveThread && lastActiveThread.lastActive !== "") {
           state.threads.forEach(thread => {
-            thread.selected = thread.id === lastActiveThread.id;
+            thread.selected = thread.id === lastActiveThread.id
+          })
+        } else {
+          const lastCreatedThread = activeThreads.reduce((latest, current) => {
+            return current.created > latest.created ? current : latest
+          })
+          state.threads.forEach(thread => {
+            thread.selected = thread.id === lastCreatedThread.id
           })
         }
       }

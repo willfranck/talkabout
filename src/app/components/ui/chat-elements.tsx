@@ -59,7 +59,7 @@ const ThreadCard = ({
   }, [thread.topic])
 
   return (
-    <ToolTip title={thread.topic.length >= 42 && thread.topic} placement="right" arrow>
+    <ToolTip title={thread.topic.length >= 40 && thread.topic} placement="right" arrow>
       <Card 
         id="ThreadCard"
         key={thread.id}
@@ -106,7 +106,8 @@ const ThreadCard = ({
               variant="body1" 
               sx={{
                 minHeight: "1rem",
-                color: (thread.selected ? "secondary.contrastText" : "secondary.light")
+                color: (thread.selected ? "secondary.contrastText" : "secondary.light"),
+                fontWeight: "600"
               }}
               className="line-clamp-1"
             >
@@ -286,7 +287,7 @@ const ChatHistory = ({
         flexDirection: "column",
         justifyContent: "start",
         gap: "1.5rem",
-        paddingY: "1.5rem",
+        padding: "1.5rem",
         width: "100%",
         height: "100%",
         overflowY: "auto"
