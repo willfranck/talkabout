@@ -71,6 +71,7 @@ export const ChatPanel = () => {
   return (
     <FlexBox as="aside"
       sx={{
+        display: { xs: "none", md: "flex" },
         flexDirection: "column",
         justifyContent: "start",
         flexShrink: "0",

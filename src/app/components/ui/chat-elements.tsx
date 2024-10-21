@@ -181,7 +181,7 @@ const ChatMessageCard = ({
       alignSelf: (message.role === "user" ? "end" : "start"),
       flexShrink: "0",
       width: "fit-content",
-      maxWidth: "86%",
+      maxWidth: { xs: "92%", md: "86%" },
       padding: "1rem",
       bgcolor: (message.role === "user" ? alpha(theme.palette.primary.dark, 0.1) : alpha(theme.palette.primary.dark, 0.25)),
       backdropFilter: "blur(20px)",
