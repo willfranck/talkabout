@@ -106,7 +106,7 @@ const theme = createTheme({
     MuiInput: {
       styleOverrides: {
         root: {
-          touchAction: "manipulation",
+          fontSize: "1rem",
         }
       }
     },
