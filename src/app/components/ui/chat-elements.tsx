@@ -33,7 +33,6 @@ import {
   FlexBox,
   ToolTip, 
   ArchiveButton,
-  RestoreButton,
   DeleteButton
 } from "@ui/mui-elements"
 import { 
@@ -59,7 +58,7 @@ const ThreadCard = ({
   }, [thread.topic])
 
   return (
-    <ToolTip title={thread.topic.length >= 42 && thread.topic} placement="right" arrow>
+    <ToolTip title={thread.topic.length >= 40 && thread.topic} placement="right" arrow>
       <Card 
         id="ThreadCard"
         key={thread.id}
@@ -106,7 +105,8 @@ const ThreadCard = ({
               variant="body1" 
               sx={{
                 minHeight: "1rem",
-                color: (thread.selected ? "secondary.contrastText" : "secondary.light")
+                color: (thread.selected ? "secondary.contrastText" : "secondary.light"),
+                fontWeight: "600"
               }}
               className="line-clamp-1"
             >
@@ -124,18 +124,17 @@ const ThreadCard = ({
             <CaretCircleRight size={24} />
           )}
         </FlexBox>
-        {thread.category === "active" && (
-          <ArchiveButton 
-            action={archiveThread} 
-            itemId={thread.id} 
-          />
-        )}
-        {thread.category === "archived" && (
-          <RestoreButton 
-            action={restoreThread} 
-            itemId={thread.id} 
-          />
-        )}
+        <ArchiveButton 
+          action={
+            thread.category === "active" 
+            ? archiveThread 
+              : thread.category === "archived" 
+              ? restoreThread 
+                : () => {}
+          } 
+          itemId={thread.id} 
+          location={thread.category}
+        />
         <DeleteButton 
           action={removeThread} 
           itemId={thread.id} 
@@ -180,9 +179,13 @@ const ChatMessageCard = ({
       alignSelf: (message.role === "user" ? "end" : "start"),
       flexShrink: "0",
       width: "fit-content",
-      maxWidth: "86%",
+      maxWidth: { xs: "92%", sm: "86%" },
       padding: "1rem",
-      bgcolor: (message.role === "user" ? alpha(theme.palette.primary.dark, 0.1) : alpha(theme.palette.primary.dark, 0.25)),
+      bgcolor: (
+        message.role === "user" 
+        ? alpha(theme.palette.primary.dark, 0.1) 
+        : alpha(theme.palette.primary.dark, 0.25)
+      ),
       backdropFilter: "blur(20px)",
       opacity: 0,
       animation: "fadeIn 240ms ease-out forwards",
@@ -202,7 +205,13 @@ const ChatMessageCard = ({
         gap: "1rem",
       }}>
         {message.role === "model" && (
-          <Image src={"/images/Llama.webp"} alt="Llama logo" width={20} height={20} className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" />
+          <Image 
+            src={"/images/Llama.webp"} 
+            alt="Llama logo" 
+            width={20} 
+            height={20} 
+            className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" 
+          />
         )}
         <FlexBox sx={{
           flexDirection: "column",
@@ -286,7 +295,7 @@ const ChatHistory = ({
         flexDirection: "column",
         justifyContent: "start",
         gap: "1.5rem",
-        paddingY: "1.5rem",
+        padding: { xs: "1.5rem 1.5rem 0 1.5rem", md: "1.5rem" },
         width: "100%",
         height: "100%",
         overflowY: "auto"
@@ -409,8 +418,7 @@ const ChatInputField = ({
       variant="outlined"
       onSubmit={onSubmit}
       sx={{
-        width: "100%",
-        padding: "0 0.5rem",
+        width: { xs: "90%", sm: "100%" }
       }}
     >
       <InputLabel htmlFor="input-with-icon-adornment">

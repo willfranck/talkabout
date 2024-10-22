@@ -48,7 +48,7 @@ const theme = createTheme({
       dark: red[800],
       light: red[500],
     },
-    divider: '#37474F',
+    divider: cyan[700],
   },
   //// MUI Typography
   typography: (palette) => ({
@@ -110,6 +110,18 @@ const theme = createTheme({
           textTransform: "none",
           borderRadius: "9999px",
         }
+      }
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "& .MuiTypography-root": {
+            color: theme.palette.primary.light
+          },
+          "& .MuiListItemIcon-root": {
+            color: theme.palette.primary.light
+          }
+        })
       }
     },
     MuiToggleButton: {

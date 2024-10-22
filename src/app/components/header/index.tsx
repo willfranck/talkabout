@@ -10,6 +10,7 @@ import {
 import { 
   FlexBox, 
   Nav,
+  MenuNav,
   ToolTip
 } from "@ui/mui-elements"
 import { 
@@ -21,9 +22,9 @@ import {
 
 
 const links = [
-  { name: 'Home', path: '/', icon: <House size={24} weight="fill" /> },
-  { name: 'Chat', path: '/chat', icon: <ChatTeardropText size={24} weight="fill" /> },
-  { name: 'About', path: '/about', icon: <Info size={24} weight="fill" /> }
+  { name: "Home", path: "/", icon: <House size={24} weight="fill" /> },
+  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} weight="fill" /> },
+  { name: "About", path: "/about", icon: <Info size={24} weight="fill" /> },
 ]
 
 function ResponsiveAppBar() {
@@ -36,7 +37,7 @@ function ResponsiveAppBar() {
       }}
     >
       <Container>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <Link href={"/"}>
             <Image 
               src="/images/Llama.webp" 
@@ -46,11 +47,16 @@ function ResponsiveAppBar() {
               className="w-10 h-10 rounded-logo invert dark:invert-0"
             />
           </Link>
-          <FlexBox sx={{ flexGrow: 1 }}>
+          <FlexBox sx={{ 
+            display: { xs: "none", sm: "flex" }, 
+            flexGrow: 1 
+          }}>
             <Nav links={links}  />
           </FlexBox>
+
           <ToolTip title="Sign In" placement="bottom" arrow>
             <Button sx={{
+              display: { xs: "none", sm: "flex" },
               "&:hover": {
                 color: "highlight.light"
               }
@@ -58,6 +64,8 @@ function ResponsiveAppBar() {
               <SignIn size={24} weight="bold" />
             </Button>
           </ToolTip>
+
+          <MenuNav links={links} />
         </Toolbar>
       </Container>
     </AppBar>

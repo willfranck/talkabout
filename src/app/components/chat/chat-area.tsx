@@ -15,7 +15,7 @@ export const ChatArea = () => {
       flexGrow: "1",
       height: "100%",
       gap: "1rem",
-      padding: "0 2rem 1rem 0"
+      padding: { xs: "0", sm: "0 1rem 0.5rem", md: "0 2rem 1rem 0" }
     }}>
       <ChatHistory messages={messageHistory} />
       <ChatInput />

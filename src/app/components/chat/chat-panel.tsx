@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ChatThread } from "@types"
 import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
@@ -13,7 +13,8 @@ import {
 import { 
   useInitialThread, 
   useThreads ,
-  useActiveThreads
+  useActiveThreads,
+  useArchivedThreads
 } from "@hooks/chat"
 import {
   alpha,
@@ -40,7 +41,8 @@ export const ChatPanel = () => {
   const dispatch = useAppDispatch()
   const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
   const [displayedText, setDisplayedText] = useState("")
-  
+  const archivedThreads = useArchivedThreads()
+  const archiveRef = useRef(archivedThreads.length)
   const threads = useThreads()
   const activeThreads = useActiveThreads()
   const sortedThreads = (threads: ChatThread[]) => {
@@ -52,32 +54,40 @@ export const ChatPanel = () => {
   useInitialThread()
 
   useEffect(() => {
-    if (threads && threads.length === 1) {
-      const remainingThread = threads[0].id
+    if (activeThreads && activeThreads.length === 1) {
+      const remainingThread = activeThreads[0].id
       selectActiveThread(dispatch, remainingThread)
     }
-  }, [dispatch, threads])
+  }, [dispatch, activeThreads])
+
+  useEffect(() => {
+    const currentlyArchived = archivedThreads.length
+    if (archivedThreads.length === 0 && currentlyArchived !== archiveRef.current) {
+      setActiveThreadCategory("active")
+    }
+    archiveRef.current = currentlyArchived
+  }, [archivedThreads, archiveRef])
 
   return (
-    <FlexBox as="aside"
-      sx={{
-        flexDirection: "column",
-        justifyContent: "start",
-        flexShrink: "0",
-        gap: "1rem",
-        width: "24rem",
-        height: "100%",
-        paddingTop: "2rem",
-        paddingBottom: "1rem",
-        backgroundColor: alpha(theme.palette.primary.dark, 0.08)
-      }} 
-    >
+    <FlexBox sx={{
+      flexDirection: "column",
+      justifyContent: "start",
+      flexShrink: "0",
+      gap: "1rem",
+      width: { xs: "21rem", lg: "24rem" },
+      height: "100%",
+      paddingTop: "2rem",
+      paddingBottom: "1rem",
+      backgroundColor: alpha(theme.palette.primary.dark, 0.08)
+    }}>
       <FlexBox sx={{
         justifyContent: "space-between",
+        gap: "1rem",
         width: "100%",
         paddingX: "1rem"
       }}>
         <FlexBox sx={{
+          alignSelf: "start",
           gap: "0.25rem"
         }}>
           <ChatTeardropText size={24} weight="bold" />
@@ -123,6 +133,6 @@ export const ChatPanel = () => {
       }}>
         <ChatHistoryTabs threads={sortedThreads(threads)} />
       </Box>
-    </FlexBox>  
+    </FlexBox>
   )
 }
