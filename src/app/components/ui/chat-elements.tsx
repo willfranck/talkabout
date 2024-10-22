@@ -275,8 +275,9 @@ const ChatHistory = ({
     } else {
       if (current) {
         if (currentMessages > messagesRef.current) {
+          const newMsgHeight = current.scrollHeight - current.clientHeight
           requestAnimationFrame(() => {
-            current.scrollTo({ top: current.scrollHeight, behavior: "smooth" })
+            current.scrollTo({ top: newMsgHeight, behavior: "smooth" })
           })
         } else {
           requestAnimationFrame(() => {

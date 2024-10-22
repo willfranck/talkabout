@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  touch-action: pan-x pan-y;
+  height: 100%;
+}
+
 /*//// Animations */
 @keyframes fadeIn {
   from {
