@@ -254,10 +254,20 @@ const ChatHistory = ({
   messages: ChatMessage[]
 }) => {
   const selectedThread = useSelectedThread()
-  const threadRef = useRef(selectedThread?.id) 
+  const threadRef = useRef<string | undefined>(selectedThread?.id) 
   const messageHistory = useMessageHistory()
-  const messagesRef = useRef(messageHistory.length)
+  const messagesRef = useRef<number>(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
+  
+  useEffect(() => {
+    // Handles initial page load
+    const { current } = scrollAreaRef
+    if (current) {
+      requestAnimationFrame(() => {
+        current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const { current } = scrollAreaRef
@@ -271,17 +281,14 @@ const ChatHistory = ({
           current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
         })
       }
-    // Handles NEW messages || page navigation
+    // Handles NEW messages
     } else {
       if (current) {
         if (currentMessages > messagesRef.current) {
-          const newMsgHeight = current.scrollHeight - current.clientHeight
+          const newMessage = current.lastChild as HTMLElement
+          const newMessageHeight = newMessage ? newMessage.offsetHeight : 0
           requestAnimationFrame(() => {
-            current.scrollTo({ top: newMsgHeight, behavior: "smooth" })
-          })
-        } else {
-          requestAnimationFrame(() => {
-            current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+            current.scrollTo({ top: current.scrollHeight - (newMessageHeight + 12), behavior: "smooth" })
           })
         }
       }
@@ -321,7 +328,10 @@ const ChatHistory = ({
         </FlexBox>
       )}
       {messages.length > 0 && messages.map((message) => (
-        <ChatMessageCard key={message.id} message={message} />
+        <ChatMessageCard 
+          key={message.id} 
+          message={message} 
+        />
       ))}
     </FlexBox>
   )
