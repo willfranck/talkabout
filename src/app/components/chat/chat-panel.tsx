@@ -69,26 +69,25 @@ export const ChatPanel = () => {
   }, [archivedThreads, archiveRef])
 
   return (
-    <FlexBox as="aside"
-      sx={{
-        display: { xs: "none", md: "flex" },
-        flexDirection: "column",
-        justifyContent: "start",
-        flexShrink: "0",
-        gap: "1rem",
-        width: "24rem",
-        height: "100%",
-        paddingTop: "2rem",
-        paddingBottom: "1rem",
-        backgroundColor: alpha(theme.palette.primary.dark, 0.08)
-      }} 
-    >
+    <FlexBox sx={{
+      flexDirection: "column",
+      justifyContent: "start",
+      flexShrink: "0",
+      gap: "1rem",
+      width: { xs: "21rem", lg: "24rem" },
+      height: "100%",
+      paddingTop: "2rem",
+      paddingBottom: "1rem",
+      backgroundColor: alpha(theme.palette.primary.dark, 0.08)
+    }}>
       <FlexBox sx={{
         justifyContent: "space-between",
+        gap: "1rem",
         width: "100%",
         paddingX: "1rem"
       }}>
         <FlexBox sx={{
+          alignSelf: "start",
           gap: "0.25rem"
         }}>
           <ChatTeardropText size={24} weight="bold" />
@@ -134,6 +133,6 @@ export const ChatPanel = () => {
       }}>
         <ChatHistoryTabs threads={sortedThreads(threads)} />
       </Box>
-    </FlexBox>  
+    </FlexBox>
   )
 }

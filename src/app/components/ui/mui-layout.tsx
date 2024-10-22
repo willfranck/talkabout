@@ -1,4 +1,8 @@
-import { Container, Box } from "@mui/material"
+import { 
+  Container, 
+  Box, 
+  Drawer 
+} from "@mui/material"
 
 //// Layout Elements
 const PageLayout = ({
@@ -34,6 +38,37 @@ const PageLayout = ({
   )
 }
 
+const MobileDrawer = ({
+  open,
+  onClose,
+  children
+}: {
+  open: boolean
+  onClose: () => void
+  children: React.ReactNode
+}) => {
+  return (
+    <Drawer 
+      open={open} 
+      onClose={onClose}
+      variant="temporary"
+      component="aside"
+      anchor="left" 
+      elevation={0}
+      ModalProps={{
+        keepMounted: true
+      }}
+      sx={{
+        display: { xs: "flex", md: "none" }
+      }}
+    >
+      {children}
+    </Drawer>
+  )
+}
+
+
 export { 
-  PageLayout 
+  PageLayout,
+  MobileDrawer
 }

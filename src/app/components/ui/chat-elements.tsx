@@ -179,7 +179,7 @@ const ChatMessageCard = ({
       alignSelf: (message.role === "user" ? "end" : "start"),
       flexShrink: "0",
       width: "fit-content",
-      maxWidth: { xs: "92%", md: "86%" },
+      maxWidth: { xs: "92%", sm: "86%" },
       padding: "1rem",
       bgcolor: (
         message.role === "user" 
@@ -295,7 +295,7 @@ const ChatHistory = ({
         flexDirection: "column",
         justifyContent: "start",
         gap: "1.5rem",
-        padding: "1.5rem",
+        padding: { xs: "1.5rem 1.5rem 0 1.5rem", md: "1.5rem" },
         width: "100%",
         height: "100%",
         overflowY: "auto"
@@ -418,7 +418,7 @@ const ChatInputField = ({
       variant="outlined"
       onSubmit={onSubmit}
       sx={{
-        width: { xs: "90%", md: "100%" }
+        width: { xs: "90%", sm: "100%" }
       }}
     >
       <InputLabel htmlFor="input-with-icon-adornment">

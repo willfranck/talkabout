@@ -107,14 +107,14 @@ const MenuNav = ({
   const open = Boolean(menuAnchorEl)
 
   const handleMenuBtnClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchorEl(event.currentTarget);
+    setMenuAnchorEl(event.currentTarget)
   }
   const handleMenuClose = () => {
     setMenuAnchorEl(null)
   }
 
   const linkElements = links.map((link) => (
-    <Link href={link.path}>
+    <Link key={link.name} href={link.path}>
       <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
         <ListItemIcon sx={{ minWidth: "2.25rem" }}>
           {link.icon}
@@ -126,7 +126,7 @@ const MenuNav = ({
 
   return (
     <Box sx={{ 
-      display: {xs: "block", md: "none" }
+      display: {xs: "block", sm: "none" }
     }}>
       <IconButton
         size="medium"

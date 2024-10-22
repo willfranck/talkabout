@@ -48,7 +48,7 @@ function ResponsiveAppBar() {
             />
           </Link>
           <FlexBox sx={{ 
-            display: { xs: "none", md: "flex" }, 
+            display: { xs: "none", sm: "flex" }, 
             flexGrow: 1 
           }}>
             <Nav links={links}  />
@@ -56,7 +56,7 @@ function ResponsiveAppBar() {
 
           <ToolTip title="Sign In" placement="bottom" arrow>
             <Button sx={{
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", sm: "flex" },
               "&:hover": {
                 color: "highlight.light"
               }

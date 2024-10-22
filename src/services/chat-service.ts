@@ -100,7 +100,7 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Response: Generate a short (roughly 40 chars) informative and cheeky title for this conversation based on the topic of the chat history.
+        Response: Generate a short (roughly 40 chars), accurate, and cheeky title for this conversation based on the topic of the chat history.
         Omit quotes around the title.
       `)
 
