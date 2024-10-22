@@ -98,10 +98,16 @@ const theme = createTheme({
     MuiFormControl: {
       styleOverrides: {
         root: ({ theme }) => ({
-          touchAction: "manipulation",
           backgroundColor: alpha(theme.palette.secondary.dark, 0.3),
           borderRadius: "0.5rem",
         })
+      }
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          touchAction: "manipulation",
+        }
       }
     },
     MuiButton: {
