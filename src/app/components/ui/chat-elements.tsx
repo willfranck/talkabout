@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useAppDispatch } from "@redux/hooks"
+import { useIsMobileOS } from "@hooks/global"
 import { 
   useSelectedThread, 
   useMessageHistory 
@@ -20,6 +21,7 @@ import {
 import theme from "@utils/mui-theme"
 import {
   alpha,
+  Box,
   Card,
   ToggleButtonGroup,
   ToggleButton,
@@ -27,7 +29,7 @@ import {
   FormControl,
   InputLabel,
   InputAdornment,
-  Input,
+  Input
 } from "@mui/material"
 import {
   FlexBox,
@@ -36,7 +38,8 @@ import {
   DeleteButton
 } from "@ui/mui-elements"
 import { 
-  CaretCircleRight,
+  // CaretCircleRight,
+  DotsThreeVertical,
   UserCircle, 
   Fire, 
   Snowflake,
@@ -50,6 +53,7 @@ const ThreadCard = ({
 }: {
   thread: ChatThread
 }) => {
+  const isMobileOS = useIsMobileOS()
   const dispatch = useAppDispatch()
   const [threadTopic, setThreadTopic] = useState("")
 
@@ -68,9 +72,10 @@ const ThreadCard = ({
           display: "flex",
           alignItems: "center",
           width: "100%",
-          padding: "0.5rem 1rem 0.5rem 0.5rem",
-          bgcolor: (thread.selected ? alpha(theme.palette.primary.main, 0.45) : ""),
+          padding: "0.5rem",
+          bgcolor: (thread.selected ? alpha(theme.palette.primary.main, 0.25) : ""),
           backdropFilter: "blur(20px)",
+          boxShadow: (thread.selected ? `inset 0 0 0 1px ${theme.palette.highlight.main}` : ""),
           opacity: "0",
           animation: "fadeInFromLeft 240ms ease-out forwards",
           cursor: "pointer",
@@ -80,7 +85,7 @@ const ThreadCard = ({
             animation: "fadeOutToRight 240ms ease-out forwards"
           },
           "&:hover": {
-            backgroundColor: (!thread.selected ? alpha(theme.palette.info.dark, 0.5) : ""),
+            backgroundColor: (!thread.selected ? alpha(theme.palette.primary.dark, 0.4) : ""),
             "& .actionButton": {
               visibility: "visible",
               animation: "fadeInFromRight 240ms ease-out 60ms forwards"
@@ -91,10 +96,13 @@ const ThreadCard = ({
         <FlexBox 
           onClick={() => selectActiveThread(dispatch, thread.id)}
           sx={{
-            justifyContent: "space-between",
+            justifyContent: "start",
             width: "100%",
           }}
         >
+          <Box sx={{ display: (isMobileOS ? "block" : "none") }}>
+            <DotsThreeVertical size={24} weight="bold" />
+          </Box>
           <FlexBox sx={{
             flexDirection: "column",
             alignItems: "start",
@@ -120,9 +128,6 @@ const ThreadCard = ({
               {new Date(thread.created).toLocaleDateString()}
             </Typography>
           </FlexBox>
-          {thread.selected && (
-            <CaretCircleRight size={24} />
-          )}
         </FlexBox>
         <ArchiveButton 
           action={
@@ -416,9 +421,13 @@ const ChatInputField = ({
   onChange,
   onSubmit
 }: IChatInput) => {
+  const inputRef = useRef<null | HTMLElement>(null)
   const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
+      if (inputRef.current) {
+        inputRef.current.blur()
+      }
       onSubmit()
     }
   }
@@ -436,8 +445,10 @@ const ChatInputField = ({
         Chat
       </InputLabel>
       <Input
+        ref={inputRef}
         multiline
         rows="5"
+        inputProps={{ tabIndex: 1 }}
         startAdornment={
           <InputAdornment position="start" sx={{ marginRight: "1rem" }}>
             <TemperatureControls 

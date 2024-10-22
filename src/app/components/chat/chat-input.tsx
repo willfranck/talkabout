@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
 import { temperatureSettings } from "@globals/values"
@@ -35,13 +35,13 @@ export const ChatInput = () => {
     setUserPrompt(event.target.value)
   }
 
-  const getTopic = async () => { 
+  const getTopic = useCallback(async () => { 
     const reply = await axios.post("/api/chat-topic", { history: messageHistory })
     if (reply.data.res) {
       const topic = reply.data.res
       dispatch(updateThreadTopic(topic))
     }
-  }
+  }, [dispatch, messageHistory])
 
   useEffect(() => {
     // Prevents getTopic() if selected thread hasn't changed || on page navigation
