@@ -374,7 +374,7 @@ const ChatHistory = ({
     const { current } = scrollAreaRef
     if (current) {
       requestAnimationFrame(() => {
-        current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+        current.scrollTo({ top: current.offsetHeight, behavior: "instant" })
       })
     }
   }, [])
@@ -388,7 +388,7 @@ const ChatHistory = ({
       messagesRef.current = currentMessages
       if (current) {
         requestAnimationFrame(() => {
-          current.scrollTo({ top: current.scrollHeight, behavior: "instant" })
+          current.scrollTo({ top: current.offsetHeight, behavior: "instant" })
         })
       }
     // Handles NEW messages
