@@ -100,7 +100,7 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Note: The llama is the LLM Model.  Avoid referencing the llama unless it's relevant.
+        Note: The llama is the LLM Model.  Make references to the llama only if it's relevant.
         Response: Generate a short (roughly 40 chars), accurate, and cheeky title for this conversation based on the underlying topic of the chat history.
         Omit quotes around the title.
       `)
