@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
-import theme from "@utils/mui-theme"
 import { 
   Container,
   AppBar,
@@ -23,9 +22,9 @@ import {
 
 
 const links = [
-  { name: "Home", path: "/", icon: <House size={24} weight="fill" color={theme.palette.primary.main} /> },
-  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} weight="fill" color={theme.palette.primary.main} /> },
-  { name: "About", path: "/about", icon: <Info size={24} weight="fill" color={theme.palette.primary.main} /> },
+  { name: "Home", path: "/", icon: <House size={24} weight="fill" /> },
+  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} weight="fill" /> },
+  { name: "About", path: "/about", icon: <Info size={24} weight="fill" /> },
 ]
 
 function ResponsiveAppBar() {

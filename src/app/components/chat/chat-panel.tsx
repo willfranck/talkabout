@@ -107,11 +107,9 @@ export const ChatPanel = () => {
         onMouseLeave={() => !isMobileOS && removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
       >
-        {!isMobileOS ? (
-          <Typography variant="body2" color="primary.main">{displayedText}</Typography>
-        ) : (
-          <Typography variant="body2" color="primary.main">New Thread </Typography>
-        )}
+        <Typography variant="body2" color="primary.main">
+          {isMobileOS ? "New Thread " : displayedText}
+        </Typography>
         <PlusCircle size={24} weight="bold" />
       </Button>
         

@@ -90,7 +90,7 @@ const ThreadCardMenu = ({
         onClose={handlePopoverClose}
         anchorEl={popoverAnchorEl}
         anchorOrigin={{
-          vertical: "center",
+          vertical: "bottom",
           horizontal: "right"
         }}
         transformOrigin={{
@@ -541,7 +541,6 @@ const ChatInputField = ({
     <FormControl 
       component="form"
       variant="outlined"
-      onSubmit={onSubmit}
       sx={{
         width: { xs: "90%", sm: "100%" }
       }}
@@ -553,7 +552,6 @@ const ChatInputField = ({
         ref={inputRef}
         multiline
         rows="5"
-        inputProps={{ tabIndex: 1 }}
         startAdornment={
           <InputAdornment position="start" sx={{ marginRight: "1rem" }}>
             <TemperatureControls 
@@ -570,6 +568,7 @@ const ChatInputField = ({
         disabled={threads === 0 || selectedThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
+        onSubmit={onSubmit}
       />
     </FormControl>
   )

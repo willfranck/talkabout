@@ -81,7 +81,7 @@ const Nav = ({
         <Tab 
           label={link.icon}
           sx={{ 
-            color: (link.path === pathname ? "highlight.main" : "primary.main"),
+            color: (link.path === pathname ? "highlight.light" : "highlight.main"),
             "&:hover": { 
               color: (link.path !== pathname ? "highlight.light" : "")
             }
@@ -197,7 +197,7 @@ const MenuNav = ({
             </ListSubheader>
             <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
               <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <SignIn size={24} weight="bold" color={theme.palette.primary.main} /> 
+                <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
               </ListItemIcon>
               <ListItemText primary="Sign In" />
             </ListItemButton>
