@@ -315,13 +315,15 @@ const ChatMessageCard = ({
         gap: "1rem",
       }}>
         {message.role === "model" && (
-          <Image 
-            src={"/images/Llama.webp"} 
-            alt="Llama logo" 
-            width={20} 
-            height={20} 
-            className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" 
-          />
+          <Box minWidth="1.25rem">
+            <Image 
+              src={"/images/Llama.webp"} 
+              alt="Llama logo" 
+              width={20} 
+              height={20} 
+              className="w-5 h-auto mt-0.5 rounded-full invert dark:invert-0" 
+            />
+          </Box>
         )}
         <FlexBox sx={{
           flexDirection: "column",
