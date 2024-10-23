@@ -265,13 +265,13 @@ const DeleteButton = ({
       tabIndex={-1}
       className="actionButton"
       sx={{
-        position: (isMobileOS ? "" : "absolute"),
+        position: "absolute",
         top: "0",
         right: "0",
         zIndex: "10",
         flexDirection: "row",
         gap: "0.25rem",
-        width: (isMobileOS ? "100%" : "2.5rem"),
+        width: "2.5rem",
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
@@ -309,13 +309,13 @@ const ArchiveButton = ({
       tabIndex={-1}
       className="actionButton"
       sx={{
-        position: (isMobileOS ? "" : "absolute"),
+        position: "absolute",
         top: "0",
-        // right: "2.5rem",
+        right: "2.5rem",
         zIndex: "10",
         flexDirection: "column",
         gap: "0.25rem",
-        width: (isMobileOS ? "100%" : "2.5rem"),
+        width: "2.5rem",
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
