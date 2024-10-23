@@ -526,14 +526,11 @@ const ChatInputField = ({
   onChange,
   onSubmit
 }: IChatInput) => {
-  const inputRef = useRef<null | HTMLElement>(null)
-  const handleSubmitKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault()
-      if (inputRef.current) {
-        onSubmit()
-        inputRef.current.blur()
-      }
+  const handleSubmitKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (prompt.trim().length > 0 && e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      onSubmit()
+      e.currentTarget.blur()
     }
   }
 
@@ -541,6 +538,7 @@ const ChatInputField = ({
     <FormControl 
       component="form"
       variant="outlined"
+      onSubmit={onSubmit}
       sx={{
         width: { xs: "90%", sm: "100%" }
       }}
@@ -549,7 +547,6 @@ const ChatInputField = ({
         Chat
       </InputLabel>
       <Input
-        ref={inputRef}
         multiline
         rows="5"
         startAdornment={
@@ -568,7 +565,6 @@ const ChatInputField = ({
         disabled={threads === 0 || selectedThread === undefined}
         onChange={onChange}
         onKeyDown={handleSubmitKeyDown}
-        onSubmit={onSubmit}
       />
     </FormControl>
   )
