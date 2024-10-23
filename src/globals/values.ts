@@ -13,7 +13,7 @@ const temperatureSettings = {
 const placeholderTopics = [
   "The Start of a ... Something",
   "A Journey with a Llama and a Chat",
-  "Talk to the Llama, the Llama Talks Back",
+  "Talk to the Llama",
   "New Chat with Llamini-Flash",
   "Going down the llama hole..."
 ]

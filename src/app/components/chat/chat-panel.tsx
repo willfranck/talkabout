@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { ChatThread } from "@types"
 import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
+import { useIsMobileOS } from "@hooks/global"
 import theme from "@utils/mui-theme"
 import { 
   createNewThread, 
@@ -39,6 +40,7 @@ import {
 
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
   const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
   const [displayedText, setDisplayedText] = useState("")
   const archivedThreads = useArchivedThreads()
@@ -101,16 +103,15 @@ export const ChatPanel = () => {
       </FlexBox>
 
       <Button 
-        onMouseEnter={() => displayTextByChar("New Thread ", setDisplayedText)}
-        onMouseLeave={() => removeTextByChar(displayedText, setDisplayedText)}
+        onMouseEnter={() => !isMobileOS && displayTextByChar("New Thread ", setDisplayedText)}
+        onMouseLeave={() => !isMobileOS && removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
       >
-        <Typography 
-          variant="body2"
-          color="primary.main"
-        >
-          {displayedText}
-        </Typography>
+        {!isMobileOS ? (
+          <Typography variant="body2" color="primary.main">{displayedText}</Typography>
+        ) : (
+          <Typography variant="body2" color="primary.main">New Thread </Typography>
+        )}
         <PlusCircle size={24} weight="bold" />
       </Button>
         

@@ -23,13 +23,20 @@ import {
   alpha,
   Box,
   Card,
+  IconButton,
   ToggleButtonGroup,
   ToggleButton,
-  Typography,
+  Popover,
+  List,
+  ListSubheader,
+  ListItemButton,
   FormControl,
   InputLabel,
   InputAdornment,
-  Input
+  Input,
+  Typography,
+  ListItemIcon,
+  ListItemText
 } from "@mui/material"
 import {
   FlexBox,
@@ -38,16 +45,112 @@ import {
   DeleteButton
 } from "@ui/mui-elements"
 import { 
-  // CaretCircleRight,
   DotsThreeVertical,
   UserCircle, 
   Fire, 
   Snowflake,
+  Trash,
+  Archive,
+  ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
 
 //// Chat Elements
+const ThreadCardMenu = ({
+  thread
+}: {
+  thread: ChatThread
+}) => {
+  const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
+  const [popoverAnchorEl, setPopoverAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(popoverAnchorEl)
+
+  const handlePopoverBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setPopoverAnchorEl(event.currentTarget)
+  }
+  const handlePopoverClose = () => {
+    setPopoverAnchorEl(null)
+  }
+
+  return (
+    <Box>
+     <IconButton 
+        onClick={handlePopoverBtnClick} 
+        sx={{ 
+          display: (isMobileOS ? "flex" : "none"), 
+          width: "1.25rem"
+        }}
+      >
+        <DotsThreeVertical size={24} weight="bold" />
+      </IconButton>
+      <Popover 
+        open={open} 
+        onClose={handlePopoverClose}
+        anchorEl={popoverAnchorEl}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left"
+        }}
+        sx={{
+          width: "75%"
+        }}
+      >
+        <List>
+          <ListSubheader sx={{
+            lineHeight: "2rem",
+            color: "primary.dark"
+          }}>
+            Actions
+          </ListSubheader>
+          {thread.category === "active" ? (
+            <ListItemButton 
+              onClick={() => {archiveThread(dispatch, thread.id), handlePopoverClose}} 
+              sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
+            >
+              <ListItemIcon sx={{ minWidth: "2rem" }}>
+                <Archive size={24} />
+              </ListItemIcon>
+              <ListItemText primary="Archive" />
+            </ListItemButton>
+          ) : (
+            <ListItemButton 
+              onClick={() => {restoreThread(dispatch, thread.id), handlePopoverClose}} 
+              sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
+            >
+              <ListItemIcon sx={{ minWidth: "2rem" }}>
+                <ArrowCounterClockwise size={24} />
+              </ListItemIcon>
+              <ListItemText primary="Restore" />
+            </ListItemButton>
+          )}
+          <ListItemButton 
+            onClick={() => (removeThread(dispatch, thread.id), handlePopoverClose)} 
+            sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
+          >
+            <ListItemIcon sx={{ minWidth: "2rem" }}>
+              <Trash size={24} color={theme.palette.error.main} />
+            </ListItemIcon>
+            <ListItemText 
+              primary="Delete" 
+              sx={{ 
+                "& .MuiTypography-root": { 
+                  color: theme.palette.error.main 
+                }
+              }} 
+            />
+          </ListItemButton>
+        </List>
+      </Popover>
+    </Box>
+  )
+}
+
 const ThreadCard = ({ 
   thread, 
 }: {
@@ -100,9 +203,7 @@ const ThreadCard = ({
             width: "100%",
           }}
         >
-          <Box sx={{ display: (isMobileOS ? "block" : "none") }}>
-            <DotsThreeVertical size={24} weight="bold" />
-          </Box>
+          <ThreadCardMenu thread={thread} />
           <FlexBox sx={{
             flexDirection: "column",
             alignItems: "start",
@@ -129,22 +230,26 @@ const ThreadCard = ({
             </Typography>
           </FlexBox>
         </FlexBox>
-        <ArchiveButton 
-          action={
-            thread.category === "active" 
-            ? archiveThread 
-              : thread.category === "archived" 
-              ? restoreThread 
-                : () => {}
-          } 
-          itemId={thread.id} 
-          location={thread.category}
-        />
-        <DeleteButton 
-          action={removeThread} 
-          itemId={thread.id} 
-          location="threads" 
-        />
+        {!isMobileOS && (
+          <>
+            <ArchiveButton 
+              action={
+                thread.category === "active" 
+                ? archiveThread 
+                  : thread.category === "archived" 
+                  ? restoreThread 
+                    : () => {}
+              } 
+              itemId={thread.id} 
+              location={thread.category}
+            />
+            <DeleteButton 
+              action={removeThread} 
+              itemId={thread.id} 
+              location="threads" 
+            />
+          </>
+        )}
       </Card>
     </ToolTip>
   )
@@ -426,9 +531,9 @@ const ChatInputField = ({
     if (prompt.trim().length > 0 && event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
       if (inputRef.current) {
+        onSubmit()
         inputRef.current.blur()
       }
-      onSubmit()
     }
   }
 

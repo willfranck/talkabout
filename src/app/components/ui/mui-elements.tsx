@@ -12,8 +12,8 @@ import {
   IconButton,
   Tabs,
   Tab,
-  Menu,
-  MenuList,
+  Popover,
+  List,
   ListSubheader,
   ListItemButton,
   ListItemIcon,
@@ -34,6 +34,7 @@ import {
   Archive,
   ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
+import { useIsMobileOS } from "@hooks/global"
 
 
 const FlexBox = styled(Box)<BoxProps>(({}) => ({
@@ -115,7 +116,7 @@ const MenuNav = ({
 
   const linkElements = links.map((link) => (
     <Link key={link.name} href={link.path}>
-      <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
+      <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
         <ListItemIcon sx={{ minWidth: "2.25rem" }}>
           {link.icon}
         </ListItemIcon>
@@ -138,7 +139,7 @@ const MenuNav = ({
       >
         <DotsThreeVertical size={24} weight="bold" color={theme.palette.primary.light} />
       </IconButton>
-      <Menu 
+      <Popover 
         open={open}
         onClose={handleMenuClose}
         elevation={1}
@@ -152,36 +153,58 @@ const MenuNav = ({
           horizontal: "right"
         }}
       >
-        <MenuList 
-          subheader={
+        <FlexBox 
+          sx={{ 
+            alignItems: "start",
+            width: "calc(100vw - 2rem)",
+            paddingY: "0.5rem"
+          }}
+        >
+          <List sx={{
+            flexDirection: "column",
+            alignItems: "start",
+            width: "50%",
+            paddingY: "0"
+          }}>
             <ListSubheader sx={{
+              width: "100%",
               lineHeight: "2rem",
               color: "primary.dark"
             }}>
-              Pages
+              Navigation
             </ListSubheader>
-          }
-          sx={{ 
-            display: "flex", 
+            {linkElements}
+          </List>
+          <Divider 
+            orientation="vertical" 
+            flexItem 
+            sx={{
+              borderColor: "primary.dark"
+            }}
+          />
+          <List sx={{
+            display: "flex",
             flexDirection: "column",
-            padding: "0"
-          }}
-        >
-          {linkElements}
-          <Divider sx={{ 
-            alignSelf: "center", 
-            width: "90%", 
-            marginY: "0.5rem",
-            borderColor: "secondary.main"
-          }}/>
-          <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem" }}>
-            <ListItemIcon sx={{ minWidth: "2.25rem" }}>
-              <SignIn size={24} weight="bold" /> 
-            </ListItemIcon>
-            <ListItemText primary="Sign In" />
-          </ListItemButton>
-        </MenuList>
-      </Menu>
+            alignItems: "start",
+            width: "50%",
+            paddingY: "0"
+          }}>
+            <ListSubheader sx={{
+              width: "100%",
+              lineHeight: "2rem",
+              color: "primary.dark"
+            }}>
+              Account
+            </ListSubheader>
+            <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+              <ListItemIcon sx={{ minWidth: "2rem" }}>
+                <SignIn size={24} weight="bold" color={theme.palette.primary.main} /> 
+              </ListItemIcon>
+              <ListItemText primary="Sign In" />
+            </ListItemButton>
+          </List>
+        </FlexBox>
+      </Popover>
     </Box>
   )
 }
@@ -234,6 +257,7 @@ const DeleteButton = ({
   location
 }: IDeleteButton) => {
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
@@ -241,13 +265,13 @@ const DeleteButton = ({
       tabIndex={-1}
       className="actionButton"
       sx={{
-        position: "absolute",
+        position: (isMobileOS ? "" : "absolute"),
         top: "0",
         right: "0",
         zIndex: "10",
-        flexDirection: "column",
+        flexDirection: "row",
         gap: "0.25rem",
-        width: "2.5rem",
+        width: (isMobileOS ? "100%" : "2.5rem"),
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
@@ -277,6 +301,7 @@ const ArchiveButton = ({
   location
 }: IArchiveButton) => {
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
@@ -284,13 +309,13 @@ const ArchiveButton = ({
       tabIndex={-1}
       className="actionButton"
       sx={{
-        position: "absolute",
+        position: (isMobileOS ? "" : "absolute"),
         top: "0",
-        right: "2.5rem",
+        // right: "2.5rem",
         zIndex: "10",
         flexDirection: "column",
         gap: "0.25rem",
-        width: "2.5rem",
+        width: (isMobileOS ? "100%" : "2.5rem"),
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
