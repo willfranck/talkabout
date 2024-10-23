@@ -269,7 +269,7 @@ const DeleteButton = ({
         top: "0",
         right: "0",
         zIndex: "10",
-        flexDirection: "row",
+        flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
         height: "100%",
