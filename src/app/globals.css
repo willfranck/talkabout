@@ -139,6 +139,10 @@ svg {
   flex-shrink: 0;
 }
 
+pre {
+  font-size: 0.875rem;
+}
+
 .rounded-logo {
   border-radius: 0 30% 0 30%;
 }
