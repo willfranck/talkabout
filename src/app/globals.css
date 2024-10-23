@@ -162,3 +162,9 @@ pre {
 .rounded-bl-only {
   border-radius: 0 0 0 0.375rem;
 }
+
+@media screen and (max-width: 767px) {
+  pre {
+    font-size: 0.5rem;
+  }
+}
