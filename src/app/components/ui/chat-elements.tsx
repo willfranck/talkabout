@@ -370,13 +370,14 @@ const ChatHistory = ({
   const messageHistory = useMessageHistory()
   const messagesRef = useRef<number>(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
+  const scrollOffset = 32
   
   useEffect(() => {
     // Handles initial page load
     const { current } = scrollAreaRef
     if (current) {
       requestAnimationFrame(() => {
-        current.scrollTo({ top: current.offsetHeight, behavior: "instant" })
+        current.scrollTo({ top: current.scrollHeight + scrollOffset, behavior: "instant" })
       })
     }
   }, [])
@@ -390,7 +391,7 @@ const ChatHistory = ({
       messagesRef.current = currentMessages
       if (current) {
         requestAnimationFrame(() => {
-          current.scrollTo({ top: current.offsetHeight, behavior: "instant" })
+          current.scrollTo({ top: current.scrollHeight + scrollOffset, behavior: "instant" })
         })
       }
     // Handles NEW messages
