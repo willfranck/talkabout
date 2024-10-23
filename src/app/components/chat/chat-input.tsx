@@ -68,9 +68,9 @@ export const ChatInput = () => {
           content: userPrompt, 
           timestamp: new Date().toISOString()
         }
-        setUserPrompt("")
         dispatch(addMessage(userMessage))
         dispatch(updateLastActive(new Date().toISOString()))
+        setUserPrompt("")
 
         const aiReply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })
         if (aiReply.data.res) {

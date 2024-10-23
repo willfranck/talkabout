@@ -54,6 +54,7 @@ import {
   ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 
 //// Chat Elements
@@ -336,7 +337,7 @@ const ChatMessageCard = ({
             gap: "0.5rem",
             width: "100%",
           }}>
-            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
               {message.content}
             </ReactMarkdown>
           </FlexBox>
