@@ -34,7 +34,6 @@ import {
   Archive,
   ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
-import { useIsMobileOS } from "@hooks/global"
 
 
 const FlexBox = styled(Box)<BoxProps>(({}) => ({
@@ -257,7 +256,6 @@ const DeleteButton = ({
   location
 }: IDeleteButton) => {
   const dispatch = useAppDispatch()
-  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
@@ -301,7 +299,6 @@ const ArchiveButton = ({
   location
 }: IArchiveButton) => {
   const dispatch = useAppDispatch()
-  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
