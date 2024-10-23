@@ -32,7 +32,7 @@ const useInitialThread = () => {
       createNewThread(dispatch)
       threadCreated.current = true
     }
-  }, [dispatch, threads])
+  }, [dispatch, threads.length])
 }
 
 const useSelectedThread = () => {
