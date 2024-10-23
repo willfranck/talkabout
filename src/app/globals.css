@@ -135,6 +135,10 @@ img {
   height: auto;
 }
 
+a {
+  color: #4DD0E1;
+}
+
 svg {
   flex-shrink: 0;
 }

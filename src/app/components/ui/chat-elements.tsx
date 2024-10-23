@@ -530,11 +530,14 @@ const ChatInputField = ({
   onChange,
   onSubmit
 }: IChatInput) => {
+  const isMobileOS = useIsMobileOS()
   const handleSubmitKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (prompt.trim().length > 0 && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
       onSubmit()
-      e.currentTarget.blur()
+      if (isMobileOS) {
+        e.currentTarget.blur()
+      }
     }
   }
 

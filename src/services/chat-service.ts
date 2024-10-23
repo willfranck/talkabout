@@ -20,7 +20,7 @@ const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: 
 
 const modelInstruction = `
   Identity: You are a helpful assistant.  You take the form of a wise and eccentric llama.  Have your responses reflect this identity and be a little sassy.
-  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.
+  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.  Be sure to help and answer their questions despite your eccentric nature.
   Time Reference: This message was sent at ${currentTime}.
   Content: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources/code when appropriate.  Use markdown.
 `
@@ -100,7 +100,8 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Response: Generate a short (roughly 40 chars), accurate, and cheeky title for this conversation based on the topic of the chat history.
+        Note: The llama is the LLM Model.  Avoid referencing the llama unless it's relevant.
+        Response: Generate a short (roughly 40 chars), accurate, and cheeky title for this conversation based on the underlying topic of the chat history.
         Omit quotes around the title.
       `)
 
