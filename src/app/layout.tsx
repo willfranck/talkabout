@@ -5,6 +5,7 @@ import { ThemeProvider, CssBaseline } from "@mui/material"
 import { Kumbh_Sans } from "next/font/google"
 import theme from "@utils/mui-theme"
 import "./globals.css"
+import "highlight.js/styles/hybrid.css"
 import Header from "@header/index"
 
 

@@ -25,7 +25,7 @@ const PageLayout = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          gap: "2rem",
+          gap: { xs: "1rem", lg: "2rem"},
           width: "100%",
           height: "100%",
           opacity: "0",

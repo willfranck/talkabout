@@ -139,26 +139,25 @@ a {
   color: #4DD0E1;
 }
 
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 svg {
   flex-shrink: 0;
 }
 
 pre {
-  padding: 1rem;
-  margin: 0 0.5rem;
+  font-size: 0.825rem;
   text-wrap: pretty;
-  font-size: 0.875rem;
-  background-color: #121212BB;
-  backdrop-filter: blur(20px);
   border-radius: 10px;
 }
 
-code {
-  font-size: 0.875rem;
-}
-
-pre code span { 
-  color: #26C6DA;
+.hljs {
+  margin-bottom: 1rem;
+  border-radius: 10px;
 }
 
 .rounded-logo {
@@ -184,7 +183,6 @@ pre code span {
 @media screen and (max-width: 767px) {
   pre,
   pre code {
-    margin-left: 0;
-    font-size: 0.575rem;
+    font-size: 0.5rem;
   }
 }

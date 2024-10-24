@@ -55,8 +55,8 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import rehypeRaw from "rehype-raw"
 import rehypeHighlight from "rehype-highlight"
+import hljs from "highlight.js"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 
 //// Chat Elements
@@ -281,18 +281,47 @@ const ChatHistoryTabs = ({
   )
 }
 
+const CodeBlock = ({
+  inline,
+  className,
+  children,
+  ...props
+}: {
+  inline?: boolean
+  className?: string
+  children?: React.ReactNode
+}) => {
+  const match = /language-(\w+)/.exec(className || "");
+
+  return !inline && match ? (
+    <pre className={className} {...props}>
+      <code className={className}>
+        {children}
+      </code>
+    </pre>
+  ) : (
+    <code className={className} {...props}>
+      {children}
+    </code>
+  )
+}
+
 const ChatMessageCard = ({
   message
 }: {
   message: ChatMessage
 }) => {
+  useEffect(() => {
+    hljs.initHighlighting()
+  }, [])
+
   return (
     <Card sx={{
       position: "relative",
       alignSelf: (message.role === "user" ? "end" : "start"),
       flexShrink: "0",
       width: "fit-content",
-      maxWidth: { xs: "92%", sm: "86%" },
+      maxWidth: { xs: "95%", lg: "86%" },
       padding: "1rem",
       bgcolor: (
         message.role === "user" 
@@ -316,7 +345,7 @@ const ChatMessageCard = ({
       <FlexBox sx={{
         flexDirection: { xs: (message.role === "user" ? "column-reverse" : "column"), sm: "row" },
         alignItems: "start",
-        gap: "0.5rem",
+        gap: "0.75rem",
       }}>
         {message.role === "model" && (
           <Box minWidth="1.5rem">
@@ -342,9 +371,13 @@ const ChatMessageCard = ({
             overflowWrap: "anywhere"
           }}>
             <ReactMarkdown 
-              remarkPlugins={[remarkGfm]} 
+              components={{
+                code: CodeBlock 
+              }}
+              remarkPlugins={[
+                remarkGfm,
+              ]} 
               rehypePlugins={[
-                rehypeRaw, 
                 rehypeHighlight, 
                 [rehypeSanitize, defaultSchema]
               ]
