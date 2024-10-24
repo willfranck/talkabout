@@ -312,15 +312,19 @@ const ChatMessageCard = ({
   message: ChatMessage
 }) => {
   // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders
+  // useEffect(() => {
+  //   document.querySelectorAll("code").forEach((block) => {
+  //     const codeBlock = block as HTMLElement
+  //     if (codeBlock.dataset.highlighted !== "yes") {
+  //       hljs.highlightElement(codeBlock)
+  //       codeBlock.dataset.highlighted = "yes"
+  //     }
+  //   })
+  // }, [message])
+
   useEffect(() => {
-    document.querySelectorAll("code").forEach((block) => {
-      const codeBlock = block as HTMLElement
-      if (codeBlock.dataset.highlighted !== "yes") {
-        hljs.highlightElement(codeBlock)
-        codeBlock.dataset.highlighted = "yes"
-      }
-    })
-  }, [message])
+    hljs.initHighlightingOnLoad()
+  }, [])
 
   return (
     <Card sx={{
