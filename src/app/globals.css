@@ -144,7 +144,21 @@ svg {
 }
 
 pre {
+  padding: 1rem;
+  margin: 0 0.5rem;
+  text-wrap: pretty;
   font-size: 0.875rem;
+  background-color: #121212BB;
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+}
+
+code {
+  font-size: 0.875rem;
+}
+
+pre code span { 
+  color: #26C6DA;
 }
 
 .rounded-logo {
@@ -168,7 +182,9 @@ pre {
 }
 
 @media screen and (max-width: 767px) {
-  pre {
-    font-size: 0.5rem;
+  pre,
+  pre code {
+    margin-left: 0;
+    font-size: 0.575rem;
   }
 }

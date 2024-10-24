@@ -55,7 +55,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import rehypeRaw from "rehype-raw"
 import rehypeHighlight from "rehype-highlight"
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 
 //// Chat Elements
 const ThreadCardMenu = ({
@@ -312,11 +314,12 @@ const ChatMessageCard = ({
       },
     }}>
       <FlexBox sx={{
+        flexDirection: { xs: (message.role === "user" ? "column-reverse" : "column"), sm: "row" },
         alignItems: "start",
-        gap: "1rem",
+        gap: "0.5rem",
       }}>
         {message.role === "model" && (
-          <Box minWidth="1.25rem">
+          <Box minWidth="1.5rem">
             <Image 
               src={"/images/Llama.webp"} 
               alt="Llama logo" 
@@ -336,8 +339,16 @@ const ChatMessageCard = ({
             alignItems: "start",
             gap: "0.5rem",
             width: "100%",
+            overflowWrap: "anywhere"
           }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]} 
+              rehypePlugins={[
+                rehypeRaw, 
+                rehypeHighlight, 
+                [rehypeSanitize, defaultSchema]
+              ]
+            }>
               {message.content}
             </ReactMarkdown>
           </FlexBox>
@@ -347,14 +358,14 @@ const ChatMessageCard = ({
           </Typography>
         </FlexBox>
         {message.role === "user" && (
-          <>
+          <Box minWidth="1.5rem" sx={{ alignSelf: { xs: "end", sm: "start" }}}>
             <UserCircle size={24} weight="duotone" />
             <DeleteButton 
               action={deleteMessage} 
               itemId={message.id} 
               location="chat-history" 
             />
-          </>
+          </Box>
         )}
       </FlexBox>
     </Card>

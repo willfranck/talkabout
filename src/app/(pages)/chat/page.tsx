@@ -46,8 +46,8 @@ export default function ChatPage() {
         onClick={handleDrawerBtnClick}
         sx={{
           position: "absolute",
-          bottom: "18%",
-          left: "4%",
+          bottom: "20%",
+          left: "2%",
           display: { xs: "flex", md: "none" },
           backgroundColor: alpha(theme.palette.primary.main, 0.33)
         }}

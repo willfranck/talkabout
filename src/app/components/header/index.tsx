@@ -27,7 +27,7 @@ const links = [
   { name: "About", path: "/about", icon: <Info size={24} weight="fill" /> },
 ]
 
-function ResponsiveAppBar() {
+const Header = () => {
   return (
     <AppBar 
       position="static" 
@@ -72,4 +72,4 @@ function ResponsiveAppBar() {
   )
 }
 
-export default ResponsiveAppBar
+export default Header

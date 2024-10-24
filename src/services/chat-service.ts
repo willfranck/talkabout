@@ -20,9 +20,10 @@ const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: 
 
 const modelInstruction = `
   Identity: You are a helpful assistant.  You take the form of a wise and eccentric llama.  Have your responses reflect this identity and be a little sassy.
-  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.  Be sure to help and answer their questions despite your eccentric nature.
+  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.  Be responsive, engaged, but mostly have fun.
   Time Reference: This message was sent at ${currentTime}.
-  Content: Respond to the User Prompt using the chat history context in a way that is detailed, concise, and a little quirky.  Send any links/resources/code when appropriate.  Use markdown.
+  Format: Your response is received as text/plain and being passed through React Markdown with remark-gfm, rehype-raw, and rehype-highlight.  Use markdown and html elements to aid your responses and add a little flair.
+  Content: Respond to the User Prompt using the chat history context in a way that is detailed, and a little quirky.  Send any links, resources, and code snippets when appropriate.
 `
 
 
@@ -100,9 +101,8 @@ async function ChatTopic({
         history: chatHistory
       })
       const result = await chat.sendMessage(`
-        Note: The llama is the LLM Model.  Make references to the llama only if it's relevant.
-        Response: Generate a short (roughly 40 chars), accurate, and cheeky title for this conversation based on the underlying topic of the chat history.
-        Omit quotes around the title.
+        Context: This is the chat history of a user and an AI model whose personality is an eccentric llama.  Avoid referencing the llama AI in the title.  Omit quotes around the title.
+        Response: Generate a short, accurate, and cheeky title for this conversation based on the underlying topic of the chat history using roughly 5-6 words.
       `)
 
       if (result.response) {
