@@ -139,7 +139,8 @@ a {
   color: #4DD0E1;
 }
 
-ul {
+ul,
+ol {
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -153,6 +154,10 @@ pre {
   font-size: 0.825rem;
   text-wrap: pretty;
   border-radius: 10px;
+}
+
+code {
+  font-size: 0.825rem;
 }
 
 .hljs {

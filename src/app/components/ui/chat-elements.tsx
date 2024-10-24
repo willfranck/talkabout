@@ -311,9 +311,16 @@ const ChatMessageCard = ({
 }: {
   message: ChatMessage
 }) => {
+  // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders
   useEffect(() => {
-    hljs.initHighlighting()
-  }, [])
+    document.querySelectorAll("code").forEach((block) => {
+      const codeBlock = block as HTMLElement
+      if (codeBlock.dataset.highlighted !== "yes") {
+        hljs.highlightElement(codeBlock)
+        codeBlock.dataset.highlighted = "yes"
+      }
+    })
+  }, [message])
 
   return (
     <Card sx={{
@@ -369,21 +376,27 @@ const ChatMessageCard = ({
             gap: "0.5rem",
             width: "100%",
             overflowWrap: "anywhere"
-          }}>
-            <ReactMarkdown 
-              components={{
-                code: CodeBlock 
-              }}
-              remarkPlugins={[
-                remarkGfm,
-              ]} 
-              rehypePlugins={[
-                rehypeHighlight, 
-                [rehypeSanitize, defaultSchema]
-              ]
-            }>
-              {message.content}
-            </ReactMarkdown>
+          }}
+            style={{ whiteSpace: "pre-wrap" }}
+          >
+            {message.role === "user" ? (
+              <>{message.content}</>
+            ) : (
+              <ReactMarkdown 
+                components={{
+                  code: CodeBlock 
+                }}
+                remarkPlugins={[
+                  remarkGfm,
+                ]} 
+                rehypePlugins={[
+                  [rehypeSanitize, defaultSchema],
+                  rehypeHighlight
+                ]
+              }>
+                {message.content}
+              </ReactMarkdown>
+            )}
           </FlexBox>
           <Typography variant="body2" color="primary.main">
             {new Date(message.timestamp).toLocaleDateString()}{" - "}
