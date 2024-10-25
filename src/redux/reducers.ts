@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ChatThread, ChatMessage } from "@types"
+import { getLastActiveThread } from "@globals/functions"
 
 interface ChatState {
   threads: ChatThread[]
@@ -30,22 +31,11 @@ const chatSlice = createSlice({
         thread.id !== action.payload
       )
       const activeThreads = state.threads.filter(thread => thread.category === "active")
-      if (wasDeletedThreadSelected && activeThreads.length > 0) {
-        const lastActiveThread = activeThreads.reduce((latest, current) => {
-          return current.lastActive > latest.lastActive ? current : latest
-        }, state.threads[0])
-        if (lastActiveThread && lastActiveThread.lastActive !== "") {
-          state.threads.forEach(thread => {
-            thread.selected = thread.id === lastActiveThread.id
-          })
-        } else {
-          const lastCreatedThread = activeThreads.reduce((latest, current) => {
-            return current.created > latest.created ? current : latest
-          })
-          state.threads.forEach(thread => {
-            thread.selected = thread.id === lastCreatedThread.id
-          })
-        }
+      const lastActiveThread = getLastActiveThread(activeThreads, wasDeletedThreadSelected)
+      if (lastActiveThread) {
+        state.threads.forEach(thread => {
+          thread.selected = thread.id === lastActiveThread
+        })
       }
     },
     updateThreadTopic: (state, action: PayloadAction<string>) => {

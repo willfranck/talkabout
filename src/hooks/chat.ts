@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useMemo } from "react"
 import { useAppSelector, useAppDispatch } from "@redux/hooks"
 import { createNewThread } from "@globals/functions"
 
@@ -10,16 +10,11 @@ const useThreads = () => {
   return threads
 }
 
-const useActiveThreads = () => {
-  const threads = useThreads()
-  const activeThreads = threads.filter(thread => thread.category === "active")
-  return activeThreads
-}
-
-const useArchivedThreads = () => {
-  const threads = useThreads()
-  const archivedThreads = threads.filter(thread => thread.category === "archived")
-  return archivedThreads
+const useThreadCount = () => {
+  const threadCount = useAppSelector(
+    (state) => state.chat.threads.length
+  )
+  return threadCount
 }
 
 const useInitialThread = () => {
@@ -35,6 +30,24 @@ const useInitialThread = () => {
   }, [dispatch, threads.length])
 }
 
+const useActiveThreads = () => {
+  const threads = useThreads()
+  const activeThreads = useMemo(() => 
+    threads.filter(thread => thread.category === "active"),
+    [threads]
+  )
+  return activeThreads
+}
+
+const useArchivedThreads = () => {
+  const threads = useThreads()
+  const archivedThreads = useMemo(() => 
+    threads.filter(thread => thread.category === "archived"),
+    [threads]
+  )
+  return archivedThreads
+}
+
 const useSelectedThread = () => {
   const selectedThread = useAppSelector(
     (state) => state.chat.threads.find(thread => thread.selected)
@@ -42,28 +55,22 @@ const useSelectedThread = () => {
   return selectedThread
 }
 
-const useThreadCount = () => {
-  const threadCount = useAppSelector(
-    (state) => state.chat.threads.length
-  )
-  return threadCount
-}
-
 const useMessageHistory = () => {
   const selectedThread = useSelectedThread()
-  const messageHistory = 
-    selectedThread?.messages 
-    || []
+  const messageHistory = useMemo(() =>
+    selectedThread?.messages || [],
+    [selectedThread]
+  )
   return messageHistory
 }
 
 
 export {
   useThreads,
+  useThreadCount,
   useInitialThread,
   useActiveThreads,
   useArchivedThreads,
   useSelectedThread,
-  useThreadCount,
   useMessageHistory
 }

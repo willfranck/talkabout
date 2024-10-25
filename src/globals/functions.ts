@@ -32,6 +32,24 @@ function selectActiveThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setActiveThread(threadId))
 }
 
+function getLastActiveThread(activeThreads: ChatThread[], wasDeletedThreadSelected: boolean) {
+  if (!wasDeletedThreadSelected) return null
+  if (activeThreads.length === 0) return null
+  
+  const lastActiveThread = activeThreads.reduce((latest, current) => {
+    return current.lastActive > latest.lastActive ? current : latest
+  }, activeThreads[0])
+
+  if (lastActiveThread && lastActiveThread.lastActive !== "") {
+    return lastActiveThread.id
+  } else {
+    const lastCreatedThread = activeThreads.reduce((latest, current) => {
+      return current.created > latest.created ? current : latest
+    })
+    return lastCreatedThread.id
+  }
+}
+
 function archiveThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setArchivedThread(threadId))
 }
@@ -70,6 +88,7 @@ export {
   createNewThread,
   removeThread,
   selectActiveThread,
+  getLastActiveThread,
   archiveThread,
   restoreThread,
   deleteMessage,
