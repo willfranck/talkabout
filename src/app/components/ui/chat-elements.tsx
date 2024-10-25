@@ -51,19 +51,27 @@ import {
   Snowflake,
   Trash,
   Archive,
-  ArrowCounterClockwise
+  ArrowCounterClockwise,
+  ArrowDown
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import hljs from "highlight.js"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
+import { AppDispatch } from "@redux/store"
 
 //// Chat Elements
-const ThreadCardMenu = ({
-  thread
+const ActionsPopover = ({
+  action,
+  thread,
+  message,
+  height,
 }: {
-  thread: ChatThread
+  action: (dispatch: AppDispatch, id: string) => void
+  thread?: ChatThread
+  message?: ChatMessage
+  height: string
 }) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
@@ -84,10 +92,15 @@ const ThreadCardMenu = ({
         sx={{ 
           display: (isMobileOS ? "flex" : "none"), 
           width: "1.5rem",
-          height: "100%"
+          height: (height)
         }}
       >
-        <DotsThreeVertical size={24} weight="bold" />
+        {thread && (
+          <DotsThreeVertical size={24} weight="bold" />
+        )}
+        {message && (
+          <Trash size={16} color={theme.palette.error.main} />
+        )}
       </IconButton>
       <Popover 
         open={open} 
@@ -112,32 +125,42 @@ const ThreadCardMenu = ({
           }}>
             Actions
           </ListSubheader>
-          {thread.category === "active" ? (
-            <ListItemButton 
-              onClick={() => {archiveThread(dispatch, thread.id), handlePopoverClose}} 
-              sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
-            >
-              <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <Archive size={24} />
-              </ListItemIcon>
-              <ListItemText primary="Archive" />
-            </ListItemButton>
-          ) : (
-            <ListItemButton 
-              onClick={() => {restoreThread(dispatch, thread.id), handlePopoverClose}} 
-              sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
-            >
-              <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <ArrowCounterClockwise size={24} />
-              </ListItemIcon>
-              <ListItemText primary="Restore" />
-            </ListItemButton>
-          )}
+          {thread ? (
+            thread.category === "active" ? (
+              <ListItemButton 
+                onClick={() => {archiveThread(dispatch, thread.id), handlePopoverClose}} 
+                sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
+              >
+                <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
+                  <Archive size={24} />
+                </ListItemIcon>
+                <ListItemText primary="Archive" />
+              </ListItemButton>
+            ) : (
+              <ListItemButton 
+                onClick={() => {restoreThread(dispatch, thread.id), handlePopoverClose}} 
+                sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
+              >
+                <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
+                  <ArrowCounterClockwise size={24} />
+                </ListItemIcon>
+                <ListItemText primary="Restore" />
+              </ListItemButton>
+            )
+          ) : null}
           <ListItemButton 
-            onClick={() => (removeThread(dispatch, thread.id), handlePopoverClose)} 
+            onClick={() => {
+              thread ? action(dispatch, thread.id)
+                : message ? action(dispatch, message.id)
+                  : null, 
+              handlePopoverClose
+            }} 
             sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
           >
-            <ListItemIcon sx={{ minWidth: "2rem" }}>
+            <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
+              {message && (
+                <ArrowDown size={24} color={theme.palette.error.main} />
+              )}
               <Trash size={24} color={theme.palette.error.main} />
             </ListItemIcon>
             <ListItemText 
@@ -160,8 +183,8 @@ const ThreadCard = ({
 }: {
   thread: ChatThread
 }) => {
-  const isMobileOS = useIsMobileOS()
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
   const [threadTopic, setThreadTopic] = useState("")
 
   useEffect(() => {
@@ -200,7 +223,7 @@ const ThreadCard = ({
           },
         }}
       >
-        <ThreadCardMenu thread={thread} />
+        <ActionsPopover action={removeThread} thread={thread} height="100%" />
         <FlexBox 
           onClick={() => selectThread(dispatch, thread.id)}
           sx={{
@@ -226,7 +249,6 @@ const ThreadCard = ({
               {threadTopic}
             </Typography>
             <Typography 
-              id="threadCreated" 
               variant="body2" 
               color={thread.selected ? "highlight.light" : "highlight.main"}
             >
@@ -351,14 +373,13 @@ const ChatMessageCard = ({
       },
       "&:hover": {
         "& .actionButton": {
-          display: "flex",
           visibility: "visible",
           animation: "fadeIn 240ms ease-out 60ms forwards"
         },
       },
     }}>
       <FlexBox sx={{
-        flexDirection: { xs: (message.role === "user" ? "column-reverse" : "column"), sm: "row" },
+        // flexDirection: { xs: (message.role === "user" ? "column-reverse" : "column"), sm: "row" },
         alignItems: "start",
         gap: "0.75rem",
       }}>
@@ -413,33 +434,32 @@ const ChatMessageCard = ({
               </ReactMarkdown>
             )}
             <FlexBox sx={{ 
-              gap: "0.75rem"
+              gap: "1rem"
             }}>
-              <Typography 
-                variant="body2" 
-                color="primary.main" 
-              >
-                {message.role === "user" ? (
-                  <>
+              {message.role === "user" ? (
+                <>
+                  <ActionsPopover action={deleteMessage} message={message} height="1rem" />
+                  <Typography
+                    variant="body2" 
+                    color="primary.main" 
+                  >
                     {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}{"  |  "}
                     {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}
-                  </>
-                ) : (
-                  <>
-                    {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}{"  |  "}
-                    {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}
-                  </>
-                )}
-              </Typography>
-              {message.role === "user" && (
-                <>
-                  <Trash size={18} className="hidden" />
+                  </Typography>
                   <DeleteButton 
                     action={deleteMessage} 
                     itemId={message.id} 
                     location="chat-history" 
                   />
                 </>
+              ) : (
+                <Typography
+                  variant="body2" 
+                  color="primary.main"
+                >
+                  {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}{"  |  "}
+                  {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}
+                </Typography>
               )}
             </FlexBox>
           </FlexBox>

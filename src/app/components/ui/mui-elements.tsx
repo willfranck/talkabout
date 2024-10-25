@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
+import { useIsMobileOS } from "@hooks/global"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -256,6 +257,7 @@ const DeleteButton = ({
   location
 }: IDeleteButton) => {
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
@@ -267,6 +269,7 @@ const DeleteButton = ({
         top: "0",
         right: "0",
         zIndex: "10",
+        display: (isMobileOS ? "none" : "flex"),
         flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
@@ -299,6 +302,7 @@ const ArchiveButton = ({
   location
 }: IArchiveButton) => {
   const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
 
   return (
     <Button 
@@ -310,6 +314,7 @@ const ArchiveButton = ({
         top: "0",
         right: "2.5rem",
         zIndex: "10",
+        display: (isMobileOS ? "none" : "flex"),
         flexDirection: "column",
         gap: "0.25rem",
         width: "2.5rem",
