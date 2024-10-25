@@ -418,8 +418,17 @@ const ChatMessageCard = ({
                 variant="body2" 
                 color="primary.main" 
               >
-                {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}{" - "}
-                {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}
+                {message.role === "user" ? (
+                  <>
+                    {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}{"  |  "}
+                    {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}
+                  </>
+                ) : (
+                  <>
+                    {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}{"  |  "}
+                    {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}
+                  </>
+                )}
               </Typography>
               {message.role === "user" && (
                 <>
