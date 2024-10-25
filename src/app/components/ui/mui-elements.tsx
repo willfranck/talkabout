@@ -271,7 +271,7 @@ const DeleteButton = ({
         gap: "0.25rem",
         width: "2.5rem",
         height: "100%",
-        borderRadius: "0",
+        borderRadius: "0 10px 10px 0",
         color: "secondary.contrastText",
         bgcolor: alpha(theme.palette.error.dark, 0.9),
         "&:hover": {

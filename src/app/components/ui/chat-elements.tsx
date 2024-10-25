@@ -322,6 +322,7 @@ const ChatMessageCard = ({
   //   })
   // }, [message])
 
+  // Works on both desktop and mobile, but unsure if it causes re-renders
   useEffect(() => {
     hljs.initHighlightingOnLoad()
   }, [])
@@ -333,7 +334,8 @@ const ChatMessageCard = ({
       flexShrink: "0",
       width: "fit-content",
       maxWidth: { xs: "95%", lg: "86%" },
-      padding: "1rem",
+      padding: "1.125rem 1rem 0.825rem",
+      overflow: "visible",
       bgcolor: (
         message.role === "user" 
         ? alpha(theme.palette.primary.dark, 0.1) 
@@ -344,12 +346,13 @@ const ChatMessageCard = ({
       animation: "fadeIn 240ms ease-out forwards",
       "& .actionButton": {
         opacity: "0",
-        animation: "fadeOutToRight 240ms ease-out forwards"
+        animation: "fadeOut 240ms ease-out forwards"
       },
       "&:hover": {
         "& .actionButton": {
+          display: "flex",
           visibility: "visible",
-          animation: "fadeInFromRight 240ms ease-out 60ms forwards"
+          animation: "fadeIn 240ms ease-out 60ms forwards"
         },
       },
     }}>
@@ -359,7 +362,11 @@ const ChatMessageCard = ({
         gap: "0.75rem",
       }}>
         {message.role === "model" && (
-          <Box minWidth="1.5rem">
+          <Box sx={{ 
+            position: "absolute", 
+            top: "-0.675rem", 
+            left: "1rem" 
+          }}>
             <Image 
               src={"/images/Llama.webp"} 
               alt="Llama logo" 
@@ -369,22 +376,25 @@ const ChatMessageCard = ({
             />
           </Box>
         )}
-        <FlexBox sx={{
-          flexDirection: "column",
-          alignItems: (message.role === "model" ? "start" : "end"),
-          gap: "0.5rem",
-        }}>
+        {message.role === "user" && (
+          <Box sx={{ 
+            position: "absolute", 
+            top: "-0.75rem", 
+            right: "1rem", 
+          }}>
+            <UserCircle size={24} weight="duotone" />
+          </Box>
+        )}
           <FlexBox sx={{
             flexDirection: "column",
-            alignItems: "start",
+            alignItems: (message.role === "user" ? "end" : "start"),
             gap: "0.5rem",
             width: "100%",
-            overflowWrap: "anywhere"
-          }}
-            style={{ whiteSpace: "pre-wrap" }}
-          >
+            maxHeight: "fit-content",
+            overflowWrap: "anywhere",
+          }}>
             {message.role === "user" ? (
-              <>{message.content}</>
+              <Typography>{message.content}</Typography>
             ) : (
               <ReactMarkdown 
                 components={{
@@ -401,22 +411,28 @@ const ChatMessageCard = ({
                 {message.content}
               </ReactMarkdown>
             )}
+            <FlexBox sx={{ 
+              gap: "0.75rem"
+            }}>
+              <Typography 
+                variant="body2" 
+                color="primary.main" 
+              >
+                {new Date(message.timestamp).toLocaleDateString()}{" - "}
+                {new Date(message.timestamp).toLocaleTimeString()}
+              </Typography>
+              {message.role === "user" && (
+                <>
+                  <Trash size={18} className="hidden" />
+                  <DeleteButton 
+                    action={deleteMessage} 
+                    itemId={message.id} 
+                    location="chat-history" 
+                  />
+                </>
+              )}
+            </FlexBox>
           </FlexBox>
-          <Typography variant="body2" color="primary.main">
-            {new Date(message.timestamp).toLocaleDateString()}{" - "}
-            {new Date(message.timestamp).toLocaleTimeString()}
-          </Typography>
-        </FlexBox>
-        {message.role === "user" && (
-          <Box minWidth="1.5rem" sx={{ alignSelf: { xs: "end", sm: "start" }}}>
-            <UserCircle size={24} weight="duotone" />
-            <DeleteButton 
-              action={deleteMessage} 
-              itemId={message.id} 
-              location="chat-history" 
-            />
-          </Box>
-        )}
       </FlexBox>
     </Card>
   )
