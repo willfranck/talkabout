@@ -229,7 +229,7 @@ const ThreadCard = ({
               variant="body2" 
               color={thread.selected ? "highlight.light" : "highlight.main"}
             >
-              {new Date(thread.created).toLocaleDateString()}
+              {new Date(thread.created).toLocaleDateString(undefined, { dateStyle: "short" })}
             </Typography>
           </FlexBox>
         </FlexBox>
@@ -418,8 +418,8 @@ const ChatMessageCard = ({
                 variant="body2" 
                 color="primary.main" 
               >
-                {new Date(message.timestamp).toLocaleDateString()}{" - "}
-                {new Date(message.timestamp).toLocaleTimeString()}
+                {new Date(message.timestamp).toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}{" - "}
+                {new Date(message.timestamp).toLocaleTimeString(undefined, { timeStyle: "short" })}
               </Typography>
               {message.role === "user" && (
                 <>
