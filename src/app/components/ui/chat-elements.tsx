@@ -206,7 +206,7 @@ const ThreadCard = ({
           sx={{
             justifyContent: "start",
             width: "100%",
-            paddingLeft: "0.5rem"
+            paddingLeft: "0.25rem"
           }}
         >
           <FlexBox sx={{
@@ -489,7 +489,7 @@ const ChatHistory = ({
           const newMessage = current.lastChild as HTMLElement
           const newMessageHeight = newMessage ? newMessage.offsetHeight : 0
           requestAnimationFrame(() => {
-            current.scrollTo({ top: current.scrollHeight - newMessageHeight, behavior: "smooth" })
+            current.scrollTo({ top: current.scrollHeight - (newMessageHeight + 12), behavior: "smooth" })
           })
         }
       }
