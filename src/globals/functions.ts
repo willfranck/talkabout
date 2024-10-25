@@ -2,7 +2,7 @@ import { AppDispatch } from "@redux/store"
 import { 
   createThread, 
   deleteThread, 
-  setActiveThread,
+  setSelectedThread,
   setArchivedThread, 
   setRestoreThread,
   deleteMessages
@@ -24,18 +24,13 @@ function createNewThread(dispatch: AppDispatch) {
   dispatch(createThread(newThread))
 }
 
-function removeThread(dispatch: AppDispatch, threadId: string) {
-  dispatch(deleteThread(threadId))
+function selectThread(dispatch: AppDispatch, threadId: string) {
+  dispatch(setSelectedThread(threadId))
 }
 
-function selectActiveThread(dispatch: AppDispatch, threadId: string) {
-  dispatch(setActiveThread(threadId))
-}
-
-function getLastActiveThread(activeThreads: ChatThread[], wasDeletedThreadSelected: boolean) {
-  if (!wasDeletedThreadSelected) return null
+function getLastActiveThread(activeThreads: ChatThread[]) {
   if (activeThreads.length === 0) return null
-  
+
   const lastActiveThread = activeThreads.reduce((latest, current) => {
     return current.lastActive > latest.lastActive ? current : latest
   }, activeThreads[0])
@@ -56,6 +51,10 @@ function archiveThread(dispatch: AppDispatch, threadId: string) {
 
 function restoreThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setRestoreThread(threadId))
+}
+
+function removeThread(dispatch: AppDispatch, threadId: string) {
+  dispatch(deleteThread(threadId))
 }
 
 function deleteMessage(dispatch: AppDispatch, messageId: string) {
@@ -87,7 +86,7 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 export {
   createNewThread,
   removeThread,
-  selectActiveThread,
+  selectThread,
   getLastActiveThread,
   archiveThread,
   restoreThread,

@@ -11,7 +11,7 @@ import {
   ChatMessage 
 } from "@types"
 import { 
-  selectActiveThread, 
+  selectThread, 
   removeThread, 
   archiveThread,
   restoreThread,
@@ -83,7 +83,8 @@ const ThreadCardMenu = ({
         onClick={handlePopoverBtnClick} 
         sx={{ 
           display: (isMobileOS ? "flex" : "none"), 
-          width: "1.25rem"
+          width: "1.5rem",
+          height: "100%"
         }}
       >
         <DotsThreeVertical size={24} weight="bold" />
@@ -199,19 +200,19 @@ const ThreadCard = ({
           },
         }}
       >
+        <ThreadCardMenu thread={thread} />
         <FlexBox 
-          onClick={() => selectActiveThread(dispatch, thread.id)}
+          onClick={() => selectThread(dispatch, thread.id)}
           sx={{
             justifyContent: "start",
             width: "100%",
+            paddingLeft: "0.5rem"
           }}
         >
-          <ThreadCardMenu thread={thread} />
           <FlexBox sx={{
             flexDirection: "column",
             alignItems: "start",
             gap: "0.25rem",
-            paddingX: "0.5rem"
           }}>
             <Typography 
               variant="body1" 

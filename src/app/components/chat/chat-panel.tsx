@@ -7,14 +7,16 @@ import { useIsMobileOS } from "@hooks/global"
 import theme from "@utils/mui-theme"
 import { 
   createNewThread, 
-  selectActiveThread, 
+  selectThread, 
   displayTextByChar, 
   removeTextByChar 
 } from "@globals/functions"
 import { 
   useInitialThread, 
-  useThreads ,
+  useThreads,
   useActiveThreads,
+  useLastActiveThread,
+  useSelectedThread,
   useArchivedThreads
 } from "@hooks/chat"
 import {
@@ -41,12 +43,14 @@ import {
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
-  const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
-  const [displayedText, setDisplayedText] = useState("")
-  const archivedThreads = useArchivedThreads()
-  const archiveRef = useRef(archivedThreads.length)
   const threads = useThreads()
   const activeThreads = useActiveThreads()
+  const lastActiveThread = useLastActiveThread()
+  const selectedThread = useSelectedThread()
+  const archivedThreads = useArchivedThreads()
+  const archiveRef = useRef(archivedThreads.length)
+  const [activeThreadCategory, setActiveThreadCategory] = useState(threadCategories[0]) 
+  const [displayedText, setDisplayedText] = useState("")
   const sortedThreads = (threads: ChatThread[]) => {
     return threads
       .filter(thread => thread.category === activeThreadCategory)
@@ -58,9 +62,15 @@ export const ChatPanel = () => {
   useEffect(() => {
     if (activeThreads && activeThreads.length === 1) {
       const remainingThread = activeThreads[0].id
-      selectActiveThread(dispatch, remainingThread)
+      selectThread(dispatch, remainingThread)
     }
   }, [dispatch, activeThreads])
+
+  useEffect(() => {
+    if (!selectedThread && lastActiveThread) {
+      selectThread(dispatch, lastActiveThread)
+    }
+  }, [dispatch, selectedThread, activeThreads, lastActiveThread])
 
   useEffect(() => {
     const currentlyArchived = archivedThreads.length

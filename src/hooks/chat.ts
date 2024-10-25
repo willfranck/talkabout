@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo } from "react"
 import { useAppSelector, useAppDispatch } from "@redux/hooks"
-import { createNewThread } from "@globals/functions"
+import { createNewThread, getLastActiveThread } from "@globals/functions"
 
 //// Chat Hooks
 const useThreads = () => {
@@ -39,6 +39,15 @@ const useActiveThreads = () => {
   return activeThreads
 }
 
+const useLastActiveThread = () => {
+  const activeThreads = useActiveThreads()
+  const lastActiveThread = useMemo(() => 
+    getLastActiveThread(activeThreads),
+    [activeThreads]
+  )
+  return lastActiveThread
+}
+
 const useArchivedThreads = () => {
   const threads = useThreads()
   const archivedThreads = useMemo(() => 
@@ -70,6 +79,7 @@ export {
   useThreadCount,
   useInitialThread,
   useActiveThreads,
+  useLastActiveThread,
   useArchivedThreads,
   useSelectedThread,
   useMessageHistory
