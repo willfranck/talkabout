@@ -107,15 +107,16 @@ export const ChatInput = ({
     }}>
       <Button 
         size="small" 
+        variant="outlined"
         onClick={onButtonClick}
         sx={{
           position: "absolute",
           bottom: "9.75rem",
-          left: "0",
+          left: "-2px",
           display: { xs: "flex", md: "none" },
           width: "1.375rem",
           height: "5rem",
-          backgroundColor: alpha(theme.palette.primary.dark, 0.25),
+          backgroundColor: alpha(theme.palette.primary.main, 0.15),
           borderRadius: "0 10px 10px 0",
         }}
       >
