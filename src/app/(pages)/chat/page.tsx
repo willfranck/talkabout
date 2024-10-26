@@ -1,21 +1,22 @@
 "use client"
 import { useState } from "react"
-import theme from "@utils/mui-theme"
+import { useSelectedThread } from "@hooks/chat"
 import { 
-  alpha, 
-  Box, 
-  Fab 
+  Box 
 } from "@mui/material"
 import { 
   PageLayout, 
   MobileDrawer 
 } from "@ui/mui-layout"
+import { FlexBox } from "@ui/mui-elements"
 import { ChatPanel } from "@chat/chat-panel"
-import { ChatArea } from "@chat/chat-area"
-import { ChatTeardropText } from "@phosphor-icons/react/dist/ssr"
+import { ChatHistory } from "@ui/chat-elements"
+import { ChatInput } from "@chat/chat-input"
 
 
 export default function ChatPage() {
+  const selectedThread = useSelectedThread()
+  const messageHistory = selectedThread ? selectedThread.messages : []
   const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(drawerAnchorEl)
 
@@ -40,20 +41,16 @@ export default function ChatPage() {
       >
         <ChatPanel />
       </Box>
-      <ChatArea /> 
-      <Fab 
-        size="small" 
-        onClick={handleDrawerBtnClick}
-        sx={{
-          position: "absolute",
-          bottom: "20%",
-          left: "2%",
-          display: { xs: "flex", md: "none" },
-          backgroundColor: alpha(theme.palette.primary.main, 0.33)
-        }}
-      >
-        <ChatTeardropText size={24} weight="fill" color={theme.palette.primary.light} />
-      </Fab>
+      <FlexBox sx={{
+        flexDirection: "column",
+        flexGrow: "1",
+        height: "100%",
+        gap: "1rem",
+        padding: { xs: "0", sm: "0 1rem 0.75rem", lg: "0 2rem 1rem 0" }
+      }}>
+        <ChatHistory messages={messageHistory} />
+        <ChatInput onButtonClick={handleDrawerBtnClick} />
+      </FlexBox>
     </PageLayout>
   )
 }
