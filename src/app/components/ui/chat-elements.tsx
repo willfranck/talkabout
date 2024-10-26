@@ -23,23 +23,18 @@ import {
   alpha,
   Box,
   Card,
-  IconButton,
   ToggleButtonGroup,
   ToggleButton,
-  Popover,
-  List,
-  ListSubheader,
-  ListItemButton,
   FormControl,
   InputLabel,
   InputAdornment,
   Input,
-  Typography,
-  ListItemIcon,
-  ListItemText
+  Typography
 } from "@mui/material"
 import {
+  IActionList,
   FlexBox,
+  ActionsPopover,
   ToolTip, 
   ArchiveButton,
   DeleteButton
@@ -50,9 +45,7 @@ import {
   Fire, 
   Snowflake,
   Trash,
-  Archive,
-  ArrowCounterClockwise,
-  ArrowDown
+  Archive
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -62,122 +55,6 @@ import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import { AppDispatch } from "@redux/store"
 
 //// Chat Elements
-const ActionsPopover = ({
-  action,
-  thread,
-  message,
-  height,
-}: {
-  action: (dispatch: AppDispatch, id: string) => void
-  thread?: ChatThread
-  message?: ChatMessage
-  height: string
-}) => {
-  const dispatch = useAppDispatch()
-  const isMobileOS = useIsMobileOS()
-  const [popoverAnchorEl, setPopoverAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(popoverAnchorEl)
-
-  const handlePopoverBtnClick = (event: React.MouseEvent<HTMLElement>) => {
-    setPopoverAnchorEl(event.currentTarget)
-  }
-  const handlePopoverClose = () => {
-    setPopoverAnchorEl(null)
-  }
-
-  return (
-    <Box>
-     <IconButton 
-        onClick={handlePopoverBtnClick} 
-        sx={{ 
-          display: (isMobileOS ? "flex" : "none"), 
-          width: "1.5rem",
-          height: (height)
-        }}
-      >
-        {thread && (
-          <DotsThreeVertical size={24} weight="bold" />
-        )}
-        {message && (
-          <Trash size={16} color={theme.palette.error.main} />
-        )}
-      </IconButton>
-      <Popover 
-        open={open} 
-        onClose={handlePopoverClose}
-        anchorEl={popoverAnchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "center",
-          horizontal: "left"
-        }}
-        sx={{
-          width: "75%"
-        }}
-      >
-        <List>
-          <ListSubheader sx={{
-            lineHeight: "2rem",
-            color: "primary.dark"
-          }}>
-            Actions
-          </ListSubheader>
-          {thread ? (
-            thread.category === "active" ? (
-              <ListItemButton 
-                onClick={() => {archiveThread(dispatch, thread.id), handlePopoverClose}} 
-                sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
-              >
-                <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
-                  <Archive size={24} />
-                </ListItemIcon>
-                <ListItemText primary="Archive" />
-              </ListItemButton>
-            ) : (
-              <ListItemButton 
-                onClick={() => {restoreThread(dispatch, thread.id), handlePopoverClose}} 
-                sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
-              >
-                <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
-                  <ArrowCounterClockwise size={24} />
-                </ListItemIcon>
-                <ListItemText primary="Restore" />
-              </ListItemButton>
-            )
-          ) : null}
-          <ListItemButton 
-            onClick={() => {
-              thread ? action(dispatch, thread.id)
-                : message ? action(dispatch, message.id)
-                  : null, 
-              handlePopoverClose
-            }} 
-            sx={{ height: "2.5rem", paddingRight: "1.25rem" }}
-          >
-            <ListItemIcon sx={{ minWidth: "0rem", marginRight: "0.5rem" }}>
-              {message && (
-                <ArrowDown size={24} color={theme.palette.error.main} />
-              )}
-              <Trash size={24} color={theme.palette.error.main} />
-            </ListItemIcon>
-            <ListItemText 
-              primary="Delete" 
-              sx={{ 
-                "& .MuiTypography-root": { 
-                  color: theme.palette.error.main 
-                }
-              }} 
-            />
-          </ListItemButton>
-        </List>
-      </Popover>
-    </Box>
-  )
-}
-
 const ThreadCard = ({ 
   thread, 
 }: {
@@ -186,6 +63,24 @@ const ThreadCard = ({
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
   const [threadTopic, setThreadTopic] = useState("")
+
+  const actionItemProps: IActionList["actionItem"] = {
+    item: thread,
+    actions: [
+      {
+        function: archiveThread,
+        label: "Archive",
+        icon: <Archive size={24} />,
+        color: theme.palette.primary.main
+      },
+      {
+        function: removeThread,
+        label: "Delete",
+        icon: <Trash size={24} />,
+        color: theme.palette.error.main
+      }
+    ]
+  }
 
   useEffect(() => {
     displayTextByChar(thread.topic, setThreadTopic)
@@ -223,7 +118,13 @@ const ThreadCard = ({
           },
         }}
       >
-        <ActionsPopover action={removeThread} thread={thread} height="100%" />
+        <ActionsPopover 
+          anchorIcon={<DotsThreeVertical size={24} weight="bold" />}
+          actionItem={actionItemProps} 
+          subheader="Options" 
+          width="1.5rem"
+          height="100%" 
+        />
         <FlexBox 
           onClick={() => selectThread(dispatch, thread.id)}
           sx={{
@@ -334,7 +235,19 @@ const ChatMessageCard = ({
 }: {
   message: ChatMessage
 }) => {
-  // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders
+  const actionItemProps: IActionList["actionItem"] = {
+    item: message,
+    actions: [
+      {
+        function: deleteMessage,
+        label: "delete",
+        icon: <Trash size={24} />,
+        color: theme.palette.error.main
+      }
+    ]
+  }
+
+  // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders **Only works on desktop**
   // useEffect(() => {
   //   document.querySelectorAll("code").forEach((block) => {
   //     const codeBlock = block as HTMLElement
@@ -345,7 +258,7 @@ const ChatMessageCard = ({
   //   })
   // }, [message])
 
-  // Works on both desktop and mobile, but unsure if it causes re-renders
+  // Works on both desktop and mobile, but it may cause re-renders
   useEffect(() => {
     hljs.initHighlightingOnLoad()
   }, [])
@@ -379,7 +292,6 @@ const ChatMessageCard = ({
       },
     }}>
       <FlexBox sx={{
-        // flexDirection: { xs: (message.role === "user" ? "column-reverse" : "column"), sm: "row" },
         alignItems: "start",
         gap: "0.75rem",
       }}>
@@ -434,11 +346,17 @@ const ChatMessageCard = ({
               </ReactMarkdown>
             )}
             <FlexBox sx={{ 
-              gap: "1rem"
+              gap: "0.375rem"
             }}>
               {message.role === "user" ? (
                 <>
-                  <ActionsPopover action={deleteMessage} message={message} height="1rem" />
+                  <ActionsPopover 
+                    anchorIcon={<Trash size={16} weight="bold" color={theme.palette.error.main} />}
+                    actionItem={actionItemProps} 
+                    subheader="Confirm" 
+                    width="1.5rem"
+                    height="1.25rem" 
+                  />
                   <Typography
                     variant="body2" 
                     color="primary.main" 

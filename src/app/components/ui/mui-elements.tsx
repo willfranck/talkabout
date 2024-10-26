@@ -4,6 +4,7 @@ import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { useIsMobileOS } from "@hooks/global"
+import { ChatThread, ChatMessage } from "@types"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -209,6 +210,115 @@ const MenuNav = ({
   )
 }
 
+export interface IActionList {
+  anchorIcon: React.ReactNode
+  actionItem: {
+    item: ChatThread | ChatMessage
+    actions: {
+      function: ((dispatch: AppDispatch, id: string) => void)
+      icon: React.ReactNode
+      label: string
+      color: string
+    }[]
+  }
+  subheader: string
+  width: string
+  height: string
+}
+
+const ActionsPopover = ({
+  anchorIcon,
+  actionItem,
+  subheader,
+  width,
+  height
+}: IActionList) => {
+  const dispatch = useAppDispatch()
+  const isMobileOS = useIsMobileOS()
+  const [popoverAnchorEl, setPopoverAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(popoverAnchorEl)
+
+  const handlePopoverBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setPopoverAnchorEl(event.currentTarget)
+  }
+  const handlePopoverClose = () => {
+    setPopoverAnchorEl(null)
+  }
+
+  const listItemButtons = actionItem.actions.map((action) => (
+    <ListItemButton 
+      onClick={() => { action.function(dispatch, actionItem.item.id), handlePopoverClose}} 
+      sx={{ 
+        height: "2.5rem", 
+        paddingRight: "1.25rem",
+        "& *": {
+          color: action.color
+        }
+      }}
+    >
+      <ListItemIcon sx={{ 
+        minWidth: "0", 
+        marginRight: "0.375rem", 
+        textWrap: "nowrap"
+      }}>
+        {action.icon}
+      </ListItemIcon>
+      <ListItemText 
+        primary={action.label} 
+        sx={{ 
+          "& .MuiTypography-root": { 
+            color: action.color, 
+            textWrap: "nowrap",
+            textTransform: "capitalize" 
+          }
+        }} 
+      />
+    </ListItemButton>
+  ))
+
+  return (
+    <Box>
+      <IconButton 
+        onClick={handlePopoverBtnClick} 
+        sx={{ 
+          display: (isMobileOS ? "flex" : "none"), 
+          width: (width),
+          height: (height)
+        }}
+      >
+        {anchorIcon}
+      </IconButton>
+      <Popover 
+        open={open} 
+        onClose={handlePopoverClose}
+        anchorEl={popoverAnchorEl}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left"
+        }}
+        sx={{
+          width: "75%"
+        }}
+      >
+        <List sx={{ paddingTop: "0" }}>
+          <ListSubheader sx={{
+            lineHeight: "2rem",
+            color: "primary.dark"
+          }}>
+            {subheader}
+          </ListSubheader>
+
+          {listItemButtons}
+        </List>
+      </Popover>
+    </Box>
+  )
+}
+
 interface IToggleGroup {
   values: string[]
   activeTab: string
@@ -343,6 +453,7 @@ export {
   ToolTip,
   Nav,
   MenuNav,
+  ActionsPopover,
   ToggleGroup,
   ArchiveButton,
   DeleteButton,
