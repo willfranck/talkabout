@@ -247,6 +247,7 @@ const ActionsPopover = ({
 
   const listItemButtons = actionItem.actions.map((action) => (
     <ListItemButton 
+      key={action.label}
       onClick={() => { action.function(dispatch, actionItem.item.id), handlePopoverClose}} 
       sx={{ 
         height: "2.5rem", 

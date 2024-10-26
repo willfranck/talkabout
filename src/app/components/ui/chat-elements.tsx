@@ -52,7 +52,6 @@ import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import hljs from "highlight.js"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
-import { AppDispatch } from "@redux/store"
 
 //// Chat Elements
 const ThreadCard = ({ 
