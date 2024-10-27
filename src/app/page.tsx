@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
+import { useIsMobileOS } from "@hooks/global"
 import { PageLayout } from "@ui/mui-layout"
 import { FlexBox } from "@ui/mui-elements"
 import { 
@@ -15,6 +16,8 @@ import {
 
 
 export default function Home() {
+  const isMobileOS = useIsMobileOS()
+
   return (
     <PageLayout>
       <FlexBox sx={{
@@ -66,43 +69,45 @@ export default function Home() {
               <ArrowRight size={18} className="group-hover:translate-x-0.5" />
             </Button>
           </Link>
-          <FlexBox sx={{
-            flexDirection: { xs: "column", sm: "row" },
-            gap: "1rem"
-          }}>
-            <Button 
-              variant="outlined" 
-              sx={{
-                width: "16rem",
-                borderRadius: "9999px",
-                textTransform: "none"
-              }}
-            >
-              <AppleLogo size={24} weight="fill" className="mr-2" />
-              <Typography 
-                variant="body2" 
-                color="primary.main"
+          {!isMobileOS && (
+            <FlexBox sx={{
+              flexDirection: { xs: "column", sm: "row" },
+              gap: "1rem"
+            }}>
+              <Button 
+                variant="outlined" 
+                sx={{
+                  width: "16rem",
+                  borderRadius: "9999px",
+                  textTransform: "none"
+                }}
               >
-                Download for Mac
-              </Typography>
-            </Button>
-            <Button 
-              variant="outlined" 
-              sx={{
-                width: "16rem",
-                borderRadius: "9999px",
-                textTransform: "none"
-              }}
-            >
-              <WindowsLogo size={24} weight="fill" className="mr-2" />
-              <Typography 
-                variant="body2" 
-                color="primary.main"
+                <AppleLogo size={24} weight="fill" className="mr-2" />
+                <Typography 
+                  variant="body2" 
+                  color="primary.main"
+                >
+                  Download for Mac
+                </Typography>
+              </Button>
+              <Button 
+                variant="outlined" 
+                sx={{
+                  width: "16rem",
+                  borderRadius: "9999px",
+                  textTransform: "none"
+                }}
               >
-                Download for Windows
-              </Typography>
-            </Button>
-          </FlexBox>
+                <WindowsLogo size={24} weight="fill" className="mr-2" />
+                <Typography 
+                  variant="body2" 
+                  color="primary.main"
+                >
+                  Download for Windows
+                </Typography>
+              </Button>
+            </FlexBox>
+          )}
         </FlexBox>
       </FlexBox>
     </PageLayout>
