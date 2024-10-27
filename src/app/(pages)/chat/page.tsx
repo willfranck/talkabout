@@ -1,6 +1,9 @@
 "use client"
 import { useState } from "react"
-import { useSelectedThread } from "@hooks/chat"
+import { 
+  useInitialThread,
+  useSelectedThread 
+} from "@hooks/chat"
 import { 
   Box 
 } from "@mui/material"
@@ -15,6 +18,7 @@ import { ChatInput } from "@chat/chat-input"
 
 
 export default function ChatPage() {
+  useInitialThread()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
   const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(null)

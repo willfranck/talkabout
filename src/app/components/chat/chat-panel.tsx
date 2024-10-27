@@ -12,7 +12,6 @@ import {
   removeTextByChar 
 } from "@globals/functions"
 import { 
-  useInitialThread, 
   useThreads,
   useActiveThreads,
   useLastActiveThread,
@@ -56,8 +55,6 @@ export const ChatPanel = () => {
       .filter(thread => thread.category === activeThreadCategory)
       .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
   }
-
-  useInitialThread()
 
   useEffect(() => {
     if (activeThreads && activeThreads.length === 1) {
