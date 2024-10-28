@@ -71,10 +71,10 @@ const Nav = ({
 }) => {
   const pathname = usePathname()
   const currentPath = links.findIndex(link => link.path === pathname)
-  const [tabIndex, setTabIndex] = useState(currentPath)
+  const [tabValue, setTabValue] = useState(currentPath)
 
   useEffect(() => {
-    setTabIndex(currentPath)
+    setTabValue(currentPath)
   }, [currentPath])
 
   const linkElements = links.map((link) => (
@@ -94,7 +94,7 @@ const Nav = ({
   ))
   
   return (
-    <Tabs value={tabIndex}>
+    <Tabs value={tabValue}>
       {linkElements}
     </Tabs>
   )

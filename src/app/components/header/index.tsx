@@ -55,14 +55,18 @@ const Header = () => {
           </FlexBox>
 
           <ToolTip title="Sign In" placement="bottom" arrow>
-            <Button sx={{
-              display: { xs: "none", sm: "flex" },
-              "&:hover": {
-                color: "highlight.light"
-              }
-            }}>
-              <SignIn size={24} weight="bold" />
-            </Button>
+            <Link href={"/auth"}>
+              <Button 
+                sx={{
+                  display: { xs: "none", sm: "flex" },
+                  "&:hover": {
+                    color: "highlight.light"
+                  }
+                }}
+              >
+                <SignIn size={24} weight="bold" />
+              </Button>
+            </Link>
           </ToolTip>
 
           <MenuNav links={links} />

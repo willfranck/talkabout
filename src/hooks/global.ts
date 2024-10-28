@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const useIsMobileOS = () => {
+const useIsMobileOS = (): boolean => {
   if (typeof window !== "undefined") {
     const userAgent = navigator.userAgent || (window as any).opera
 
@@ -8,8 +8,17 @@ const useIsMobileOS = () => {
     
     return isIOS || isAndroid
   }
+  return false
+}
+
+const useIsElectron = (): boolean => {
+  return (
+    typeof window !== "undefined" &&
+    window.process?.versions?.electron !== "undefined"
+  )
 }
 
 export {
-  useIsMobileOS
+  useIsMobileOS,
+  useIsElectron
 }

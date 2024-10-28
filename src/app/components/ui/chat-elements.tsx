@@ -259,7 +259,7 @@ const ChatMessageCard = ({
 
   // Works on both desktop and mobile, but it may cause re-renders
   useEffect(() => {
-    hljs.initHighlightingOnLoad()
+    hljs.highlightAll()
   }, [])
 
   return (

@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-import { app, shell, BrowserWindow } from "electron"
+import { app, shell, BrowserWindow, ipcMain } from "electron"
 import { createServer } from "http"
 import path from "path"
 import next from "next"
@@ -94,4 +94,24 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit()
+})
+
+ipcMain.on("open-login-window", (event, redirectUrl) => {
+  const loginWindow = new BrowserWindow({
+    title: "Talkabout",
+    width: 764,
+    height: 1024,
+    center: true,
+    backgroundColor: "#0A0A0A",
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: false,
+      contextIsolation: true,
+    }
+  })
+  loginWindow.loadURL(redirectUrl)
+
+  loginWindow.on("ready-to-show", () => {
+    loginWindow.show()
+  })
 })
