@@ -197,12 +197,14 @@ const MenuNav = ({
             }}>
               Account
             </ListSubheader>
-            <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-              <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
-              </ListItemIcon>
-              <ListItemText primary="Sign In" />
-            </ListItemButton>
+            <Link href={"/auth"}>
+              <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+                <ListItemIcon sx={{ minWidth: "2rem" }}>
+                  <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
+                </ListItemIcon>
+                <ListItemText primary="Sign In" />
+              </ListItemButton>
+            </Link>
           </List>
         </FlexBox>
       </Popover>
