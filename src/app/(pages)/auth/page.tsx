@@ -143,6 +143,9 @@ export default function LoginPage() {
                   onChange={handleInputChange}
                   required 
                   slotProps={{
+                    htmlInput: {
+                      enterKeyHint: "next"
+                    },
                     inputLabel: {
                       shrink: true
                     }
@@ -163,6 +166,9 @@ export default function LoginPage() {
                   onChange={handleInputChange}
                   required 
                   slotProps={{
+                    htmlInput: {
+                      enterKeyHint: "go"
+                    },
                     inputLabel: {
                       shrink: true
                     },
@@ -260,6 +266,9 @@ export default function LoginPage() {
                     onChange={handleInputChange}
                     required 
                     slotProps={{
+                      htmlInput: {
+                        enterKeyHint: "next"
+                      },
                       inputLabel: {
                         shrink: true
                       }
@@ -279,6 +288,9 @@ export default function LoginPage() {
                     value={userInputData.lastName}
                     onChange={handleInputChange}
                     slotProps={{
+                      htmlInput: {
+                        enterKeyHint: "next"
+                      },
                       inputLabel: {
                         shrink: true
                       }
@@ -300,6 +312,9 @@ export default function LoginPage() {
                   onChange={handleInputChange}
                   required 
                   slotProps={{
+                    htmlInput: {
+                      enterKeyHint: "next"
+                    },
                     inputLabel: {
                       shrink: true
                     }
@@ -320,6 +335,9 @@ export default function LoginPage() {
                   onChange={handleInputChange}
                   required 
                   slotProps={{
+                    htmlInput: {
+                      enterKeyHint: "go"
+                    },
                     inputLabel: {
                       shrink: true
                     },

@@ -583,6 +583,16 @@ const ChatInputField = ({
       <Input
         multiline
         rows={isMobileOS ? "3" : "5"}
+        value={prompt}
+        placeholder="Message Llamini-Flash"
+        disabled={threads === 0 || selectedThread === undefined}
+        onChange={onChange}
+        onKeyDown={handleSubmitKeyDown}
+        slotProps={{
+          input: {
+            enterKeyHint: "go"
+          }
+        }}
         startAdornment={
           <InputAdornment position="start" sx={{ marginRight: "0.75rem" }}>
             <TemperatureControls 
@@ -609,11 +619,6 @@ const ChatInputField = ({
             </Button>
           </InputAdornment>
         }
-        value={prompt}
-        placeholder="Message Llamini-Flash"
-        disabled={threads === 0 || selectedThread === undefined}
-        onChange={onChange}
-        onKeyDown={handleSubmitKeyDown}
       />
     </FormControl>
   )
