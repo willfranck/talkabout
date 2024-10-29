@@ -26,7 +26,7 @@ import {
   Info,
   SpinnerGap
 } from "@phosphor-icons/react/dist/ssr"
-import { createClient } from "@utils/supabase/client"
+// import { createClient } from "@utils/supabase/client"
 
 
 export default function LoginPage() {
@@ -56,20 +56,20 @@ export default function LoginPage() {
     }
   }
 
-  const supabase = createClient()
-  const redirectUrl = "https://ftofifkimfgrojwuylmy.supabase.co/auth/callback"
+  // const supabase = createClient()
+  // const redirectUrl = "https://ftofifkimfgrojwuylmy.supabase.co/auth/callback"
 
   const handleOAuthLogin = async () => {
-    (await supabase).auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: redirectUrl,
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent"
-        }
-      }
-    })
+    // (await supabase).auth.signInWithOAuth({
+    //   provider: "google",
+    //   options: {
+    //     redirectTo: redirectUrl,
+    //     queryParams: {
+    //       access_type: "offline",
+    //       prompt: "consent"
+    //     }
+    //   }
+    // })
   }
 
   return (
