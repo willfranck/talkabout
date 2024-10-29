@@ -1,10 +1,14 @@
 "use server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 
+interface SupabaseRes {
+  success: boolean
+  message?: string
+  error?: string
+}
 
-async function login(formData: FormData) {
+async function login(formData: FormData): Promise<SupabaseRes> {
   const supabase = await createClient()
 
   const data = {
@@ -15,13 +19,14 @@ async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
   if (error) {
     console.log(error?.message)
+    return { success: false, message: error?.message }
   }
 
   revalidatePath("/", "layout")
-  redirect("/chat")
+  return { success: true }
 }
 
-async function signup(formData: FormData) {
+async function signup(formData: FormData): Promise<SupabaseRes> {
   const supabase = await createClient()
 
   const firstName = formData.get("firstName") as string
@@ -41,10 +46,11 @@ async function signup(formData: FormData) {
   })
   if (error) {
     console.log(error?.message)
+    return { success: false, message: error?.message }
   }
 
   revalidatePath("/", "layout")
-  redirect("/chat")
+  return { success: true }
 }
 
 

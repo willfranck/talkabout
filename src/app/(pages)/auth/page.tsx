@@ -1,5 +1,7 @@
 "use client"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useSnackbar } from "@hooks/global"
 import { login, signup } from "@services/supabase-actions"
 import { User } from "@types"
 import { PageLayout } from "@ui/mui-layout"
@@ -34,6 +36,8 @@ type UserInputData = Omit<User, "avatar" | "chats"> & {
 }
 
 export default function LoginPage() {
+  const router = useRouter()
+  const { showMessage } = useSnackbar()
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -64,11 +68,23 @@ export default function LoginPage() {
       formData.append(key, userInputData[key as keyof UserInputData])
     })
     if (isLogin) {
-      await login(formData)
+      const res = await login(formData)
       setIsLoading(false)
+      if (res.success) {
+        showMessage("success", "Successfully logged in")
+        router.push("/chat")
+      } else {
+        showMessage("error", res.message || "An undefined error occurred")
+      }
     } else {
-      await signup(formData)
+      const res = await signup(formData)
       setIsLoading(false)
+      if (res.success) {
+        showMessage("success", "Successfully logged in")
+        router.push("/chat")
+      } else {
+        showMessage("error", res.message || "An undefined error occurred")
+      }
     }
   }
 
