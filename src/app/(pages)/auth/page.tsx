@@ -69,22 +69,22 @@ export default function LoginPage() {
     })
     if (isLogin) {
       const res = await login(formData)
-      setIsLoading(false)
       if (res.success) {
-        showMessage("success", "Successfully logged in")
+        showMessage("success", "Successfully signed in")
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")
       }
+      setIsLoading(false)
     } else {
       const res = await signup(formData)
-      setIsLoading(false)
       if (res.success) {
-        showMessage("success", "Successfully logged in")
+        showMessage("success", "Successfully created account")
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")
       }
+      setIsLoading(false)
     }
   }
 

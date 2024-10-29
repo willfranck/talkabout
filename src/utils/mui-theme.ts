@@ -35,7 +35,7 @@ const theme = createTheme({
       light: cyan[100],
     },
     background: {
-      default: "#101010",
+      // default: "#101010",
       paper: "#121212",
     },
     info: {

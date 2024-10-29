@@ -23,6 +23,7 @@ import {
   alpha,
   Box,
   Card,
+  Button,
   ToggleButtonGroup,
   ToggleButton,
   FormControl,
@@ -45,7 +46,8 @@ import {
   Fire, 
   Snowflake,
   Trash,
-  Archive
+  Archive,
+  PaperPlaneRight
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -489,6 +491,7 @@ const TemperatureControls = ({
   defaultTemperature,
   onTemperatureChange
 }: ITemperature) => {
+  const isMobileOS = useIsMobileOS()
   const tooltipContent = `Adjust the responses to suit the mood\n-\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative\n_`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLElement>, value: number) => {
@@ -503,8 +506,8 @@ const TemperatureControls = ({
         orientation="vertical"
         exclusive
         sx={{
-          width: "1.8rem",
-          height: "6rem",
+          width: "1.75rem",
+          height: (isMobileOS? "4.25rem" : "6rem"),
           borderRadius: "2px"
         }}
       >
@@ -579,9 +582,9 @@ const ChatInputField = ({
       </InputLabel>
       <Input
         multiline
-        rows="5"
+        rows={isMobileOS ? "3" : "5"}
         startAdornment={
-          <InputAdornment position="start" sx={{ marginRight: "1rem" }}>
+          <InputAdornment position="start" sx={{ marginRight: "0.75rem" }}>
             <TemperatureControls 
               temperatureHot={temperatureSettings.hot}
               temperatureNormal={temperatureSettings.normal}
@@ -589,6 +592,22 @@ const ChatInputField = ({
               defaultTemperature={defaultTemperature}
               onTemperatureChange={onTemperatureChange}
             />
+          </InputAdornment>
+        }
+        endAdornment={
+          <InputAdornment position="end">
+            <Button 
+              variant="contained"
+              type="submit"
+              onClick={onSubmit}
+              sx={{ 
+                width: "2rem",
+                height: (isMobileOS ? "4.125rem" : "6rem"),
+                borderRadius: "0.4rem" 
+              }}
+            >
+              <PaperPlaneRight size={20} color={theme.palette.secondary.contrastText} />
+            </Button>
           </InputAdornment>
         }
         value={prompt}

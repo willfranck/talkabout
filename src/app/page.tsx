@@ -9,8 +9,9 @@ import {
   Button
 } from "@mui/material"
 import { 
-  AppleLogo, 
   ArrowRight, 
+  SignIn,
+  AppleLogo, 
   WindowsLogo 
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -23,7 +24,7 @@ export default function Home() {
       <FlexBox sx={{
         flexDirection: "column",
         height: "100%",
-        gap: { xs: "6rem", md: "8rem" },
+        gap: { xs: "6rem", md: "7rem" },
         marginX: "2rem"
       }}>
         <FlexBox sx={{
@@ -53,22 +54,34 @@ export default function Home() {
           flexDirection: "column",
           gap: "2rem",
         }}>
-          <Link href={"/chat"}>
-            <Button 
-              variant="text" 
-              sx={{
-                display: "flex",
-                gap: "0.5rem",
-                paddingX: "1.5rem",
-                borderRadius: "9999px",
-                textTransform: "none",
-              }}
-              className="group"
-            >
-              <Typography variant="body1">Try it now</Typography>
-              <ArrowRight size={18} className="group-hover:translate-x-0.5" />
-            </Button>
-          </Link>
+          <FlexBox sx={{ flexDirection: "column", gap: "1rem" }}>
+            <Link href={"/chat"}>
+              <Button 
+                variant="text" 
+                sx={{
+                  gap: "0.5rem",
+                  paddingX: "1.5rem"
+                }}
+                className="group"
+              >
+                <Typography variant="body1" sx={{ textWrap: "nowrap"}}>Try it now</Typography>
+                <ArrowRight size={18} className="group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+            <Link href={"/auth"}>
+              <Button 
+                variant="text" 
+                sx={{
+                  gap: "0.5rem",
+                  paddingX: "1.5rem"
+                }}
+                className="group"
+              >
+                <Typography variant="body1" sx={{ textWrap: "nowrap"}}>Sign In/Up</Typography>
+                <SignIn size={18} className="group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+          </FlexBox>
           {!isMobileOS && (
             <FlexBox sx={{
               flexDirection: { xs: "column", sm: "row" },
