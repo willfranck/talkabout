@@ -7,6 +7,7 @@ import {
   alpha,
   Box,
   Card,
+  Dialog,
   FormControl,
   TextField,
   Button, 
@@ -22,7 +23,8 @@ import {
   NotePencil,
   SignIn,
   GoogleLogo, 
-  Info
+  Info,
+  SpinnerGap
 } from "@phosphor-icons/react/dist/ssr"
 import { createClient } from "@utils/supabase/client"
 
@@ -31,6 +33,7 @@ export default function LoginPage() {
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const userDataRef = useRef<FormData>(new FormData())
+  const [isLoading, setIsLoading] = useState(false)
   
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show)
@@ -43,10 +46,13 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isLogin: boolean) => {
     e.preventDefault()
+    setIsLoading(true)
     if (isLogin) {
       await login(userDataRef.current)
+      setIsLoading(false)
     } else {
       await signup(userDataRef.current)
+      setIsLoading(false)
     }
   }
 
@@ -152,6 +158,7 @@ export default function LoginPage() {
                 <Button 
                   variant="outlined" 
                   type="submit"
+                  disabled={isLoading}
                   sx={{ width: "100%", height: "2.5rem", gap: "0.5rem" }}
                 >
                   <SignIn size={18} />
@@ -176,6 +183,7 @@ export default function LoginPage() {
                 <Button 
                   variant="contained" 
                   onClick={handleOAuthLogin}
+                  disabled={isLoading}
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />
@@ -303,6 +311,7 @@ export default function LoginPage() {
                 <Button 
                   variant="outlined" 
                   type="submit"
+                  disabled={isLoading}
                   sx={{ width: "100%", height: "2.5rem", gap: "0.5rem" }}
                 >
                   <NotePencil size={18} />
@@ -327,6 +336,7 @@ export default function LoginPage() {
                 <Button 
                   variant="contained" 
                   onClick={handleOAuthLogin}
+                  disabled={isLoading}
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />
@@ -336,6 +346,7 @@ export default function LoginPage() {
             </FlexBox>
           </FormControl>
         )}
+
         <Card sx={{ 
           display: "flex",
           flexDirection: "column",
@@ -368,6 +379,20 @@ export default function LoginPage() {
           </FlexBox>
         </Card>
       </FlexBox>
+
+      <Dialog 
+        open={isLoading} 
+        sx={{ 
+          "& .MuiPaper-root": {
+            background: "transparent",
+            "& > *": {
+              animation: "spin 0.8s linear infinite"
+            } 
+          }
+        }}
+      >
+        <SpinnerGap size={36} weight="bold" />
+      </Dialog>
     </PageLayout>
   )
 }

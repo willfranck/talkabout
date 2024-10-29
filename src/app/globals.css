@@ -115,6 +115,12 @@
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /*//// Base Styles */
 html {
   -webkit-text-size-adjust: 100%;
