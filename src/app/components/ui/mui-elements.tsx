@@ -29,7 +29,7 @@ import {
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { 
-  DotsThreeVertical,
+  SquaresFour,
   SignIn,
   Trash, 
   ArrowDown, 
@@ -138,7 +138,7 @@ const MenuNav = ({
         onClick={handleMenuBtnClick}
         color="primary"
       >
-        <DotsThreeVertical size={24} weight="bold" color={theme.palette.primary.light} />
+        <SquaresFour size={24} color={theme.palette.primary.light} />
       </IconButton>
       <Popover 
         open={open}

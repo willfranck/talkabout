@@ -1,6 +1,7 @@
 "use client"
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { login, signup } from "@services/supabase-actions"
+import { User } from "@types"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
 import { 
@@ -28,30 +29,45 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 // import { createClient } from "@utils/supabase/client"
 
+type UserInputData = Omit<User, "avatar" | "chats"> & {
+  password: string
+}
 
 export default function LoginPage() {
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
-  const userDataRef = useRef<FormData>(new FormData())
   const [isLoading, setIsLoading] = useState(false)
-  
+  const [userInputData, setUserInputData] = useState<UserInputData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: ""
+  })
+
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    userDataRef.current.set(name, value)
+    setUserInputData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isLogin: boolean) => {
     e.preventDefault()
     setIsLoading(true)
+    const formData = new FormData()
+    Object.keys(userInputData).forEach(key => {
+      formData.append(key, userInputData[key as keyof UserInputData])
+    })
     if (isLogin) {
-      await login(userDataRef.current)
+      await login(formData)
       setIsLoading(false)
     } else {
-      await signup(userDataRef.current)
+      await signup(formData)
       setIsLoading(false)
     }
   }
@@ -76,7 +92,7 @@ export default function LoginPage() {
     <PageLayout>
       <FlexBox sx={{
         flexDirection: "column",
-        width: "94%", 
+        width: "96%", 
         maxWidth: "22rem",
         height: "100%",
         overflowY: "auto"
@@ -107,6 +123,7 @@ export default function LoginPage() {
                   label="Email"
                   name="email"
                   type="email"
+                  value={userInputData.email}
                   onChange={handleInputChange}
                   required 
                   slotProps={{
@@ -125,6 +142,7 @@ export default function LoginPage() {
                   variant="outlined"
                   label="Password"
                   name="password"
+                  value={userInputData.password}
                   type={showPassword ? "text" : "password"}
                   onChange={handleInputChange}
                   required 
@@ -222,6 +240,7 @@ export default function LoginPage() {
                     label="First Name"
                     type="text"
                     name="firstName"
+                    value={userInputData.firstName}
                     onChange={handleInputChange}
                     required 
                     slotProps={{
@@ -241,6 +260,7 @@ export default function LoginPage() {
                     label="Last Name"
                     type="text" 
                     name="lastName"
+                    value={userInputData.lastName}
                     onChange={handleInputChange}
                     slotProps={{
                       inputLabel: {
@@ -260,6 +280,7 @@ export default function LoginPage() {
                   label="Email"
                   name="email"
                   type="email"
+                  value={userInputData.email}
                   onChange={handleInputChange}
                   required 
                   slotProps={{
@@ -279,6 +300,7 @@ export default function LoginPage() {
                   label="Password"
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  value={userInputData.password}
                   onChange={handleInputChange}
                   required 
                   slotProps={{

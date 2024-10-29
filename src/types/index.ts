@@ -1,3 +1,11 @@
+export type User = {
+  firstName: string
+  lastName: string
+  email: string
+  avatar?: string
+  chats: ChatThread[]
+}
+
 export type ChatMessage = {
   id: string
   role: "user" | "model"

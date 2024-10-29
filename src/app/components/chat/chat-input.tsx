@@ -14,21 +14,10 @@ import {
   useMessageHistory 
 } from "@hooks/chat"
 import { ChatMessage } from "@types"
-import theme from "@utils/mui-theme"
-import { 
-  alpha, 
-  Button 
-} from "@mui/material"
-import { FlexBox } from "@ui/mui-elements"
 import { ChatInputField } from "@ui/chat-elements"
-import { ChatTeardropText } from "@phosphor-icons/react/dist/ssr"
 
 
-export const ChatInput = ({
-  onButtonClick,
-}: {
-  onButtonClick: (event: React.MouseEvent<HTMLElement>) => void
-}) => {
+export const ChatInput = () => {
   const dispatch = useAppDispatch()
   const threadCount = useThreadCount()
   const selectedThread = useSelectedThread()
@@ -101,37 +90,15 @@ export const ChatInput = ({
   }
 
   return (
-    <FlexBox sx={{
-      position: "relative",
-      width: "100%"
-    }}>
-      <Button 
-        size="small" 
-        variant="outlined"
-        onClick={onButtonClick}
-        sx={{
-          position: "absolute",
-          bottom: "9.75rem",
-          left: "-2px",
-          display: { xs: "flex", md: "none" },
-          width: "1.375rem",
-          height: "5rem",
-          backgroundColor: alpha(theme.palette.primary.main, 0.15),
-          borderRadius: "0 10px 10px 0",
-        }}
-      >
-        <ChatTeardropText size={16} weight="fill" color={theme.palette.primary.light} />
-      </Button>
-      <ChatInputField 
-        prompt={userPrompt} 
-        threads={threadCount}
-        selectedThread={selectedThread}
-        temperatureSettings={temperatureSettings}
-        defaultTemperature={aiTemperature}
-        onTemperatureChange={handleTemperatureChange}
-        onChange={handleInputChange}
-        onSubmit={handleSubmit}
-      />
-    </FlexBox>
+    <ChatInputField 
+      prompt={userPrompt} 
+      threads={threadCount}
+      selectedThread={selectedThread}
+      temperatureSettings={temperatureSettings}
+      defaultTemperature={aiTemperature}
+      onTemperatureChange={handleTemperatureChange}
+      onChange={handleInputChange}
+      onSubmit={handleSubmit}
+    />
   )
 }

@@ -1,11 +1,14 @@
 "use client"
+import { useState } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { 
   Container,
   AppBar,
   Toolbar,
-  Button
+  Button,
+  Typography
 } from "@mui/material"
 import { 
   FlexBox, 
@@ -13,12 +16,15 @@ import {
   MenuNav,
   ToolTip
 } from "@ui/mui-elements"
+import { MobileDrawer } from "@ui/mui-layout"
+import { ChatPanel } from "@chat/chat-panel"
 import { 
   House, 
   ChatTeardropText, 
   Info,
   SignIn
 } from "@phosphor-icons/react/dist/ssr"
+import theme from "@utils/mui-theme"
 
 
 const links = [
@@ -28,6 +34,17 @@ const links = [
 ]
 
 const Header = () => {
+  const pathname = usePathname()
+  const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(drawerAnchorEl)
+
+  const handleDrawerBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setDrawerAnchorEl(event.currentTarget)
+  }
+  const handleDrawerClose = () => {
+    setDrawerAnchorEl(null)
+  }
+
   return (
     <AppBar 
       position="static" 
@@ -38,15 +55,41 @@ const Header = () => {
     >
       <Container>
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          <Button 
+            onClick={handleDrawerBtnClick}
+            sx={{
+              display: { xs: "flex", sm: "none" },
+              visibility: (pathname === "/chat" ? "visible" : "hidden" )
+            }}
+          >
+            <ChatTeardropText size={24} weight="bold" color={theme.palette.primary.light} />
+          </Button>
+          <MobileDrawer open={open} onClose={handleDrawerClose}>
+            <ChatPanel />
+          </MobileDrawer>
+          
           <Link href={"/"}>
-            <Image 
-              src="/images/Llama.webp" 
-              alt="logo" 
-              width={40} 
-              height={40} 
-              className="w-10 h-10 rounded-logo invert dark:invert-0"
-            />
+            <FlexBox sx={{ flexDirection: "column" }}>
+              <Image 
+                src="/images/Llama.webp" 
+                alt="logo" 
+                width={40} 
+                height={40} 
+                className="w-8 sm:w-10 h-auto rounded-logo invert dark:invert-0"
+              />
+              <Typography 
+                variant="body2" 
+                color={theme.palette.secondary.contrastText} 
+                sx={{ 
+                  display: { xs: "block", sm: "none" },
+                  fontSize: "0.625rem" 
+                }}
+              >
+                Talkabout
+              </Typography>
+            </FlexBox>
           </Link>
+
           <FlexBox sx={{ 
             display: { xs: "none", sm: "flex" }, 
             flexGrow: 1 
@@ -55,10 +98,9 @@ const Header = () => {
           </FlexBox>
 
           <ToolTip title="Sign In" placement="bottom" arrow>
-            <Link href={"/auth"}>
+            <Link href={"/auth"} className="hidden sm:block">
               <Button 
                 sx={{
-                  display: { xs: "none", sm: "flex" },
                   "&:hover": {
                     color: "highlight.light"
                   }

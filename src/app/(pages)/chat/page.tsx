@@ -1,16 +1,10 @@
 "use client"
-import { useState } from "react"
 import { 
   useInitialThread,
   useSelectedThread 
 } from "@hooks/chat"
-import { 
-  Box 
-} from "@mui/material"
-import { 
-  PageLayout, 
-  MobileDrawer 
-} from "@ui/mui-layout"
+import { PageLayout } from "@ui/mui-layout"
+import { Box } from "@mui/material"
 import { FlexBox } from "@ui/mui-elements"
 import { ChatPanel } from "@chat/chat-panel"
 import { ChatHistory } from "@ui/chat-elements"
@@ -21,21 +15,9 @@ export default function ChatPage() {
   useInitialThread()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
-  const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(drawerAnchorEl)
-
-  const handleDrawerBtnClick = (event: React.MouseEvent<HTMLElement>) => {
-    setDrawerAnchorEl(event.currentTarget)
-  }
-  const handleDrawerClose = () => {
-    setDrawerAnchorEl(null)
-  }
 
   return (
     <PageLayout>
-      <MobileDrawer open={open} onClose={handleDrawerClose}>
-        <ChatPanel />
-      </MobileDrawer>
       <Box 
         component="aside"
         sx={{
@@ -53,7 +35,7 @@ export default function ChatPage() {
         padding: { xs: "0", sm: "0 1rem 0.75rem", lg: "0 2rem 1rem 0" }
       }}>
         <ChatHistory messages={messageHistory} />
-        <ChatInput onButtonClick={handleDrawerBtnClick} />
+        <ChatInput />
       </FlexBox>
     </PageLayout>
   )

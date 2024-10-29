@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        sm: "600px",
+        md: "900px",
+        lg: "1200px"
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
