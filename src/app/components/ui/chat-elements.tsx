@@ -598,7 +598,6 @@ const ChatInputField = ({
           <InputAdornment position="end">
             <Button 
               variant="contained"
-              type="submit"
               onClick={onSubmit}
               sx={{ 
                 width: "2rem",
