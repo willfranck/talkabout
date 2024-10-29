@@ -110,6 +110,13 @@ const theme = createTheme({
         }
       }
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          fontSize: "1rem",
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {
