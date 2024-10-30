@@ -75,7 +75,7 @@ const Header = () => {
                 alt="logo" 
                 width={40} 
                 height={40} 
-                className="w-8 sm:w-10 h-auto rounded-logo invert dark:invert-0"
+                className="w-7 sm:w-10 h-auto rounded-logo dark:invert"
               />
               <Typography 
                 variant="body2" 
