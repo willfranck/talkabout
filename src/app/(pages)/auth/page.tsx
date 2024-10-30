@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
 import { login, signup } from "@services/supabase-actions"
@@ -41,6 +41,7 @@ export default function LoginPage() {
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([])
   const [userInputData, setUserInputData] = useState<UserInputData>({
     firstName: "",
     lastName: "",
@@ -58,6 +59,18 @@ export default function LoginPage() {
       ...prev,
       [name]: value
     }))
+  }
+
+  const handleNextInput = (e: React.KeyboardEvent<HTMLElement>, index: number) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      if (inputRefs.current) {
+        const nextInput = inputRefs.current[index + 1]
+        if (nextInput) {
+          nextInput.focus()
+        }
+      }
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isLogin: boolean) => {
@@ -141,6 +154,8 @@ export default function LoginPage() {
                   type="email"
                   value={userInputData.email}
                   onChange={handleInputChange}
+                  inputRef={(el) => (inputRefs.current[0] = el)}
+                  onKeyDown={(e) => handleNextInput(e, 0)}
                   required 
                   slotProps={{
                     htmlInput: {
@@ -161,9 +176,10 @@ export default function LoginPage() {
                   variant="outlined"
                   label="Password"
                   name="password"
-                  value={userInputData.password}
                   type={showPassword ? "text" : "password"}
+                  value={userInputData.password}
                   onChange={handleInputChange}
+                  inputRef={(el) => (inputRefs.current[1] = el)}
                   required 
                   slotProps={{
                     htmlInput: {
@@ -264,6 +280,8 @@ export default function LoginPage() {
                     name="firstName"
                     value={userInputData.firstName}
                     onChange={handleInputChange}
+                    inputRef={(el) => (inputRefs.current[0] = el)}
+                    onKeyDown={(e) => handleNextInput(e, 0)}
                     required 
                     slotProps={{
                       htmlInput: {
@@ -287,6 +305,8 @@ export default function LoginPage() {
                     name="lastName"
                     value={userInputData.lastName}
                     onChange={handleInputChange}
+                    inputRef={(el) => (inputRefs.current[1] = el)}
+                    onKeyDown={(e) => handleNextInput(e, 1)}
                     slotProps={{
                       htmlInput: {
                         enterKeyHint: "next"
@@ -310,6 +330,8 @@ export default function LoginPage() {
                   type="email"
                   value={userInputData.email}
                   onChange={handleInputChange}
+                  inputRef={(el) => (inputRefs.current[2] = el)}
+                  onKeyDown={(e) => handleNextInput(e, 2)}
                   required 
                   slotProps={{
                     htmlInput: {
@@ -333,6 +355,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={userInputData.password}
                   onChange={handleInputChange}
+                  inputRef={(el) => (inputRefs.current[3] = el)}
                   required 
                   slotProps={{
                     htmlInput: {
