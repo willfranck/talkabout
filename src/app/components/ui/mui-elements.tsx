@@ -5,6 +5,7 @@ import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { useIsMobileOS } from "@hooks/global"
 import { ChatThread, ChatMessage } from "@types"
+import { styled } from "@mui/material/styles"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -27,9 +28,7 @@ import {
   TooltipProps,
   tooltipClasses
 } from "@mui/material"
-import { styled } from "@mui/material/styles"
 import { 
-  SquaresFour,
   SignIn,
   Trash, 
   ArrowDown, 
@@ -61,10 +60,10 @@ const ToolTip = styled(({ className, ...props }: TooltipProps) => (
 interface INav {
   name: string
   path: string
-  icon: React.ReactNode
+  icon: React.ReactElement
 }
 
-const Nav = ({
+const TabNav = ({
   links
 }: {
   links: INav[]
@@ -81,7 +80,7 @@ const Nav = ({
     <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
       <Link href={link.path} className="outline-none">
         <Tab 
-          label={link.icon}
+          icon={link.icon}
           sx={{ 
             color: (link.path === pathname ? "highlight.light" : "highlight.main"),
             "&:hover": { 
@@ -101,23 +100,15 @@ const Nav = ({
 }
 
 const MenuNav = ({
-  links
+  links,
+  onClose
 }: {
   links: INav[]
+  onClose: () => void
 }) => {
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(menuAnchorEl)
-
-  const handleMenuBtnClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchorEl(event.currentTarget)
-  }
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null)
-  }
-
   const linkElements = links.map((link) => (
     <Link key={link.name} href={link.path}>
-      <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+      <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
         <ListItemIcon sx={{ minWidth: "2.25rem" }}>
           {link.icon}
         </ListItemIcon>
@@ -127,93 +118,60 @@ const MenuNav = ({
   ))
 
   return (
-    <Box sx={{ 
-      display: {xs: "block", sm: "none" }
-    }}>
-      <IconButton
-        size="medium"
-        aria-label="Menu Anchor"
-        aria-controls="appbar-menu"
-        aria-haspopup="true"
-        onClick={handleMenuBtnClick}
-        color="primary"
-      >
-        <SquaresFour size={24} color={theme.palette.primary.light} />
-      </IconButton>
-      <Popover 
-        open={open}
-        onClose={handleMenuClose}
-        elevation={1}
-        anchorEl={menuAnchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
+    <FlexBox 
+      sx={{ 
+        flexDirection: "column",
+        alignItems: "start",
+        width: "100%",
+        gap: "0.5rem",
+        paddingY: "0.5rem"
+      }}
+    >
+      <List sx={{
+        width: "100%",
+        paddingY: "0.25rem"
+      }}>
+        <ListSubheader sx={{
+          width: "100%",
+          lineHeight: "2rem",
+          color: "primary.dark"
+        }}>
+          Navigation
+        </ListSubheader>
+        {linkElements}
+      </List>
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{
+          borderColor: "primary.dark"
         }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-      >
-        <FlexBox 
-          sx={{ 
-            alignItems: "start",
-            width: "calc(100vw - 2rem)",
-            paddingY: "0.5rem"
-          }}
-        >
-          <List sx={{
-            flexDirection: "column",
-            alignItems: "start",
-            width: "50%",
-            paddingY: "0"
-          }}>
-            <ListSubheader sx={{
-              width: "100%",
-              lineHeight: "2rem",
-              color: "primary.dark"
-            }}>
-              Navigation
-            </ListSubheader>
-            {linkElements}
-          </List>
-          <Divider 
-            orientation="vertical" 
-            flexItem 
-            sx={{
-              borderColor: "primary.dark"
-            }}
-          />
-          <List sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "start",
-            width: "50%",
-            paddingY: "0"
-          }}>
-            <ListSubheader sx={{
-              width: "100%",
-              lineHeight: "2rem",
-              color: "primary.dark"
-            }}>
-              Account
-            </ListSubheader>
-            <Link href={"/auth"}>
-              <ListItemButton onClick={handleMenuClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-                <ListItemIcon sx={{ minWidth: "2rem" }}>
-                  <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
-                </ListItemIcon>
-                <ListItemText primary="Sign In" />
-              </ListItemButton>
-            </Link>
-          </List>
-        </FlexBox>
-      </Popover>
-    </Box>
+      />
+      <List sx={{
+        width: "100%",
+        paddingY: "0.25rem"
+      }}>
+        <ListSubheader sx={{
+          width: "100%",
+          lineHeight: "2rem",
+          color: "primary.dark"
+        }}>
+          Account
+        </ListSubheader>
+        <Link href={"/auth"}>
+          <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+            <ListItemIcon sx={{ minWidth: "2rem" }}>
+              <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
+            </ListItemIcon>
+            <ListItemText primary="Sign In" />
+          </ListItemButton>
+        </Link>
+      </List>
+    </FlexBox>
   )
 }
 
 export interface IActionList {
-  anchorIcon: React.ReactNode
   actionItem: {
     item: ChatThread | ChatMessage
     actions: {
@@ -224,16 +182,17 @@ export interface IActionList {
     }[]
   }
   subheader: string
-  width: string
-  height: string
+  anchorIcon: React.ReactNode
+  anchorWidth: string
+  anchorHeight: string
 }
 
 const ActionsPopover = ({
-  anchorIcon,
   actionItem,
   subheader,
-  width,
-  height
+  anchorIcon,
+  anchorWidth,
+  anchorHeight
 }: IActionList) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
@@ -285,8 +244,8 @@ const ActionsPopover = ({
         onClick={handlePopoverBtnClick} 
         sx={{ 
           display: (isMobileOS ? "flex" : "none"), 
-          width: (width),
-          height: (height)
+          width: (anchorWidth),
+          height: (anchorHeight)
         }}
       >
         {anchorIcon}
@@ -454,7 +413,7 @@ const ArchiveButton = ({
 export {
   FlexBox,
   ToolTip,
-  Nav,
+  TabNav,
   MenuNav,
   ActionsPopover,
   ToggleGroup,

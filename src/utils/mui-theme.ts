@@ -117,6 +117,14 @@ const theme = createTheme({
         }
       }
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          minHeight: "3rem",
+          textTransform: "none"
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {

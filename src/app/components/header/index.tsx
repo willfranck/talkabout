@@ -3,16 +3,17 @@ import { useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import theme from "@utils/mui-theme"
 import { 
   Container,
   AppBar,
   Toolbar,
-  Button,
-  Typography
+  Typography,
+  IconButton
 } from "@mui/material"
 import { 
   FlexBox, 
-  Nav,
+  TabNav,
   MenuNav,
   ToolTip
 } from "@ui/mui-elements"
@@ -22,9 +23,9 @@ import {
   House, 
   ChatTeardropText, 
   Info,
-  SignIn
+  SignIn,
+  SquaresFour
 } from "@phosphor-icons/react/dist/ssr"
-import theme from "@utils/mui-theme"
 
 
 const links = [
@@ -35,14 +36,22 @@ const links = [
 
 const Header = () => {
   const pathname = usePathname()
-  const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(drawerAnchorEl)
+  const [chatDrawerAnchorEl, setChatDrawerAnchorEl] = useState<HTMLElement | null>(null)
+  const [navDrawerAnchorEl, setNavDrawerAnchorEl] = useState<HTMLElement | null>(null)
+  const openChat = Boolean(chatDrawerAnchorEl)
+  const openNav = Boolean(navDrawerAnchorEl)
 
-  const handleDrawerBtnClick = (event: React.MouseEvent<HTMLElement>) => {
-    setDrawerAnchorEl(event.currentTarget)
+  const handleChatDrawerBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setChatDrawerAnchorEl(event.currentTarget)
   }
-  const handleDrawerClose = () => {
-    setDrawerAnchorEl(null)
+  const handleNavDrawerBtnClick = (event: React.MouseEvent<HTMLElement>) => {
+    setNavDrawerAnchorEl(event.currentTarget)
+  }
+  const handleChatDrawerClose = () => {
+    setChatDrawerAnchorEl(null)
+  }
+  const handleNavDrawerClose = () => {
+    setNavDrawerAnchorEl(null)
   }
 
   return (
@@ -55,63 +64,86 @@ const Header = () => {
     >
       <Container>
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          <Button 
-            onClick={handleDrawerBtnClick}
+          <FlexBox>
+            <Link href={"/"}>
+              <FlexBox sx={{ flexDirection: "column" }}>
+                <Image 
+                  src="/images/Llama.webp" 
+                  alt="logo" 
+                  width={40} 
+                  height={40} 
+                  className="w-7 sm:w-10 h-auto rounded-logo dark:invert"
+                />
+                <Typography 
+                  variant="body2" 
+                  color={theme.palette.secondary.contrastText} 
+                  sx={{ 
+                    display: { xs: "block", sm: "none" },
+                    fontSize: "0.625rem" 
+                  }}
+                >
+                  Talkabout
+                </Typography>
+              </FlexBox>
+            </Link>
+            <IconButton 
+              size="medium"
+              aria-label="Chat Menu Anchor"
+              aria-haspopup="true"
+              onClick={handleChatDrawerBtnClick}
+              color="primary"
+              sx={{
+                display: { xs: "flex", md: "none" },
+                visibility: (pathname === "/chat" ? "visible" : "hidden" )
+              }}
+            >
+              <ChatTeardropText size={24} weight="bold" color={theme.palette.primary.light} />
+            </IconButton>
+            <MobileDrawer open={openChat} onClose={handleChatDrawerClose} anchor="left">
+              <ChatPanel />
+            </MobileDrawer>
+          </FlexBox>
+
+          <FlexBox sx={{ display: { xs: "none", sm: "flex" } }}>
+            <TabNav links={links} />
+          </FlexBox>
+
+          <FlexBox sx={{ 
+            justifyContent: "end",
+            width: { xs: "2.5rem", sm: "5rem", md: "2.5rem" } 
+          }}>
+            <ToolTip title="Sign In" placement="bottom" arrow>
+              <Link href={"/auth"} className="hidden sm:block">
+                <IconButton
+                  color="primary" 
+                  sx={{
+                    "&:hover": {
+                      color: "highlight.light"
+                    }
+                  }}
+                >
+                  <SignIn size={24} weight="bold" />
+                </IconButton>
+              </Link>
+            </ToolTip>
+          </FlexBox>
+
+          <IconButton
+            size="medium"
+            aria-label="Nav Menu Anchor"
+            aria-haspopup="true"
+            onClick={handleNavDrawerBtnClick}
+            color="primary"
             sx={{
               display: { xs: "flex", sm: "none" },
               visibility: (pathname === "/chat" ? "visible" : "hidden" )
             }}
           >
-            <ChatTeardropText size={24} weight="bold" color={theme.palette.primary.light} />
-          </Button>
-          <MobileDrawer open={open} onClose={handleDrawerClose}>
-            <ChatPanel />
+            <SquaresFour size={24} color={theme.palette.primary.light} />
+          </IconButton>
+          <MobileDrawer open={openNav} onClose={handleNavDrawerClose} anchor="right">
+            <MenuNav links={links} onClose={handleNavDrawerClose} />
           </MobileDrawer>
-          
-          <Link href={"/"}>
-            <FlexBox sx={{ flexDirection: "column" }}>
-              <Image 
-                src="/images/Llama.webp" 
-                alt="logo" 
-                width={40} 
-                height={40} 
-                className="w-7 sm:w-10 h-auto rounded-logo dark:invert"
-              />
-              <Typography 
-                variant="body2" 
-                color={theme.palette.secondary.contrastText} 
-                sx={{ 
-                  display: { xs: "block", sm: "none" },
-                  fontSize: "0.625rem" 
-                }}
-              >
-                Talkabout
-              </Typography>
-            </FlexBox>
-          </Link>
-
-          <FlexBox sx={{ 
-            display: { xs: "none", sm: "flex" }, 
-            flexGrow: 1 
-          }}>
-            <Nav links={links}  />
-          </FlexBox>
-
-          <ToolTip title="Sign In" placement="bottom" arrow>
-            <Link href={"/auth"} className="hidden sm:block">
-              <Button 
-                sx={{
-                  "&:hover": {
-                    color: "highlight.light"
-                  }
-                }}
-              >
-                <SignIn size={24} weight="bold" />
-              </Button>
-            </Link>
-          </ToolTip>
-
-          <MenuNav links={links} />
         </Toolbar>
       </Container>
     </AppBar>

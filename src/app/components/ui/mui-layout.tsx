@@ -41,10 +41,12 @@ const PageLayout = ({
 const MobileDrawer = ({
   open,
   onClose,
+  anchor,
   children
 }: {
   open: boolean
   onClose: () => void
+  anchor: "top" | "right" | "bottom" | "left"
   children: React.ReactNode
 }) => {
   return (
@@ -53,13 +55,15 @@ const MobileDrawer = ({
       onClose={onClose}
       variant="temporary"
       component="aside"
-      anchor="left" 
+      anchor={anchor} 
       elevation={0}
       ModalProps={{
         keepMounted: true
       }}
       sx={{
-        display: { xs: "flex", md: "none" }
+        "& .MuiPaper-root": {
+          minWidth: "9rem"
+        }
       }}
     >
       {children}

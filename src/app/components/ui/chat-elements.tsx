@@ -120,11 +120,11 @@ const ThreadCard = ({
         }}
       >
         <ActionsPopover 
-          anchorIcon={<DotsThreeVertical size={24} weight="bold" />}
           actionItem={actionItemProps} 
           subheader="Options" 
-          width="1.5rem"
-          height="100%" 
+          anchorIcon={<DotsThreeVertical size={24} weight="bold" />}
+          anchorWidth="1.5rem"
+          anchorHeight="100%" 
         />
         <FlexBox 
           onClick={() => selectThread(dispatch, thread.id)}
@@ -352,11 +352,11 @@ const ChatMessageCard = ({
               {message.role === "user" ? (
                 <>
                   <ActionsPopover 
-                    anchorIcon={<Trash size={16} weight="bold" color={theme.palette.error.main} />}
                     actionItem={actionItemProps} 
                     subheader="Confirm" 
-                    width="1.5rem"
-                    height="1.25rem" 
+                    anchorIcon={<Trash size={16} weight="bold" color={theme.palette.error.main} />}
+                    anchorWidth="1.5rem"
+                    anchorHeight="1.25rem" 
                   />
                   <Typography
                     variant="body2" 
