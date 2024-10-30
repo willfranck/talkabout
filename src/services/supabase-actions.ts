@@ -18,8 +18,8 @@ async function login(formData: FormData): Promise<SupabaseRes> {
 
   const { error } = await supabase.auth.signInWithPassword(data)
   if (error) {
-    console.log(error?.message)
-    return { success: false, message: error?.message }
+    console.log(error.message)
+    return { success: false, message: error.message }
   }
 
   revalidatePath("/", "layout")
@@ -45,8 +45,8 @@ async function signup(formData: FormData): Promise<SupabaseRes> {
     }
   })
   if (error) {
-    console.log(error?.message)
-    return { success: false, message: error?.message }
+    console.log(error.message)
+    return { success: false, message: error.message }
   }
 
   revalidatePath("/", "layout")

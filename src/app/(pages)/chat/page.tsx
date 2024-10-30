@@ -19,10 +19,10 @@ export default function ChatPage() {
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
 
-  useEffect(() => {
-    showMessage("info", "Trial Mode\n\nSign In/Up to save chats")
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   showMessage("info", "Trial Mode\n\nSign In/Up to save chats")
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   return (
     <PageLayout>
