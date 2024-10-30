@@ -1,6 +1,6 @@
 "use client"
-import { useEffect } from "react"
-import { useSnackbar } from "@hooks/global"
+// import { useEffect } from "react"
+// import { useSnackbar } from "@hooks/global"
 import { 
   useInitialThread,
   useSelectedThread 
@@ -15,7 +15,7 @@ import { ChatInput } from "@chat/chat-input"
 
 export default function ChatPage() {
   useInitialThread()
-  const { showMessage } = useSnackbar()
+  // const { showMessage } = useSnackbar()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
 
