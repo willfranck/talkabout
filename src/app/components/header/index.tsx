@@ -54,6 +54,30 @@ const Header = () => {
     setNavDrawerAnchorEl(null)
   }
 
+  const llamaLogo = (
+    <Link href={"/"}>
+      <FlexBox sx={{ flexDirection: "column" }}>
+        <Image 
+          src="/images/Llama.webp" 
+          alt="logo" 
+          width={40} 
+          height={40} 
+          className="w-7 sm:w-10 h-auto rounded-logo dark:invert"
+        />
+        <Typography 
+          variant="body2" 
+          color={theme.palette.secondary.contrastText} 
+          sx={{ 
+            display: { xs: "block", sm: "none" },
+            fontSize: "0.625rem" 
+          }}
+        >
+          Talkabout
+        </Typography>
+      </FlexBox>
+    </Link>
+  )
+
   return (
     <AppBar 
       position="static" 
@@ -65,27 +89,9 @@ const Header = () => {
       <Container>
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <FlexBox>
-            <Link href={"/"}>
-              <FlexBox sx={{ flexDirection: "column" }}>
-                <Image 
-                  src="/images/Llama.webp" 
-                  alt="logo" 
-                  width={40} 
-                  height={40} 
-                  className="w-7 sm:w-10 h-auto rounded-logo dark:invert"
-                />
-                <Typography 
-                  variant="body2" 
-                  color={theme.palette.secondary.contrastText} 
-                  sx={{ 
-                    display: { xs: "block", sm: "none" },
-                    fontSize: "0.625rem" 
-                  }}
-                >
-                  Talkabout
-                </Typography>
-              </FlexBox>
-            </Link>
+            <FlexBox sx={{ display: { xs: "none", sm: "flex" } }}>
+              {llamaLogo}
+            </FlexBox>
             <IconButton 
               size="medium"
               aria-label="Chat Menu Anchor"
@@ -104,16 +110,21 @@ const Header = () => {
             </MobileDrawer>
           </FlexBox>
 
+          <FlexBox sx={{ display: { xs: "flex", sm: "none" } }}>
+            {llamaLogo}
+          </FlexBox>
+
           <FlexBox sx={{ display: { xs: "none", sm: "flex" } }}>
             <TabNav links={links} />
           </FlexBox>
 
           <FlexBox sx={{ 
             justifyContent: "end",
-            width: { xs: "2.5rem", sm: "5rem", md: "2.5rem" } 
+            display: { xs: "none", sm: "flex" },
+            width: { sm: "5rem", md: "2.5rem" } 
           }}>
             <ToolTip title="Sign In" placement="bottom" arrow>
-              <Link href={"/auth"} className="hidden sm:block">
+              <Link href={"/auth"}>
                 <IconButton
                   color="primary" 
                   sx={{
@@ -136,7 +147,6 @@ const Header = () => {
             color="primary"
             sx={{
               display: { xs: "flex", sm: "none" },
-              visibility: (pathname === "/chat" ? "visible" : "hidden" )
             }}
           >
             <SquaresFour size={24} color={theme.palette.primary.light} />

@@ -120,6 +120,7 @@ const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
+          minWidth: "5rem",
           minHeight: "3rem",
           textTransform: "none"
         }
