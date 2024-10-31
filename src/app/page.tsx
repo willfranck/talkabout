@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
-import { useIsMobileOS } from "@hooks/global"
+import { useSession } from "@hooks/global"
 import { PageLayout } from "@ui/mui-layout"
 import { FlexBox } from "@ui/mui-elements"
 import { 
@@ -11,13 +11,14 @@ import {
 import { 
   ArrowRight, 
   SignIn,
-  AppleLogo, 
-  WindowsLogo 
+  // AppleLogo, 
+  // WindowsLogo 
 } from "@phosphor-icons/react/dist/ssr"
 
 
 export default function Home() {
-  const isMobileOS = useIsMobileOS()
+  const { session } = useSession()
+  // const isMobileOS = useIsMobileOS()
 
   return (
     <PageLayout>
@@ -41,20 +42,24 @@ export default function Home() {
           <Typography variant="h1">Talkabout</Typography>
         </FlexBox>
 
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            textAlign: "center" 
-          }}
-        >
-          The world&apos;s mysteries unraveled through the eyes of a llama
-        </Typography>
+        <FlexBox sx={{ flexDirection: "column" }}>
+          <Typography variant="body2" sx={{ textAlign: "center", fontWeight: "bold" }}>
+            An AI Chat Experience
+          </Typography>
+          <Typography variant="body2" sx={{ textAlign: "center" }}>
+            The world&apos;s mysteries unraveled through the eyes of a llama
+          </Typography>
+        </FlexBox>
 
         <FlexBox sx={{
           flexDirection: "column",
           gap: "2rem",
         }}>
-          <FlexBox sx={{ flexDirection: "column", gap: "1rem" }}>
+          <FlexBox sx={{ 
+            flexDirection: "column", 
+            gap: "1rem",
+            minHeight: "5.5rem" 
+          }}>
             <Link href={"/chat"}>
               <Button 
                 variant="text" 
@@ -64,25 +69,29 @@ export default function Home() {
                 }}
                 className="group"
               >
-                <Typography variant="body1" sx={{ textWrap: "nowrap"}}>Try it now</Typography>
+                <Typography variant="body1" sx={{ textWrap: "nowrap"}}>
+                  {!session ? "Try it now" : "Start Chatting"}
+                </Typography>
                 <ArrowRight size={18} className="group-hover:translate-x-0.5" />
               </Button>
             </Link>
-            <Link href={"/auth"}>
-              <Button 
-                variant="text" 
-                sx={{
-                  gap: "0.5rem",
-                  paddingX: "1.5rem"
-                }}
-                className="group"
-              >
-                <Typography variant="body1" sx={{ textWrap: "nowrap"}}>Sign In/Up</Typography>
-                <SignIn size={18} className="group-hover:translate-x-0.5" />
-              </Button>
-            </Link>
+            {!session && (
+              <Link href={"/auth"}>
+                <Button 
+                  variant="text" 
+                  sx={{
+                    gap: "0.5rem",
+                    paddingX: "1.5rem"
+                  }}
+                  className="group"
+                >
+                  <Typography variant="body1" sx={{ textWrap: "nowrap"}}>Sign In/Up</Typography>
+                  <SignIn size={18} className="group-hover:translate-x-0.5" />
+                </Button>
+              </Link>
+            )}
           </FlexBox>
-          {!isMobileOS && (
+          {/* {!isMobileOS && (
             <FlexBox sx={{
               flexDirection: { xs: "column", sm: "row" },
               gap: "1rem"
@@ -120,7 +129,7 @@ export default function Home() {
                 </Typography>
               </Button>
             </FlexBox>
-          )}
+          )} */}
         </FlexBox>
       </FlexBox>
     </PageLayout>

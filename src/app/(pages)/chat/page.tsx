@@ -22,12 +22,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (!session) {
-      setTimeout(() => {
+      const delayTimer = setTimeout(() => {
         showMessage("info", "Trial Mode\n\n- Sign In/Up -\n to save chats")
-      }, 600)
+      }, 1200)
+      return () => clearTimeout(delayTimer)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [session])
 
   return (
     <PageLayout>

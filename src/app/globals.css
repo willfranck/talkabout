@@ -130,7 +130,7 @@ html {
 
 body {
   overscroll-behavior-x: none;
-  background: linear-gradient(135deg, rgba(18, 18, 18, 1) 20%, rgba(0, 96, 100, 0.075) 50%, rgba(18, 18, 18, 1) 80%);
+  background: linear-gradient(110deg, rgba(18, 18, 18, 1) 10%, rgba(0, 96, 100, 0.1) 50%, rgba(18, 18, 18, 1) 90%);
 }
 
 body * {
