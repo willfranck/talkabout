@@ -6,7 +6,7 @@ import {
   setArchivedThread, 
   setRestoreThread,
   deleteMessages
-} from "@redux/reducers"
+} from "@redux/slices/chat"
 import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
 

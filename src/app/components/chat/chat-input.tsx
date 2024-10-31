@@ -7,7 +7,7 @@ import {
   addMessage, 
   updateLastActive, 
   updateThreadTopic 
-} from "@redux/reducers"
+} from "@redux/slices/chat"
 import { 
   useThreadCount, 
   useSelectedThread, 
