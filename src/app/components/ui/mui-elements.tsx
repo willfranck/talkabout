@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
-import { useIsMobileOS } from "@hooks/global"
+import { useSession, useIsMobileOS, useSnackbar } from "@hooks/global"
+import { signOut } from "@services/supabase-actions"
 import { ChatThread, ChatMessage } from "@types"
 import { styled } from "@mui/material/styles"
 import theme from "@utils/mui-theme"
@@ -30,6 +31,8 @@ import {
 } from "@mui/material"
 import { 
   SignIn,
+  SignOut,
+  UserCircleGear,
   Trash, 
   ArrowDown, 
   Archive,
@@ -106,10 +109,29 @@ const MenuNav = ({
   links: INav[]
   onClose: () => void
 }) => {
+  const pathname = usePathname()
+  const router = useRouter()
+  const { session } = useSession()
+  const { showMessage } = useSnackbar()
+
+  const handleSignOut = async () => {
+    const res = await signOut()
+    if (res.error) {
+      onClose()
+      showMessage("error", res.message || "Undefined error signing out")
+    } else {
+      onClose()
+      showMessage("success", "Signed Out")
+      if (pathname === "/profile") {
+        router.push("/")
+      }
+    }
+  }
+
   const linkElements = links.map((link) => (
     <Link key={link.name} href={link.path}>
       <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-        <ListItemIcon sx={{ minWidth: "2.25rem" }}>
+        <ListItemIcon sx={{ minWidth: "2rem" }}>
           {link.icon}
         </ListItemIcon>
         <ListItemText primary={link.name} />
@@ -158,14 +180,33 @@ const MenuNav = ({
         }}>
           Account
         </ListSubheader>
-        <Link href={"/auth"}>
-          <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-            <ListItemIcon sx={{ minWidth: "2rem" }}>
-              <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
-            </ListItemIcon>
-            <ListItemText primary="Sign In" />
-          </ListItemButton>
-        </Link>
+        {session ? (
+          <>
+            <Link href={"/profile"}>
+              <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+                <ListItemIcon sx={{ minWidth: "2rem" }}>
+                  <UserCircleGear size={24} weight="bold" color={theme.palette.primary.light} /> 
+                </ListItemIcon>
+                <ListItemText primary="Profile" />
+              </ListItemButton>
+            </Link>
+            <ListItemButton onClick={handleSignOut} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+              <ListItemIcon sx={{ minWidth: "2rem" }}>
+                <SignOut size={24} weight="bold" color={theme.palette.primary.light} /> 
+              </ListItemIcon>
+              <ListItemText primary="Sign Out" />
+            </ListItemButton>
+          </>
+        ) : (
+          <Link href={"/auth"}>
+            <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+              <ListItemIcon sx={{ minWidth: "2rem" }}>
+                <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
+              </ListItemIcon>
+              <ListItemText primary="Sign In" />
+            </ListItemButton>
+          </Link>
+        )}
       </List>
     </FlexBox>
   )

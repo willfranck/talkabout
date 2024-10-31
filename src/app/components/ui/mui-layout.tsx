@@ -62,7 +62,7 @@ const MobileDrawer = ({
       }}
       sx={{
         "& .MuiPaper-root": {
-          minWidth: "9rem"
+          minWidth: "10rem"
         }
       }}
     >

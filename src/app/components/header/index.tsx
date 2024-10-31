@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useSession, useSnackbar } from "@hooks/global"
 import { signOut } from "@services/supabase-actions"
 import Link from "next/link"
@@ -27,6 +27,7 @@ import {
   Info,
   SignIn,
   SignOut,
+  UserCircleGear,
   SquaresFour
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -39,6 +40,7 @@ const links = [
 
 const Header = () => {
   const pathname = usePathname()
+  const router = useRouter()
   const { session } = useSession()
   const { showMessage } = useSnackbar()
   const [chatDrawerAnchorEl, setChatDrawerAnchorEl] = useState<HTMLElement | null>(null)
@@ -63,10 +65,11 @@ const Header = () => {
     const res = await signOut()
     if (res.error) {
       showMessage("error", res.message || "Undefined error signing out")
-      // refreshSession()
     } else {
       showMessage("success", "Signed Out")
-      // refreshSession()
+      if (pathname === "/profile") {
+        router.push("/")
+      }
     }
   }
 
@@ -140,19 +143,35 @@ const Header = () => {
             width: { sm: "5rem", md: "2.5rem" } 
           }}>
             {session ? (
-              <ToolTip title="Sign Out" placement="bottom" arrow>
-                <IconButton
-                  color="primary"
-                  onClick={handleSignOut} 
-                  sx={{
-                    "&:hover": {
-                      color: "highlight.light"
-                    }
-                  }}
-                >
-                  <SignOut size={24} weight="bold" />
-                </IconButton>
-              </ToolTip>
+              <>
+                <ToolTip title="Profile" placement="bottom" arrow>
+                  <Link href={"/profile"}>
+                    <IconButton
+                      color="primary"
+                      sx={{
+                        "&:hover": {
+                          color: "highlight.light"
+                        }
+                      }}
+                    >
+                      <UserCircleGear size={24} weight="bold" />
+                    </IconButton>
+                  </Link>
+                </ToolTip>
+                <ToolTip title="Sign Out" placement="bottom" arrow>
+                  <IconButton
+                    color="primary"
+                    onClick={handleSignOut} 
+                    sx={{
+                      "&:hover": {
+                        color: "highlight.light"
+                      }
+                    }}
+                  >
+                    <SignOut size={24} weight="bold" />
+                  </IconButton>
+                </ToolTip>
+              </>
             ) : (
               <ToolTip title="Sign In" placement="bottom" arrow>
                 <Link href={"/auth"}>
