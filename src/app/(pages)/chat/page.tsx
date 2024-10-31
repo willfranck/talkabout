@@ -1,6 +1,6 @@
 "use client"
-// import { useEffect } from "react"
-// import { useSnackbar } from "@hooks/global"
+import { useEffect } from "react"
+import { useSession, useSnackbar } from "@hooks/global"
 import { 
   useInitialThread,
   useSelectedThread 
@@ -15,14 +15,19 @@ import { ChatInput } from "@chat/chat-input"
 
 export default function ChatPage() {
   useInitialThread()
-  // const { showMessage } = useSnackbar()
+  const { session } = useSession()
+  const { showMessage } = useSnackbar()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
 
-  // useEffect(() => {
-  //   showMessage("info", "Trial Mode\n\nSign In/Up to save chats")
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  useEffect(() => {
+    if (!session) {
+      setTimeout(() => {
+        showMessage("info", "Trial Mode\n\n- Sign In/Up -\n to save chats")
+      }, 600)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <PageLayout>
