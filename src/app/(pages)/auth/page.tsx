@@ -2,7 +2,7 @@
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
-import { login, signup } from "@services/supabase-actions"
+import { logIn, signUp } from "@services/supabase-actions"
 import { User } from "@types"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
@@ -81,7 +81,7 @@ export default function LoginPage() {
       formData.append(key, userInputData[key as keyof UserInputData])
     })
     if (isLogin) {
-      const res = await login(formData)
+      const res = await logIn(formData)
       if (res.success) {
         showMessage("success", "Successfully signed in")
         router.push("/chat")
@@ -90,7 +90,7 @@ export default function LoginPage() {
       }
       setIsLoading(false)
     } else {
-      const res = await signup(formData)
+      const res = await signUp(formData)
       if (res.success) {
         showMessage("success", "Successfully created account")
         router.push("/chat")

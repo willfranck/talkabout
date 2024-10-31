@@ -1,5 +1,6 @@
 import { useContext } from "react"
-import { SnackbarContext } from "@providers/mui-snackbar-provider"
+import { SessionContext, SessionContextProps } from "@providers/session-provider"
+import { SnackbarContext, SnackbarContextProps } from "@providers/mui-snackbar-provider"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const useIsMobileOS = (): boolean => {
@@ -21,7 +22,15 @@ const useIsElectron = (): boolean => {
   )
 }
 
-const useSnackbar = () => {
+const useSession = (): SessionContextProps => {
+  const context = useContext(SessionContext)
+  if (!context) {
+    throw new Error("useSession must be used within a SessionProvider")
+  }
+  return context
+}
+
+const useSnackbar = (): SnackbarContextProps => {
   const context = useContext(SnackbarContext)
   if (!context) {
     throw new Error("useSnackbar must be used within a SnackbarProvider")
@@ -32,5 +41,6 @@ const useSnackbar = () => {
 export {
   useIsMobileOS,
   useIsElectron,
+  useSession,
   useSnackbar
 }

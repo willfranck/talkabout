@@ -3,6 +3,8 @@ import { ReduxProvider } from "@providers/redux-provider"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { SnackbarProvider } from "@providers/mui-snackbar-provider"
+import { SupabaseSessionProvider } from "@providers/session-provider"
+import { createClient } from "@utils/supabase/server"
 import { Kumbh_Sans } from "next/font/google"
 import theme from "@utils/mui-theme"
 import "./globals.css"
@@ -23,11 +25,14 @@ const kumbhSans = Kumbh_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const supabase = createClient()
+  const { data: { session } } = await (await supabase).auth.getSession()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${kumbhSans.variable}`}>
@@ -36,8 +41,10 @@ export default function RootLayout({
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <SnackbarProvider>
-                <Header />
-                {children}
+                <SupabaseSessionProvider initialSession={session}>
+                  <Header />
+                  {children}
+                </SupabaseSessionProvider>
               </SnackbarProvider>
             </ThemeProvider>
           </AppRouterCacheProvider>

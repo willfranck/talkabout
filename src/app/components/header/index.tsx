@@ -1,6 +1,8 @@
 "use client"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
+import { useSession, useSnackbar } from "@hooks/global"
+import { signOut } from "@services/supabase-actions"
 import Link from "next/link"
 import Image from "next/image"
 import theme from "@utils/mui-theme"
@@ -24,6 +26,7 @@ import {
   ChatTeardropText, 
   Info,
   SignIn,
+  SignOut,
   SquaresFour
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -36,6 +39,8 @@ const links = [
 
 const Header = () => {
   const pathname = usePathname()
+  const { session } = useSession()
+  const { showMessage } = useSnackbar()
   const [chatDrawerAnchorEl, setChatDrawerAnchorEl] = useState<HTMLElement | null>(null)
   const [navDrawerAnchorEl, setNavDrawerAnchorEl] = useState<HTMLElement | null>(null)
   const openChat = Boolean(chatDrawerAnchorEl)
@@ -52,6 +57,17 @@ const Header = () => {
   }
   const handleNavDrawerClose = () => {
     setNavDrawerAnchorEl(null)
+  }
+
+  const handleSignOut = async () => {
+    const res = await signOut()
+    if (res.error) {
+      showMessage("error", res.message || "Undefined error signing out")
+      // refreshSession()
+    } else {
+      showMessage("success", "Signed Out")
+      // refreshSession()
+    }
   }
 
   const llamaLogo = (
@@ -123,20 +139,36 @@ const Header = () => {
             display: { xs: "none", sm: "flex" },
             width: { sm: "5rem", md: "2.5rem" } 
           }}>
-            <ToolTip title="Sign In" placement="bottom" arrow>
-              <Link href={"/auth"}>
+            {session ? (
+              <ToolTip title="Sign Out" placement="bottom" arrow>
                 <IconButton
-                  color="primary" 
+                  color="primary"
+                  onClick={handleSignOut} 
                   sx={{
                     "&:hover": {
                       color: "highlight.light"
                     }
                   }}
                 >
-                  <SignIn size={24} weight="bold" />
+                  <SignOut size={24} weight="bold" />
                 </IconButton>
-              </Link>
-            </ToolTip>
+              </ToolTip>
+            ) : (
+              <ToolTip title="Sign In" placement="bottom" arrow>
+                <Link href={"/auth"}>
+                  <IconButton
+                    color="primary" 
+                    sx={{
+                      "&:hover": {
+                        color: "highlight.light"
+                      }
+                    }}
+                  >
+                    <SignIn size={24} weight="bold" />
+                  </IconButton>
+                </Link>
+              </ToolTip>
+            )}
           </FlexBox>
 
           <IconButton

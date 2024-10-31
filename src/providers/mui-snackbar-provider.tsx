@@ -6,8 +6,10 @@ import {
 } from "@mui/material"
 
 
-interface SnackbarContextProps {
-  showMessage: (type: "info" | "success" | "warning" | "error", message: string) => void
+export type SnackbarContextProps = {
+  showMessage: (
+    type: "info" | "success" | "warning" | "error",
+    message: string) => void
 }
 
 export const SnackbarContext = createContext<SnackbarContextProps>({ showMessage: () => {} })
