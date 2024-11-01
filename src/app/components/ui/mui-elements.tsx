@@ -81,7 +81,7 @@ const TabNav = ({
 
   const linkElements = links.map((link) => (
     <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
-      <Link href={link.path} className="outline-none">
+      <Link href={link.path} aria-label={link.name} className="outline-none">
         <Tab 
           icon={link.icon}
           sx={{ 
@@ -96,7 +96,7 @@ const TabNav = ({
   ))
   
   return (
-    <Tabs value={tabValue}>
+    <Tabs value={tabValue} aria-label="Page navigation">
       {linkElements}
     </Tabs>
   )
@@ -129,7 +129,7 @@ const MenuNav = ({
   }
 
   const linkElements = links.map((link) => (
-    <Link key={link.name} href={link.path}>
+    <Link key={link.name} href={link.path} aria-label={link.name}>
       <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
         <ListItemIcon sx={{ minWidth: "1.875rem" }}>
           {link.icon}
@@ -250,6 +250,7 @@ const ActionsPopover = ({
   const listItemButtons = actionItem.actions.map((action) => (
     <ListItemButton 
       key={action.label}
+      aria-label={action.label}
       onClick={() => { action.function(dispatch, actionItem.item.id), handlePopoverClose}} 
       sx={{ 
         height: "2.5rem", 
