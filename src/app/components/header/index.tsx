@@ -33,9 +33,9 @@ import {
 
 
 const links = [
-  { name: "Home", path: "/", icon: <House size={24} weight="fill" /> },
-  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} weight="fill" /> },
-  { name: "About", path: "/about", icon: <Info size={24} weight="fill" /> },
+  { name: "Home", path: "/", icon: <House size={24} /> },
+  { name: "Chat", path: "/chat", icon: <ChatTeardropText size={24} /> },
+  { name: "About", path: "/about", icon: <Info size={24} /> },
 ]
 
 const Header = () => {
@@ -111,19 +111,23 @@ const Header = () => {
             <FlexBox sx={{ display: { xs: "none", sm: "flex" } }}>
               {llamaLogo}
             </FlexBox>
-            <IconButton 
-              size="medium"
-              aria-label="Chat Menu Anchor"
-              aria-haspopup="true"
-              onClick={handleChatDrawerBtnClick}
-              color="primary"
-              sx={{
-                display: { xs: "flex", md: "none" },
-                visibility: (pathname === "/chat" ? "visible" : "hidden" )
-              }}
-            >
-              <ChatTeardropText size={24} weight="bold" color={theme.palette.primary.light} />
-            </IconButton>
+            <ToolTip title="Chats" placement="bottom" arrow>
+              <IconButton 
+                aria-label="Chat Menu Anchor"
+                aria-haspopup="true"
+                onClick={handleChatDrawerBtnClick}
+                color="primary"
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  visibility: (pathname === "/chat" ? "visible" : "hidden" ),
+                  "&:hover": {
+                    color: "highlight.light"
+                  }
+                }}
+              >
+                <ChatTeardropText size={24} />
+              </IconButton>
+            </ToolTip>
             <MobileDrawer open={openChat} onClose={handleChatDrawerClose} anchor="left">
               <ChatPanel />
             </MobileDrawer>
@@ -154,7 +158,7 @@ const Header = () => {
                         }
                       }}
                     >
-                      <UserCircleGear size={24} weight="bold" />
+                      <UserCircleGear size={24} />
                     </IconButton>
                   </Link>
                 </ToolTip>
@@ -168,7 +172,7 @@ const Header = () => {
                       }
                     }}
                   >
-                    <SignOut size={24} weight="bold" />
+                    <SignOut size={24} />
                   </IconButton>
                 </ToolTip>
               </>
@@ -183,7 +187,7 @@ const Header = () => {
                       }
                     }}
                   >
-                    <SignIn size={24} weight="bold" />
+                    <SignIn size={24} />
                   </IconButton>
                 </Link>
               </ToolTip>
@@ -200,7 +204,7 @@ const Header = () => {
               display: { xs: "flex", sm: "none" },
             }}
           >
-            <SquaresFour size={24} color={theme.palette.primary.light} />
+            <SquaresFour size={24} weight="light" color={theme.palette.primary.light} />
           </IconButton>
           <MobileDrawer open={openNav} onClose={handleNavDrawerClose} anchor="right">
             <MenuNav links={links} onClose={handleNavDrawerClose} />

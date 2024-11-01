@@ -123,7 +123,7 @@ const ThreadCard = ({
           actionItem={actionItemProps} 
           subheader="Options" 
           anchorIcon={<DotsThreeVertical size={24} weight="bold" />}
-          anchorWidth="1.5rem"
+          anchorWidth="1.375rem"
           anchorHeight="100%" 
         />
         <FlexBox 
@@ -354,7 +354,7 @@ const ChatMessageCard = ({
                   <ActionsPopover 
                     actionItem={actionItemProps} 
                     subheader="Confirm" 
-                    anchorIcon={<Trash size={16} weight="bold" color={theme.palette.error.main} />}
+                    anchorIcon={<Trash size={16} color={theme.palette.error.main} />}
                     anchorWidth="1.5rem"
                     anchorHeight="1.25rem" 
                   />

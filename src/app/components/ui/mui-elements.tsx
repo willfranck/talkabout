@@ -85,7 +85,7 @@ const TabNav = ({
         <Tab 
           icon={link.icon}
           sx={{ 
-            color: (link.path === pathname ? "highlight.light" : "highlight.main"),
+            color: (link.path === pathname ? "highlight.light" : "primary.light"),
             "&:hover": { 
               color: (link.path !== pathname ? "highlight.light" : "")
             }
@@ -131,7 +131,7 @@ const MenuNav = ({
   const linkElements = links.map((link) => (
     <Link key={link.name} href={link.path}>
       <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-        <ListItemIcon sx={{ minWidth: "2rem" }}>
+        <ListItemIcon sx={{ minWidth: "1.875rem" }}>
           {link.icon}
         </ListItemIcon>
         <ListItemText primary={link.name} />
@@ -184,15 +184,15 @@ const MenuNav = ({
           <>
             <Link href={"/profile"}>
               <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-                <ListItemIcon sx={{ minWidth: "2rem" }}>
-                  <UserCircleGear size={24} weight="bold" color={theme.palette.primary.light} /> 
+                <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                  <UserCircleGear size={24} color={theme.palette.primary.light} /> 
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
               </ListItemButton>
             </Link>
             <ListItemButton onClick={handleSignOut} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-              <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <SignOut size={24} weight="bold" color={theme.palette.primary.light} /> 
+              <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                <SignOut size={24} color={theme.palette.primary.light} /> 
               </ListItemIcon>
               <ListItemText primary="Sign Out" />
             </ListItemButton>
@@ -200,8 +200,8 @@ const MenuNav = ({
         ) : (
           <Link href={"/auth"}>
             <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-              <ListItemIcon sx={{ minWidth: "2rem" }}>
-                <SignIn size={24} weight="bold" color={theme.palette.primary.light} /> 
+              <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                <SignIn size={24} color={theme.palette.primary.light} /> 
               </ListItemIcon>
               <ListItemText primary="Sign In" />
             </ListItemButton>
