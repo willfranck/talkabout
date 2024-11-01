@@ -83,7 +83,7 @@ export default function LoginPage() {
     if (isLogin) {
       const res = await logIn(formData)
       if (res.success) {
-        showMessage("success", "Successfully signed in")
+        showMessage("success", "Successfully Signed In")
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")
@@ -92,7 +92,7 @@ export default function LoginPage() {
     } else {
       const res = await signUp(formData)
       if (res.success) {
-        showMessage("success", "Successfully created account")
+        showMessage("success", "Successfully Created Account")
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")

@@ -83,7 +83,7 @@ export const ChatPanel = () => {
       justifyContent: "start",
       flexShrink: "0",
       gap: "1rem",
-      width: { xs: "21rem", lg: "24rem" },
+      width: { xs: "21rem", sm: "22rem", md: "23rem", lg: "25rem" },
       height: "100%",
       paddingTop: "2rem",
       paddingBottom: "1rem",
