@@ -28,7 +28,8 @@ import {
   SignIn,
   SignOut,
   UserCircleGear,
-  SquaresFour
+  SquaresFour,
+  CaretLeft
 } from "@phosphor-icons/react/dist/ssr"
 
 
@@ -120,12 +121,14 @@ const Header = () => {
                 sx={{
                   display: { xs: "flex", md: "none" },
                   visibility: (pathname === "/chat" ? "visible" : "hidden" ),
+                  width: "2.5rem",
                   "&:hover": {
                     color: "highlight.light"
                   }
                 }}
               >
-                <ChatTeardropText size={24} />
+                <CaretLeft size={12} weight="fill" />
+                <ChatTeardropText size={24} className="-translate-x-1" />
               </IconButton>
             </ToolTip>
             <MobileDrawer open={openChat} onClose={handleChatDrawerClose} anchor="left">

@@ -81,10 +81,10 @@ const TabNav = ({
 
   const linkElements = links.map((link) => (
     <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
-      <Link href={link.path} role="linkItem" aria-label={link.name} className="outline-none">
+      <Link href={link.path} role="link" aria-label={link.name} className="outline-none">
         <Tab 
           icon={link.icon}
-          role="tabItem"
+          role="tab"
           aria-label={link.name}
           sx={{ 
             color: (link.path === pathname ? "highlight.light" : "primary.light"),
@@ -148,7 +148,7 @@ const MenuNav = ({
         alignItems: "start",
         width: "100%",
         gap: "0.5rem",
-        paddingY: "0.5rem"
+        padding: "0.5rem 0 0.5rem 0.75rem"
       }}
     >
       <List sx={{
@@ -194,7 +194,7 @@ const MenuNav = ({
             </Link>
             <ListItemButton onClick={handleSignOut} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
               <ListItemIcon sx={{ minWidth: "1.875rem" }}>
-                <SignOut size={24} color={theme.palette.primary.light} /> 
+                <SignOut size={24} color={theme.palette.primary.light} className="translate-x-px" /> 
               </ListItemIcon>
               <ListItemText primary="Sign Out" />
             </ListItemButton>
