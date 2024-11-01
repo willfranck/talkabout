@@ -73,7 +73,7 @@ const TabNav = ({
 }) => {
   const pathname = usePathname()
   const currentPath = links.findIndex(link => link.path === pathname)
-  const [tabValue, setTabValue] = useState(currentPath)
+  const [tabValue, setTabValue] = useState(currentPath >= 0 && currentPath)
 
   useEffect(() => {
     setTabValue(currentPath)
@@ -81,19 +81,19 @@ const TabNav = ({
 
   const linkElements = links.map((link) => (
     <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
-      <Link href={link.path} role="link" aria-label={link.name} className="outline-none">
-        <Tab 
-          icon={link.icon}
-          role="tab"
-          aria-label={link.name}
-          sx={{ 
-            color: (link.path === pathname ? "highlight.light" : "primary.light"),
-            "&:hover": { 
-              color: (link.path !== pathname ? "highlight.light" : "")
-            }
-          }}
-        />
-      </Link>
+      <Tab 
+        LinkComponent={Link}
+        href={link.path}
+        icon={link.icon}
+        role="tab"
+        aria-label={link.name}
+        sx={{ 
+          color: "primary.main",
+          "&:hover": { 
+            color: (link.path !== pathname ? "highlight.light" : "")
+          }
+        }}
+      />
     </ToolTip>
   ))
   
@@ -131,14 +131,23 @@ const MenuNav = ({
   }
 
   const linkElements = links.map((link) => (
-    <Link key={link.name} href={link.path} aria-label={link.name}>
-      <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-        <ListItemIcon sx={{ minWidth: "1.875rem" }}>
-          {link.icon}
-        </ListItemIcon>
-        <ListItemText primary={link.name} />
-      </ListItemButton>
-    </Link>
+    <ListItemButton
+      key={link.name} 
+      LinkComponent={Link} 
+      href={link.path} 
+      onClick={onClose} 
+      role="button" 
+      aria-label={link.name} 
+      sx={{ 
+        height: "2.5rem", 
+        marginLeft: "0.25rem" 
+      }}
+    >
+      <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+        {link.icon}
+      </ListItemIcon>
+      <ListItemText primary={link.name} />
+    </ListItemButton>
   ))
 
   return (
@@ -184,15 +193,31 @@ const MenuNav = ({
         </ListSubheader>
         {session ? (
           <>
-            <Link href={"/profile"}>
-              <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-                <ListItemIcon sx={{ minWidth: "1.875rem" }}>
-                  <UserCircleGear size={24} color={theme.palette.primary.light} /> 
-                </ListItemIcon>
-                <ListItemText primary="Profile" />
-              </ListItemButton>
-            </Link>
-            <ListItemButton onClick={handleSignOut} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
+            <ListItemButton 
+              LinkComponent={Link} 
+              href="/profile"
+              onClick={onClose}
+              role="button"
+              aria-label="Profile" 
+              sx={{ 
+                height: "2.5rem", 
+                marginLeft: "0.25rem" 
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                <UserCircleGear size={24} color={theme.palette.primary.light} /> 
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </ListItemButton>
+            <ListItemButton 
+              onClick={handleSignOut} 
+              role="button"
+              aria-label="Sign Out"
+              sx={{ 
+                height: "2.5rem", 
+                marginLeft: "0.25rem" 
+              }}
+            >
               <ListItemIcon sx={{ minWidth: "1.875rem" }}>
                 <SignOut size={24} color={theme.palette.primary.light} className="translate-x-px" /> 
               </ListItemIcon>
@@ -200,14 +225,22 @@ const MenuNav = ({
             </ListItemButton>
           </>
         ) : (
-          <Link href={"/auth"}>
-            <ListItemButton onClick={onClose} sx={{ height: "2.5rem", marginLeft: "0.25rem" }}>
-              <ListItemIcon sx={{ minWidth: "1.875rem" }}>
-                <SignIn size={24} color={theme.palette.primary.light} /> 
-              </ListItemIcon>
-              <ListItemText primary="Sign In" />
-            </ListItemButton>
-          </Link>
+          <ListItemButton 
+            LinkComponent={Link} 
+            href="/auth" 
+            onClick={onClose} 
+            role="button"
+            aria-label="Sign In"
+            sx={{ 
+              height: "2.5rem", 
+              marginLeft: "0.25rem" 
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+              <SignIn size={24} color={theme.palette.primary.light} /> 
+            </ListItemIcon>
+            <ListItemText primary="Sign In" />
+          </ListItemButton>
         )}
       </List>
     </FlexBox>

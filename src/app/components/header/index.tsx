@@ -152,25 +152,25 @@ const Header = () => {
             {session ? (
               <>
                 <ToolTip title="Profile" placement="bottom" arrow>
-                  <Link href={"/profile"}>
-                    <IconButton
-                      aria-label="Profile"
-                      color="primary"
-                      sx={{
-                        "&:hover": {
-                          color: "highlight.light"
-                        }
-                      }}
-                    >
-                      <UserCircleGear size={24} />
-                    </IconButton>
-                  </Link>
+                  <IconButton
+                    LinkComponent={Link}
+                    href="/profile"
+                    aria-label="Profile"
+                    color="primary"
+                    sx={{
+                      "&:hover": {
+                        color: "highlight.light"
+                      }
+                    }}
+                  >
+                    <UserCircleGear size={24} />
+                  </IconButton>
                 </ToolTip>
                 <ToolTip title="Sign Out" placement="bottom" arrow>
                   <IconButton
-                    aria-label="Sign Out"
                     color="primary"
                     onClick={handleSignOut} 
+                    aria-label="Sign Out"
                     sx={{
                       "&:hover": {
                         color: "highlight.light"
@@ -183,19 +183,19 @@ const Header = () => {
               </>
             ) : (
               <ToolTip title="Sign In" placement="bottom" arrow>
-                <Link href={"/auth"}>
-                  <IconButton
-                    aria-label="Sign In"
-                    color="primary" 
-                    sx={{
-                      "&:hover": {
-                        color: "highlight.light"
-                      }
-                    }}
-                  >
-                    <SignIn size={24} />
-                  </IconButton>
-                </Link>
+                <IconButton
+                  LinkComponent={Link}
+                  href="/auth"
+                  color="primary" 
+                  aria-label="Sign In"
+                  sx={{
+                    "&:hover": {
+                      color: "highlight.light"
+                    }
+                  }}
+                >
+                  <SignIn size={24} />
+                </IconButton>
               </ToolTip>
             )}
           </FlexBox>

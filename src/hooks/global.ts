@@ -1,25 +1,31 @@
-import { useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import { SessionContext, SessionContextProps } from "@providers/session-provider"
 import { SnackbarContext, SnackbarContextProps } from "@providers/mui-snackbar-provider"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const useIsMobileOS = (): boolean => {
-  if (typeof window !== "undefined") {
-    const userAgent = navigator.userAgent || (window as any).opera
+  const [isMobileOS, setIsMobileOS] = useState(false)
 
+  useEffect(() => {
+    const userAgent = navigator.userAgent || (window as any).opera
     const isIOS = /iPad|iPhone|iPod/.test(userAgent)
     const isAndroid = /android/i.test(userAgent)
     
-    return isIOS || isAndroid
-  }
-  return false
+    setIsMobileOS(isIOS || isAndroid)
+  }, [])
+
+  return isMobileOS
 }
 
 const useIsElectron = (): boolean => {
-  return (
-    typeof window !== "undefined" &&
-    window.process?.versions?.electron !== "undefined"
-  )
+  const [isElectron, setIsElectron] = useState(false)
+
+  useEffect(() => {
+    const isElectronEnv = Boolean(window.process?.versions?.electron)
+    setIsElectron(isElectronEnv)
+  }, [])
+
+  return isElectron
 }
 
 const useSession = (): SessionContextProps => {

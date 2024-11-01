@@ -60,37 +60,37 @@ export default function Home() {
             gap: "1rem",
             minHeight: "5.5rem" 
           }}>
-            <Link href={"/chat"}>
+            <Button 
+              LinkComponent={Link}
+              href="/chat"
+              variant="text" 
+              aria-labelledby="chatCTA"
+              sx={{
+                gap: "0.5rem",
+                paddingX: "1.5rem"
+              }}
+              className="group"
+            >
+              <Typography id="chatCTA" variant="body1" sx={{ textWrap: "nowrap"}}>
+                {!session ? "Try it now" : "Start Chatting"}
+              </Typography>
+              <ArrowRight size={18} className="group-hover:translate-x-0.5" />
+            </Button>
+            {!session && (
               <Button 
+                LinkComponent={Link}
+                href="/auth"
                 variant="text" 
-                aria-labelledby="chatCTA"
+                aria-labelledby="signinCTA"
                 sx={{
                   gap: "0.5rem",
                   paddingX: "1.5rem"
                 }}
                 className="group"
               >
-                <Typography id="chatCTA" variant="body1" sx={{ textWrap: "nowrap"}}>
-                  {!session ? "Try it now" : "Start Chatting"}
-                </Typography>
-                <ArrowRight size={18} className="group-hover:translate-x-0.5" />
+                <Typography id="signinCTA" variant="body1" sx={{ textWrap: "nowrap"}}>Sign In/Up</Typography>
+                <SignIn size={18} className="group-hover:translate-x-0.5" />
               </Button>
-            </Link>
-            {!session && (
-              <Link href={"/auth"}>
-                <Button 
-                  variant="text" 
-                  aria-labelledby="signinCTA"
-                  sx={{
-                    gap: "0.5rem",
-                    paddingX: "1.5rem"
-                  }}
-                  className="group"
-                >
-                  <Typography id="signinCTA" variant="body1" sx={{ textWrap: "nowrap"}}>Sign In/Up</Typography>
-                  <SignIn size={18} className="group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
             )}
           </FlexBox>
           {/* {!isMobileOS && (
