@@ -113,6 +113,7 @@ export const ChatPanel = () => {
         onMouseEnter={() => !isMobileOS && displayTextByChar("New Thread ", setDisplayedText)}
         onMouseLeave={() => !isMobileOS && removeTextByChar(displayedText, setDisplayedText)}
         onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
+        aria-label="Create new chat thread"
       >
         <PlusCircle size={24} className="mr-1" />
         <Typography variant="body2" color="primary.main">

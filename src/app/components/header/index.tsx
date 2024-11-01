@@ -113,7 +113,7 @@ const Header = () => {
             </FlexBox>
             <ToolTip title="Chats" placement="bottom" arrow>
               <IconButton 
-                aria-label="Chat Menu Anchor"
+                aria-label="Open chat menu"
                 aria-haspopup="true"
                 onClick={handleChatDrawerBtnClick}
                 color="primary"
@@ -151,6 +151,7 @@ const Header = () => {
                 <ToolTip title="Profile" placement="bottom" arrow>
                   <Link href={"/profile"}>
                     <IconButton
+                      aria-label="Profile"
                       color="primary"
                       sx={{
                         "&:hover": {
@@ -164,6 +165,7 @@ const Header = () => {
                 </ToolTip>
                 <ToolTip title="Sign Out" placement="bottom" arrow>
                   <IconButton
+                    aria-label="Sign Out"
                     color="primary"
                     onClick={handleSignOut} 
                     sx={{
@@ -180,6 +182,7 @@ const Header = () => {
               <ToolTip title="Sign In" placement="bottom" arrow>
                 <Link href={"/auth"}>
                   <IconButton
+                    aria-label="Sign In"
                     color="primary" 
                     sx={{
                       "&:hover": {
@@ -196,7 +199,7 @@ const Header = () => {
 
           <IconButton
             size="medium"
-            aria-label="Nav Menu Anchor"
+            aria-label="Open navigation menu"
             aria-haspopup="true"
             onClick={handleNavDrawerBtnClick}
             color="primary"

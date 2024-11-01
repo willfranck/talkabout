@@ -194,7 +194,10 @@ export default function LoginPage() {
                           position="end" 
                           sx={{ cursor: "pointer" }}
                         >
-                          <IconButton onClick={handleClickShowPassword}>
+                          <IconButton 
+                            onClick={handleClickShowPassword}
+                            aria-label={showPassword ? "Hide password" : "Show Password"}
+                          >
                             {showPassword 
                               ? <EyeSlash size={20} color={theme.palette.primary.light} /> 
                               : <Eye size={20} color={theme.palette.primary.light} />
@@ -215,6 +218,7 @@ export default function LoginPage() {
                   variant="outlined" 
                   type="submit"
                   disabled={isLoading}
+                  aria-label="Submit login"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.5rem" }}
                 >
                   <SignIn size={18} />
@@ -225,6 +229,7 @@ export default function LoginPage() {
                   <Button 
                     variant="text"
                     onClick={() => setHasAccount(false)}
+                    aria-label="Create an account"
                   >
                     Sign Up
                   </Button>
@@ -240,6 +245,7 @@ export default function LoginPage() {
                   variant="contained" 
                   onClick={handleOAuthLogin}
                   disabled={isLoading}
+                  aria-label="Sign In with Google"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />
@@ -370,7 +376,10 @@ export default function LoginPage() {
                           position="end" 
                           sx={{ cursor: "pointer" }}
                         >
-                          <IconButton onClick={handleClickShowPassword}>
+                          <IconButton 
+                            onClick={handleClickShowPassword}
+                            aria-label={showPassword ? "Hide password" : "Show Password"}
+                          >
                             {showPassword 
                               ? <EyeSlash size={20} color={theme.palette.primary.light} /> 
                               : <Eye size={20} color={theme.palette.primary.light} />
@@ -391,6 +400,7 @@ export default function LoginPage() {
                   variant="outlined" 
                   type="submit"
                   disabled={isLoading}
+                  aria-label="Submit signup"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.5rem" }}
                 >
                   <NotePencil size={18} />
@@ -401,6 +411,7 @@ export default function LoginPage() {
                   <Button 
                     variant="text"
                     onClick={() => setHasAccount(true)}
+                    aria-label="Go to login page"
                   >
                     Log In
                   </Button>
@@ -416,6 +427,7 @@ export default function LoginPage() {
                   variant="contained" 
                   onClick={handleOAuthLogin}
                   disabled={isLoading}
+                  aria-label="Sign In with Google"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />

@@ -518,6 +518,7 @@ const TemperatureControls = ({
           selected={temperatureHot === aiTemperature}
           value={temperatureHot}
           onClick={(e) => handleButtonClick(e, temperatureHot)}
+          aria-label="Set AI temperature to hot"
         >
           <Fire size={20} weight="bold" />
         </ToggleButton>
@@ -528,6 +529,7 @@ const TemperatureControls = ({
           value={temperatureCold}
           selected={temperatureCold === aiTemperature}
           onClick={(e) => handleButtonClick(e, temperatureCold)}
+          aria-label="Set AI temperature to cold"
         >
           <Snowflake size={20} weight="bold" />
         </ToggleButton>
@@ -609,6 +611,7 @@ const ChatInputField = ({
             <Button 
               variant="contained"
               onClick={onSubmit}
+              aria-label="Send message"
               sx={{ 
                 width: "2rem",
                 height: (isMobileOS ? "4.125rem" : "6rem"),

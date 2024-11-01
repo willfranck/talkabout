@@ -282,6 +282,8 @@ const ActionsPopover = ({
   return (
     <Box>
       <IconButton 
+        aria-label="Open actions popover"
+        aria-haspopup="true"
         onClick={handlePopoverBtnClick} 
         sx={{ 
           display: (isMobileOS ? "flex" : "none"), 
@@ -341,6 +343,7 @@ const ToggleGroup = ({
       key={value} 
       value={value}
       onClick={() => onClick(value)}
+      aria-label={value}
     >
       {value}
     </ToggleButton>
@@ -376,6 +379,7 @@ const DeleteButton = ({
     <Button 
       onClick={() => action(dispatch, itemId)}
       tabIndex={-1}
+      aria-label="Delete"
       className="actionButton"
       sx={{
         position: "absolute",
@@ -421,6 +425,7 @@ const ArchiveButton = ({
     <Button 
       onClick={() => action(dispatch, itemId)}
       tabIndex={-1}
+      aria-label="Archive/Restore toggle"
       className="actionButton"
       sx={{
         position: "absolute",
