@@ -175,7 +175,7 @@ const theme = createTheme({
           color: theme.palette.primary.main,
           backgroundColor: theme.palette.secondary.dark,
           textTransform: "none",
-          borderRadius: "9999px",
+          borderRadius: "0.375rem",
           "&:hover": {
             color: theme.palette.secondary.contrastText,
             backgroundColor: theme.palette.primary.dark,

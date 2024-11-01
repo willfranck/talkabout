@@ -73,7 +73,7 @@ const TabNav = ({
 }) => {
   const pathname = usePathname()
   const currentPath = links.findIndex(link => link.path === pathname)
-  const [tabValue, setTabValue] = useState(currentPath >= 0 && currentPath)
+  const [tabValue, setTabValue] = useState(currentPath)
 
   useEffect(() => {
     setTabValue(currentPath)
@@ -123,7 +123,7 @@ const MenuNav = ({
       showMessage("error", res.message || "Undefined error signing out")
     } else {
       onClose()
-      showMessage("success", "Signed Out")
+      showMessage("success", "Signed out.  See you soon!")
       if (pathname === "/profile") {
         router.push("/")
       }

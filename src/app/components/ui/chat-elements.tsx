@@ -513,7 +513,7 @@ const TemperatureControls = ({
       >
         <ToggleButton sx={{
           height: "50%",
-          borderRadius: "0.4rem"
+          borderRadius: "0.375rem"
         }}
           selected={temperatureHot === aiTemperature}
           value={temperatureHot}
@@ -524,7 +524,7 @@ const TemperatureControls = ({
         </ToggleButton>
         <ToggleButton sx={{
           height: "50%",
-          borderRadius: "0.4rem"
+          borderRadius: "0.375rem"
         }}
           value={temperatureCold}
           selected={temperatureCold === aiTemperature}
@@ -615,7 +615,7 @@ const ChatInputField = ({
               sx={{ 
                 width: "2rem",
                 height: (isMobileOS ? "4.125rem" : "6rem"),
-                borderRadius: "0.4rem" 
+                borderRadius: "0.375rem" 
               }}
             >
               <PaperPlaneRight size={20} color={theme.palette.secondary.contrastText} />

@@ -83,7 +83,8 @@ export default function LoginPage() {
     if (isLogin) {
       const res = await logIn(formData)
       if (res.success) {
-        showMessage("success", "Successfully Signed In")
+        const name = res.user?.user_metadata.first_name || ""
+        showMessage("success", `Welcome back ${name}!`)
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")
@@ -92,7 +93,8 @@ export default function LoginPage() {
     } else {
       const res = await signUp(formData)
       if (res.success) {
-        showMessage("success", "Successfully Created Account")
+        const name = res.user?.user_metadata.first_name || ""
+        showMessage("success", `Successfully created account\nWelcome to the team ${name}! `)
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")

@@ -12,14 +12,14 @@ async function logIn(formData: FormData): Promise<SupabaseRes> {
     password: formData.get("password") as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: { user }, error } = await supabase.auth.signInWithPassword(data)
   if (error) {
     console.log(error.message)
     return { success: false, message: error.message }
   }
 
   revalidatePath("/", "layout")
-  return { success: true }
+  return { success: true, user: user as SupabaseUser }
 }
 
 async function signUp(formData: FormData): Promise<SupabaseRes> {
@@ -30,7 +30,7 @@ async function signUp(formData: FormData): Promise<SupabaseRes> {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
-  const { error } = await supabase.auth.signUp({
+  const { data: { user }, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -46,7 +46,7 @@ async function signUp(formData: FormData): Promise<SupabaseRes> {
   }
 
   revalidatePath("/", "layout")
-  return { success: true }
+  return { success: true, user: user as SupabaseUser }
 }
 
 async function signOut(): Promise<SupabaseRes> {

@@ -67,7 +67,7 @@ const Header = () => {
     if (res.error) {
       showMessage("error", res.message || "Undefined error signing out")
     } else {
-      showMessage("success", "Signed Out")
+      showMessage("success", "Signed out.  See you soon!")
       if (pathname === "/profile") {
         router.push("/")
       }
