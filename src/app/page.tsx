@@ -24,9 +24,9 @@ export default function Home() {
     <PageLayout>
       <FlexBox sx={{
         flexDirection: "column",
-        height: "100%",
-        gap: { xs: "6rem", md: "7rem" },
-        marginX: "2rem"
+        gap: { xs: "4rem", md: "6rem", lg: "8rem" },
+        margin: "auto 2rem",
+        paddingY: "1rem"
       }}>
         <FlexBox sx={{
           flexDirection: "column",

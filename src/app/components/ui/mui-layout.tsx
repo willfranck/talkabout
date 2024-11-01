@@ -28,6 +28,7 @@ const PageLayout = ({
           gap: { xs: "0.75rem", lg: "2rem"},
           width: "100%",
           height: "100%",
+          overflowY: "auto",
           opacity: "0",
           animation: "fadeIn 240ms ease-out forwards"
         }}
