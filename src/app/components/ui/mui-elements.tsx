@@ -81,9 +81,11 @@ const TabNav = ({
 
   const linkElements = links.map((link) => (
     <ToolTip key={link.name} title={link.name} placement="bottom" arrow>
-      <Link href={link.path} aria-label={link.name} className="outline-none">
+      <Link href={link.path} role="linkItem" aria-label={link.name} className="outline-none">
         <Tab 
           icon={link.icon}
+          role="tabItem"
+          aria-label={link.name}
           sx={{ 
             color: (link.path === pathname ? "highlight.light" : "primary.light"),
             "&:hover": { 
