@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { ReduxProvider } from "@providers/redux-provider"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter"
 import { ThemeProvider, CssBaseline } from "@mui/material"
@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description: "AI Chat with Llamini-Flash - A llama powered by Google Gemini",
   keywords: "AI, Chat, Productivity, Application, NextJS, Electron",
   robots: "index, follow",
+}
+
+export const viewport: Viewport = {
+  viewportFit: "auto"
 }
 
 const kumbhSans = Kumbh_Sans({

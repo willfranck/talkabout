@@ -129,10 +129,6 @@ html {
 }
 
 body {
-  min-width: 100vw;
-  min-width: -webkit-fill-available;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
   overscroll-behavior-x: none;
   background: linear-gradient(110deg, rgba(18, 18, 18, 1) 10%, rgba(0, 96, 100, 0.1) 50%, rgba(18, 18, 18, 1) 90%);
 }
