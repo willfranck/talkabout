@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  viewportFit: "auto"
+  viewportFit: "cover"
 }
 
 const kumbhSans = Kumbh_Sans({
