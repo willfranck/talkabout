@@ -97,6 +97,15 @@ const theme = createTheme({
         })
       }
     },
+    MuiToolbar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.up("xs")]: {
+            minHeight: "56px",
+          }
+        })
+      }
+    },
     MuiCard: {
       styleOverrides: {
         root: ({ theme }) => ({

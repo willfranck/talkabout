@@ -18,10 +18,10 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       height: {
-        "page-content": "calc(100vh - 4rem)",
+        "page-content": "calc(100vh - 3.5rem)",
       },
       maxHeight: {
-        "page-content": "calc(100vh - 4rem)",
+        "page-content": "calc(100vh - 3.5rem)",
       },
     },
   },
