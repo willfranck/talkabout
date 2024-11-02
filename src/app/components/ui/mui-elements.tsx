@@ -27,7 +27,8 @@ import {
   ToggleButton,
   Tooltip,
   TooltipProps,
-  tooltipClasses
+  tooltipClasses,
+  Dialog
 } from "@mui/material"
 import { 
   SignIn,
@@ -36,7 +37,8 @@ import {
   Trash, 
   ArrowDown, 
   Archive,
-  ArrowCounterClockwise
+  ArrowCounterClockwise,
+  SpinnerGap
 } from "@phosphor-icons/react/dist/ssr"
 
 
@@ -98,7 +100,7 @@ const TabNav = ({
   ))
   
   return (
-    <Tabs value={tabValue} aria-label="Page navigation">
+    <Tabs value={tabValue >= 0 ? tabValue : false} aria-label="Page navigation">
       {linkElements}
     </Tabs>
   )
@@ -491,6 +493,28 @@ const ArchiveButton = ({
   )
 }
 
+const LoadingDialog = ({
+  open
+}: {
+  open: boolean
+}) => {
+  return (
+    <Dialog 
+      open={open} 
+      sx={{ 
+        "& .MuiPaper-root": {
+          background: "transparent",
+          "& > *": {
+            animation: "spin 0.8s linear infinite"
+          } 
+        }
+      }}
+    >
+      <SpinnerGap size={36} weight="bold" />
+    </Dialog>
+  )
+}
+
 
 export {
   FlexBox,
@@ -501,4 +525,5 @@ export {
   ToggleGroup,
   ArchiveButton,
   DeleteButton,
+  LoadingDialog
 }

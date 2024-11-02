@@ -43,6 +43,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         <Alert
           severity={snackbarSeverity}
           onClose={handleClose}
+          tabIndex={-1}
           sx={{ maxWidth: "20rem" }}
         >
           {snackbarMessage}

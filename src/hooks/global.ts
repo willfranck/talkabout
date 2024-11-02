@@ -1,4 +1,7 @@
 import { useState, useEffect, useContext } from "react"
+import { User, transformSupabaseUser } from "@types"
+import { getUser } from "@services/supabase-actions"
+import { useThreads } from "./chat"
 import { SessionContext, SessionContextProps } from "@providers/session-provider"
 import { SnackbarContext, SnackbarContextProps } from "@providers/mui-snackbar-provider"
 
@@ -28,6 +31,34 @@ const useIsElectron = (): boolean => {
   return isElectron
 }
 
+interface UserReturn {
+  user: User | null
+  refreshUser: () => Promise<void>
+}
+
+const useUser = (): UserReturn => {
+  const [user, setUser] = useState<User | null>(null)
+  const userChats = useThreads()
+
+  const getUserData = async () => {
+    const res = await getUser()
+    if (res.success && res.user) {
+      const userData = transformSupabaseUser(res.user, userChats)
+      setUser(userData)
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
+  const refreshUser = async () => {
+    await getUserData()
+  }
+
+  return { user, refreshUser }
+}
+
 const useSession = (): SessionContextProps => {
   const context = useContext(SessionContext)
   if (!context) {
@@ -47,6 +78,7 @@ const useSnackbar = (): SnackbarContextProps => {
 export {
   useIsMobileOS,
   useIsElectron,
+  useUser,
   useSession,
   useSnackbar
 }

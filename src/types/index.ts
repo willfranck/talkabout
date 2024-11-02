@@ -1,7 +1,10 @@
 export type User = {
+  id: string
+  email: string
+  created: string
+  lastSignIn: string
   firstName: string
   lastName: string
-  email: string
   avatar?: string
   chats: ChatThread[]
 }
@@ -25,6 +28,10 @@ export type SupabaseUser = {
     email_verified: boolean
     phone_verified: boolean
     sub: string
+    // Data from Google OAuth
+    iss?: string
+    full_name?: string
+    avatar_url?: string
   }
   identities: Array<{
     identity_id: string
@@ -45,6 +52,19 @@ export type SupabaseUser = {
   created_at: string
   updated_at: string
   is_anonymous: boolean
+}
+
+export const transformSupabaseUser = (supabaseUser: SupabaseUser, chats: ChatThread[] = []): User => {
+  return {
+    id: supabaseUser.id,
+    email: supabaseUser.email,
+    created: supabaseUser.created_at,
+    lastSignIn: supabaseUser.last_sign_in_at,
+    firstName: supabaseUser.user_metadata.first_name,
+    lastName: supabaseUser.user_metadata.last_name,
+    avatar: supabaseUser.user_metadata.avatar_url,
+    chats
+  }
 }
 
 export interface SupabaseSession {

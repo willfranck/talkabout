@@ -70,6 +70,26 @@ async function getUser(): Promise<SupabaseRes> {
   return { success: false, message: "No User Found" }
 }
 
+async function updateUser(formData: FormData): Promise<SupabaseRes> {
+  const supabase = await createClient()
+
+  const newFirstName = formData.get("firstName") as string
+  const newLastName = formData.get("lastName") as string | null
+  const newEmail = formData.get("email") as string
+
+  const { data: { user }, error } = await supabase.auth.updateUser({
+    email: newEmail,
+    data: {
+      first_name: newFirstName,
+      last_name: newLastName,
+    }
+  })
+  if (error) {
+    return { success: false, message: error.message }
+  }
+  return { success: true, user: user as SupabaseUser }
+}
+
 async function getSession(): Promise<SupabaseRes> {
   const supabase = await createClient()
   const { data: { session }, error } = await supabase.auth.getSession()
@@ -88,5 +108,6 @@ export {
   signUp,
   signOut,
   getUser,
+  updateUser,
   getSession
 }

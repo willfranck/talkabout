@@ -24,7 +24,7 @@ export default function ChatPage() {
     if (!session) {
       const delayTimer = setTimeout(() => {
         showMessage("info", "Trial Mode\n\n- Sign In/Up -\n to save chats")
-      }, 1200)
+      }, 2400)
       return () => clearTimeout(delayTimer)
     }
   }, [session])

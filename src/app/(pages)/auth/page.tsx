@@ -19,7 +19,10 @@ import {
   InputAdornment,
   IconButton
 } from "@mui/material"
-import { FlexBox } from "@app/components/ui/mui-elements"
+import { 
+  FlexBox, 
+  LoadingDialog 
+} from "@app/components/ui/mui-elements"
 import {
   Eye,
   EyeSlash, 
@@ -31,7 +34,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 // import { createClient } from "@utils/supabase/client"
 
-type UserInputData = Omit<User, "avatar" | "chats"> & {
+type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "chats"> & {
   password: string
 }
 
@@ -473,19 +476,7 @@ export default function LoginPage() {
         </Card>
       </FlexBox>
 
-      <Dialog 
-        open={isLoading} 
-        sx={{ 
-          "& .MuiPaper-root": {
-            background: "transparent",
-            "& > *": {
-              animation: "spin 0.8s linear infinite"
-            } 
-          }
-        }}
-      >
-        <SpinnerGap size={36} weight="bold" />
-      </Dialog>
+      <LoadingDialog open={isLoading} />
     </PageLayout>
   )
 }
