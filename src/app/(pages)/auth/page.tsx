@@ -10,7 +10,6 @@ import {
   alpha,
   Box,
   Card,
-  Dialog,
   FormControl,
   TextField,
   Button, 
@@ -29,8 +28,7 @@ import {
   NotePencil,
   SignIn,
   GoogleLogo, 
-  Info,
-  SpinnerGap
+  Info
 } from "@phosphor-icons/react/dist/ssr"
 // import { createClient } from "@utils/supabase/client"
 
