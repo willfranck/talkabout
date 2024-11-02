@@ -50,10 +50,10 @@ const ToolTip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: alpha(theme.palette.info.dark, 0.4),
+    color: alpha(theme.palette.info.dark, 0.3),
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: alpha(theme.palette.info.dark, 0.4),
+    backgroundColor: alpha(theme.palette.info.dark, 0.3),
     backdropFilter: "blur(20px)",
     textAlign: "center",
     padding: "0.5rem",
@@ -429,7 +429,7 @@ const DeleteButton = ({
         height: "100%",
         borderRadius: "0 10px 10px 0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.error.dark, 0.9),
+        bgcolor: alpha(theme.palette.error.dark, 0.66),
         "&:hover": {
           bgcolor: alpha(theme.palette.error.main, 0.9),
         }
@@ -475,7 +475,7 @@ const ArchiveButton = ({
         height: "100%",
         borderRadius: "0",
         color: "secondary.contrastText",
-        bgcolor: alpha(theme.palette.info.main, 0.9),
+        bgcolor: alpha(theme.palette.info.main, 0.66),
         "&:hover": {
           bgcolor: alpha(theme.palette.info.light, 0.9),
         }

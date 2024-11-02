@@ -443,7 +443,7 @@ const ChatHistory = ({
         flexDirection: "column",
         justifyContent: "start",
         gap: "1.5rem",
-        padding: { xs: "1.5rem 1.5rem 0 1.5rem", md: "1.5rem" },
+        padding: { xs: "1.5rem 1.5rem 0 1.5rem", md: "2rem 1.5rem 1rem" },
         width: "100%",
         height: "100%",
         overflowY: "auto"
