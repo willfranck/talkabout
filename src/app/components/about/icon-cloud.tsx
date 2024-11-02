@@ -20,7 +20,7 @@ const cloudConfig = {
   options: {
     initial: [0.15, -0.05],
     fadeIn: 1200,
-    maxSpeed: 0.004,
+    maxSpeed: 0.005,
     depth: 0.33,
     imageScale: 4,
     noMouse: true,
