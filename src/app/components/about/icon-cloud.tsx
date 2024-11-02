@@ -18,22 +18,14 @@ const cloudConfig = {
     }
   },
   options: {
-    dragControl: true,
-    dragThreshold: 4,
     initial: [0.15, -0.05],
     fadeIn: 1200,
-    maxSpeed: 0.01,
-    clickToFront: 500,
+    maxSpeed: 0.004,
     depth: 0.33,
     imageScale: 4,
-    tooltip: "native" as const,
-    tooltipDelay: 0,
-    noMouse: false,
+    noMouse: true,
     wheelZoom: false,
     pinchZoom: false,
-    noSelect: false,
-    freezeActive: false,
-    freezeDecel: true,
     outlineMethod: "none" as const,
   }
 }
@@ -43,20 +35,17 @@ const ICON_SLUGS = [
   "mui",
   "react",
   "typescript",
-  "vercel",
+  "googlegemini",
   "tailwindcss",
   "nodedotjs",
+  "vercel",
   "electron",
-  "remark",
   "github",
+  "remark",
   "html5",
   "css3",
   "supabase"
 ]
-
-const ICON_COLOR: Record<string, string> = {
-  nextdotjs: "#EDEDED"
-}
 
 const useIcons = (slugs: string[]) => {
   const [icons, setIcons] = useState<IconsState | null>(null)
@@ -89,7 +78,6 @@ const useIcons = (slugs: string[]) => {
     renderSimpleIcon({
       icon,
       size: 42,
-      bgHex: ICON_COLOR[icon.hex],
       aProps: {
         onClick: (e: React.MouseEvent) => e.preventDefault()
       }
