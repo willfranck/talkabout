@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react"
 import { useUser, useSnackbar } from "@hooks/global"
 import { User } from "@types"
 import { updateUser } from "@services/supabase-actions"
+import { useThreads, useThreadCount } from "@hooks/chat"
 import { PageLayout} from "@ui/mui-layout"
 import { 
   FlexBox, 
@@ -11,16 +12,22 @@ import {
 import { 
   FormControl,
   TextField,
-  Button
+  Button,
+  Avatar,
+  Typography
 } from "@mui/material"
-import { NotePencil} from "@phosphor-icons/react/dist/ssr"
+import { NotePencil } from "@phosphor-icons/react/dist/ssr"
+
 
 type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "chats">
 
 export default function ProfilePage() {
   const { showMessage } = useSnackbar()
-  const { user } = useUser()
+  const { user, refreshUser } = useUser()
   const [isLoading, setIsLoading] = useState(true)
+  const threads = useThreads()
+  const threadCount = useThreadCount()
+  const [canEdit, setCanEdit] = useState(false)
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
   const [userInputData, setUserInputData] = useState<User>({
     id: "",
@@ -45,6 +52,20 @@ export default function ProfilePage() {
     setIsLoading(false)
   }, [user])
 
+  const stringAvatar = (first: string, last: string | undefined) => {
+    return {
+      children: `${first.split(" ")[0][0]}${last?.split(" ")[0][0] || ""}`
+    }
+  }
+
+  const messageCount = threads.reduce((total, thread) => {
+    return total + thread.messages.length
+  }, 0)
+
+  const handleEditInfo = () => {
+    setCanEdit((canEdit) => !canEdit)
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserInputData(prev => ({
@@ -68,6 +89,7 @@ export default function ProfilePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
+    setCanEdit(false)
     const formData = new FormData()
     Object.keys(userInputData).forEach(key => {
       formData.append(key, userInputData[key as keyof UserInputData])
@@ -75,6 +97,7 @@ export default function ProfilePage() {
     const res = await updateUser(formData)
     if (res.success) {
       showMessage("success", "Updated account\n\nCheck your new email for the confirmation link to complete the update if it was changed")
+      await refreshUser()
     } else {
       showMessage("error", res.message || "An undefined error occurred")
     }
@@ -85,152 +108,187 @@ export default function ProfilePage() {
     <PageLayout>
       <LoadingDialog open={isLoading} />
       
-      {!isLoading && (
-        <FormControl 
-          component="form" 
-          onSubmit={(e) => handleSubmit(e)}
-          sx={{ 
-            padding: "2rem", 
-          }}
-        >
+      {user && (
+        <FlexBox sx={{ 
+          flexDirection: "column",
+          gap: "3rem",
+          width: "100%",
+          maxWidth: "30rem" 
+        }}>
           <FlexBox sx={{ 
-            flexDirection: "column", 
-            gap: "2rem" 
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "1rem",
+            width: "100%" 
           }}>
-            <FlexBox sx={{
-              flexDirection: "column",
-              gap: "1rem",
-              width: "100%",
-            }}>
-              <TextField 
-                variant="outlined"
-                label="First Name"
-                type="text"
-                name="firstName"
-                value={userInputData.firstName}
-                onChange={handleInputChange}
-                inputRef={(el) => (inputRefs.current[0] = el)}
-                onKeyDown={(e) => handleNextInput(e, 0)}
-                required 
-                slotProps={{
-                  htmlInput: {
-                    enterKeyHint: "next"
-                  },
-                  inputLabel: {
-                    shrink: true
-                  }
-                }}
+            <FlexBox sx={{ gap: "1rem" }}>
+              <Avatar 
+                {...stringAvatar(user!.firstName, user!.lastName)}
                 sx={{ 
-                  width: "100%", 
-                  "& .MuiInputBase-input": { 
-                    padding: "0.875rem" 
-                  } 
+                  width: "56px", 
+                  height: "56px", 
+                  color: "secondary.contrastText", 
+                  backgroundColor: "primary.dark" 
                 }}
-              />
-              <TextField 
-                variant="outlined"
-                label="Last Name"
-                type="text" 
-                name="lastName"
-                value={userInputData.lastName}
-                onChange={handleInputChange}
-                inputRef={(el) => (inputRefs.current[1] = el)}
-                onKeyDown={(e) => handleNextInput(e, 1)}
-                slotProps={{
-                  htmlInput: {
-                    enterKeyHint: "next"
-                  },
-                  inputLabel: {
-                    shrink: true
-                  }
-                }}
-                sx={{ 
-                  width: "100%", 
-                  "& .MuiInputBase-input": { 
-                    padding: "0.875rem" 
-                  } 
-                }}
-              />
-              <TextField 
-                variant="outlined"
-                label="Email"
-                name="email"
-                type="email"
-                value={userInputData.email}
-                onChange={handleInputChange}
-                inputRef={(el) => (inputRefs.current[2] = el)}
-                onKeyDown={(e) => handleNextInput(e, 2)}
-                required 
-                slotProps={{
-                  htmlInput: {
-                    enterKeyHint: "next"
-                  },
-                  inputLabel: {
-                    shrink: true
-                  }
-                }}
-                sx={{ 
-                  width: "100%", 
-                  "& .MuiInputBase-input": { 
-                    padding: "0.875rem" 
-                  } 
-                }}
-              />
-              {/* <TextField 
-                variant="outlined"
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={userInputData.password}
-                onChange={handleInputChange}
-                inputRef={(el) => (inputRefs.current[3] = el)}
-                required 
-                slotProps={{
-                  htmlInput: {
-                    enterKeyHint: "go"
-                  },
-                  inputLabel: {
-                    shrink: true
-                  },
-                  input: {
-                    endAdornment: 
-                      <InputAdornment 
-                        position="end" 
-                        sx={{ cursor: "pointer" }}
-                      >
-                        <IconButton 
-                          onClick={handleClickShowPassword}
-                          aria-label={showPassword ? "Hide password" : "Show Password"}
-                        >
-                          {showPassword 
-                            ? <EyeSlash size={20} color={theme.palette.primary.light} /> 
-                            : <Eye size={20} color={theme.palette.primary.light} />
-                          }
-                        </IconButton>
-                      </InputAdornment>
-                  }
-                }}
-                sx={{ 
-                  width: "100%", 
-                  marginBottom: "0.5rem",
-                  "& .MuiInputBase-input": { 
-                    padding: "0.875rem" 
-                  } 
-                }}
-              /> */}
-              <Button 
-                variant="outlined" 
-                type="submit"
-                disabled={isLoading}
-                aria-label="Submit signup"
-                sx={{ width: "100%", height: "2.5rem", gap: "0.5rem" }}
-              >
-                <NotePencil size={18} />
-                Update
-              </Button>
+              ></Avatar>
+              <Typography variant="h2" sx={{ fontSize: "1.5rem", fontWeight: "" }}>
+                {`Welcome ${user!.firstName}`}
+              </Typography>
             </FlexBox>
           </FlexBox>
-        </FormControl>
+
+          <FlexBox sx={{ 
+            flexDirection: "column",
+            alignItems: "start",
+            gap: "1.5rem",
+            width: "100%"
+          }}>
+            <FlexBox sx={{ 
+              flexDirection: "column",
+              alignItems: "start",
+              gap: "0.25rem" 
+            }}>
+              <Typography sx={{ marginBottom: "0.5rem" }}>Stats</Typography>
+              <Typography variant="body2">
+                {`Threads: ${threadCount}    Messages: ${messageCount}`}
+              </Typography>
+              <Typography variant="body2">
+                {`Joined:  ${new Date(user!.created).toLocaleDateString()}`}
+              </Typography>
+            </FlexBox>
+
+            <FlexBox sx={{ 
+              flexDirection: "column",
+              alignItems: "start",
+              width: "100%"
+            }}>
+              <FlexBox sx={{ 
+                justifyContent: "space-between",
+                width: "100%" 
+              }}>
+                <Typography>Info</Typography>
+                <Button 
+                  variant="text" 
+                  onClick={handleEditInfo}
+                  sx={{ width: "4rem" }}
+                >
+                  {!canEdit ? "Edit" : "Cancel"}
+                </Button>
+              </FlexBox>
+
+              <FormControl 
+                component="form" 
+                onSubmit={(e) => handleSubmit(e)}
+                sx={{ 
+                  width: "100%",
+                  padding: "2rem 1rem 0.5rem", 
+                }}
+              >
+                <FlexBox sx={{ 
+                  flexDirection: "column", 
+                  gap: "2rem" 
+                }}>
+                  <FlexBox sx={{
+                    flexDirection: "column",
+                    gap: "1rem",
+                    width: "100%",
+                  }}>
+                    <TextField 
+                      variant="outlined"
+                      label="First Name"
+                      type="text"
+                      name="firstName"
+                      value={userInputData.firstName}
+                      onChange={handleInputChange}
+                      inputRef={(el) => (inputRefs.current[0] = el)}
+                      onKeyDown={(e) => handleNextInput(e, 0)}
+                      disabled={!canEdit}
+                      required 
+                      slotProps={{
+                        htmlInput: {
+                          enterKeyHint: "next"
+                        },
+                        inputLabel: {
+                          shrink: true
+                        }
+                      }}
+                      sx={{ 
+                        width: "100%", 
+                        "& .MuiInputBase-input": { 
+                          padding: "0.875rem" 
+                        } 
+                      }}
+                    />
+                    <TextField 
+                      variant="outlined"
+                      label="Last Name"
+                      type="text" 
+                      name="lastName"
+                      value={userInputData.lastName}
+                      onChange={handleInputChange}
+                      inputRef={(el) => (inputRefs.current[1] = el)}
+                      onKeyDown={(e) => handleNextInput(e, 1)}
+                      disabled={!canEdit}
+                      slotProps={{
+                        htmlInput: {
+                          enterKeyHint: "next"
+                        },
+                        inputLabel: {
+                          shrink: true
+                        }
+                      }}
+                      sx={{ 
+                        width: "100%", 
+                        "& .MuiInputBase-input": { 
+                          padding: "0.875rem" 
+                        } 
+                      }}
+                    />
+                    <TextField 
+                      variant="outlined"
+                      label="Email"
+                      name="email"
+                      type="email"
+                      value={userInputData.email}
+                      onChange={handleInputChange}
+                      inputRef={(el) => (inputRefs.current[2] = el)}
+                      onKeyDown={(e) => handleNextInput(e, 2)}
+                      disabled={!canEdit}
+                      required 
+                      slotProps={{
+                        htmlInput: {
+                          enterKeyHint: "next"
+                        },
+                        inputLabel: {
+                          shrink: true
+                        }
+                      }}
+                      sx={{ 
+                        width: "100%", 
+                        "& .MuiInputBase-input": { 
+                          padding: "0.875rem" 
+                        } 
+                      }}
+                    />
+                    <Button 
+                      variant="outlined" 
+                      type="submit"
+                      disabled={isLoading}
+                      aria-label="Submit signup"
+                      sx={{ 
+                        visibility: (canEdit ? "visible" : "hidden"),
+                        height: "2.5rem", 
+                        gap: "0.5rem" }}
+                    >
+                      <NotePencil size={18} />
+                      Update
+                    </Button>
+                  </FlexBox>
+                </FlexBox>
+              </FormControl>
+            </FlexBox>
+          </FlexBox>
+        </FlexBox>
       )}
     </PageLayout>
   )
