@@ -113,7 +113,8 @@ export default function ProfilePage() {
           flexDirection: "column",
           gap: "3rem",
           width: "100%",
-          maxWidth: "30rem" 
+          maxWidth: "32rem",
+          padding: "1rem 2rem 3rem" 
         }}>
           <FlexBox sx={{ 
             flexDirection: "column",
