@@ -318,14 +318,13 @@ export default function ProfilePage() {
                     </FlexBox>
                   </FormControl>
 
-                  <Divider flexItem sx={{ borderColor: "primary.main" }}/>
+                  <Divider sx={{ marginY: "1rem", borderColor: "primary.dark" }} flexItem />
                   
                   <FlexBox sx={{ 
                     flexDirection: "column",
                     alignItems: "start",
                     gap: "0.5rem",
-                    width: "100%",
-                    marginTop: "1rem" 
+                    width: "100%"
                   }}>
                     <Typography fontSize="1.375rem" fontWeight="bold" color="error.dark">Danger Zone</Typography>
                     <FlexBox sx={{ 
