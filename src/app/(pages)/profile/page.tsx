@@ -1,10 +1,12 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import { useThreads, useThreadCount } from "@hooks/chat"
 import { useUser, useSnackbar } from "@hooks/global"
 import { User } from "@types"
-import { updateUser } from "@services/supabase-actions"
-import { useThreads, useThreadCount } from "@hooks/chat"
+import { updateUser, deleteUser } from "@services/supabase-actions"
+import { useAppDispatch } from "@redux/hooks"
+import { clearAll } from "@globals/functions"
 import { PageLayout} from "@ui/mui-layout"
 import { 
   FlexBox, 
@@ -15,7 +17,8 @@ import {
   TextField,
   Button,
   Avatar,
-  Typography
+  Typography,
+  Divider
 } from "@mui/material"
 import { NotePencil } from "@phosphor-icons/react/dist/ssr"
 
@@ -23,6 +26,7 @@ import { NotePencil } from "@phosphor-icons/react/dist/ssr"
 type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "chats">
 
 export default function ProfilePage() {
+  const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
   const { user, refreshUser } = useUser()
   const [isLoading, setIsLoading] = useState(true)
@@ -98,6 +102,20 @@ export default function ProfilePage() {
     const res = await updateUser(formData)
     if (res.success) {
       showMessage("success", "Updated account\n\nCheck your new email for the confirmation link to complete the update if it was changed")
+      await refreshUser()
+    } else {
+      showMessage("error", res.message || "An undefined error occurred")
+    }
+    setIsLoading(false)
+  }
+
+  const handleDeleteUser = async () => {
+    setIsLoading(true)
+    setCanEdit(false)
+
+    const res = await deleteUser()
+    if (res.success) {
+      showMessage("success", "Account deleted")
       await refreshUser()
     } else {
       showMessage("error", res.message || "An undefined error occurred")
@@ -299,6 +317,43 @@ export default function ProfilePage() {
                       </FlexBox>
                     </FlexBox>
                   </FormControl>
+
+                  <Divider flexItem sx={{ borderColor: "primary.main" }}/>
+                  
+                  <FlexBox sx={{ 
+                    flexDirection: "column",
+                    alignItems: "start",
+                    gap: "0.5rem",
+                    width: "100%",
+                    marginTop: "1rem" 
+                  }}>
+                    <Typography fontSize="1.375rem" fontWeight="bold" color="error.dark">Danger Zone</Typography>
+                    <FlexBox sx={{ 
+                      flexDirection: { xs: "column", sm: "row" },
+                      gap: "0.5rem", 
+                      width: "100%" 
+                    }}>
+                      <Button 
+                        variant="outlined" 
+                        color="error" 
+                        onClick={() => clearAll(dispatch)}
+                        aria-label="Clear all chats"
+                        sx={{ width: { xs: "100%", sm:"50%" } }}
+                      >
+                        Clear All Chats
+                      </Button>
+                      <Button 
+                        variant="outlined" 
+                        color="error" 
+                        onClick={handleDeleteUser}
+                        aria-label="Delete account"
+                        disabled
+                        sx={{ width: { xs: "100%", sm:"50%" } }}
+                      >
+                        Delete Account
+                      </Button>
+                    </FlexBox>
+                  </FlexBox>
                 </FlexBox>
               </FlexBox>
             </FlexBox>

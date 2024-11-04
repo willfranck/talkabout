@@ -71,7 +71,7 @@ export default function AboutPage() {
             <Box>
               <Typography fontWeight="bold" sx={{ marginBottom: "0.25rem" }}>The Limits</Typography>
               <Typography variant="body2" sx={{ maxWidth: "100ch" }}>
-                As the assistant&apos;s name might suggest, the Llama is powered by Gemini 1.5 Flash. <br />
+                As the assistant&apos;s name might suggest, the Llama is powered by Google Gemini 1.5 Flash. <br />
                 - Flash is a very efficient LLM, though it doesn&apos;t have the depth of training as other models. <br />
                 - The first answer may not always be the most accurate.  Similar to other LLMs, you may need follow up messages to really point it in the right direction. <br />
                 - The more context an LLM has, the more accurate the responses.

@@ -73,11 +73,8 @@ const chatSlice = createSlice({
         }
       }
     },
-    clearMessages: (state) => {
-      const selectedThread = state.threads.find(thread => thread.selected)
-      if (selectedThread) {
-        selectedThread.messages = []
-      }
+    clearAllMessages: (state) => {
+      state.threads = []
     },
   }
 })
@@ -92,7 +89,7 @@ export const {
   setRestoreThread,
   addMessage,
   deleteMessages, 
-  clearMessages
+  clearAllMessages
 } = chatSlice.actions
 
 export default chatSlice.reducer

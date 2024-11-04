@@ -90,6 +90,23 @@ async function updateUser(formData: FormData): Promise<SupabaseRes> {
   return { success: true, user: user as SupabaseUser }
 }
 
+async function deleteUser(): Promise<SupabaseRes> {
+  const supabase = await createClient()
+  const { error: deleteError } = await supabase.auth.admin.deleteUser(
+    (await supabase.auth.getUser()).data.user?.id as string
+  )
+  if (deleteError) {
+    return { success: false, message: deleteError.message }
+  }
+
+  const { error: signOutError } = await supabase.auth.signOut()
+  if (signOutError) {
+    return { success: false, message: signOutError.message }
+  }
+
+  return { success: true }
+}
+
 async function getSession(): Promise<SupabaseRes> {
   const supabase = await createClient()
   const { data: { session }, error } = await supabase.auth.getSession()
@@ -109,5 +126,6 @@ export {
   signOut,
   getUser,
   updateUser,
+  deleteUser,
   getSession
 }

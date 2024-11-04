@@ -5,7 +5,8 @@ import {
   setSelectedThread,
   setArchivedThread, 
   setRestoreThread,
-  deleteMessages
+  deleteMessages,
+  clearAllMessages
 } from "@redux/slices/chat"
 import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
@@ -61,6 +62,10 @@ function deleteMessage(dispatch: AppDispatch, messageId: string) {
   dispatch(deleteMessages(messageId))
 }
 
+function clearAll(dispatch: AppDispatch) {
+  dispatch(clearAllMessages())
+}
+
 //// UI Functions
 function displayTextByChar(text: string, setState: React.Dispatch<React.SetStateAction<string>>) {
   let accumulatedText = ""
@@ -91,6 +96,7 @@ export {
   archiveThread,
   restoreThread,
   deleteMessage,
+  clearAll,
   displayTextByChar,
   removeTextByChar
 }
