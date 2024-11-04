@@ -109,187 +109,208 @@ export default function ProfilePage() {
       <LoadingDialog open={isLoading} />
       
       {user && (
-        <FlexBox sx={{ 
-          flexDirection: "column",
-          gap: "3rem",
-          width: "100%",
-          maxWidth: "32rem",
-          padding: "1rem 2rem 3rem" 
-        }}>
+        <>
           <FlexBox sx={{ 
-            flexDirection: "column",
             alignItems: "start",
-            gap: "1rem",
-            width: "100%" 
-          }}>
-            <FlexBox sx={{ gap: "1rem" }}>
-              <Avatar 
-                {...stringAvatar(user!.firstName, user!.lastName)}
-                sx={{ 
-                  width: "56px", 
-                  height: "56px", 
-                  color: "secondary.contrastText", 
-                  backgroundColor: "primary.dark" 
-                }}
-              ></Avatar>
-              <Typography variant="h2" sx={{ fontSize: "1.5rem", fontWeight: "" }}>
-                {`Welcome ${user!.firstName}`}
-              </Typography>
-            </FlexBox>
-          </FlexBox>
-
-          <FlexBox sx={{ 
-            flexDirection: "column",
-            alignItems: "start",
-            gap: "1.5rem",
-            width: "100%"
+            flexGrow: "1", 
+            height: "100%",
+            overflowY: "auto" 
           }}>
             <FlexBox sx={{ 
               flexDirection: "column",
-              alignItems: "start",
-              gap: "0.25rem" 
-            }}>
-              <Typography sx={{ marginBottom: "0.5rem" }}>Stats</Typography>
-              <Typography variant="body2">
-                {`Threads: ${threadCount}    Messages: ${messageCount}`}
-              </Typography>
-              <Typography variant="body2">
-                {`Joined:  ${new Date(user!.created).toLocaleDateString()}`}
-              </Typography>
-            </FlexBox>
-
-            <FlexBox sx={{ 
-              flexDirection: "column",
-              alignItems: "start",
-              width: "100%"
+              gap: "2rem",
+              width: "100%",
+              maxWidth: "30rem",
+              marginY: "auto",
+              padding: "1rem 0.5rem 3rem 1.5rem",
             }}>
               <FlexBox sx={{ 
-                justifyContent: "space-between",
+                flexDirection: "column",
+                alignItems: "start",
+                gap: "1rem",
                 width: "100%" 
               }}>
-                <Typography>Info</Typography>
-                <Button 
-                  variant="text" 
-                  onClick={handleEditInfo}
-                  sx={{ width: "4rem" }}
-                >
-                  {!canEdit ? "Edit" : "Cancel"}
-                </Button>
+                <Typography variant="h2">Profile</Typography>
+                <FlexBox sx={{ gap: "0.375rem" }}>
+                  <Avatar 
+                    {...stringAvatar(user!.firstName, user!.lastName)}
+                    sx={{ 
+                      width: "56px", 
+                      height: "56px", 
+                      color: "secondary.contrastText", 
+                      backgroundColor: "primary.dark" 
+                    }}
+                  ></Avatar>
+                  <Typography variant="body1" sx={{ fontSize: "1.5rem", fontWeight: "" }}>
+                    {`${user!.firstName}`}
+                  </Typography>
+                </FlexBox>
               </FlexBox>
 
-              <FormControl 
-                component="form" 
-                onSubmit={(e) => handleSubmit(e)}
-                sx={{ 
-                  width: "100%",
-                  padding: "2rem 1rem 0.5rem", 
-                }}
-              >
+              <FlexBox sx={{ 
+                flexDirection: "column",
+                alignItems: "start",
+                gap: "1.5rem",
+                width: "100%"
+              }}>
                 <FlexBox sx={{ 
-                  flexDirection: "column", 
-                  gap: "2rem" 
+                  flexDirection: "column",
+                  alignItems: "start",
+                  gap: "0.25rem" 
                 }}>
-                  <FlexBox sx={{
-                    flexDirection: "column",
-                    gap: "1rem",
-                    width: "100%",
+                  <Typography sx={{ marginBottom: "0.5rem" }}>Stats</Typography>
+                  <Typography variant="body2">
+                    {`Threads: ${threadCount}    Messages: ${messageCount}`}
+                  </Typography>
+                  <Typography variant="body2">
+                    {`Joined:  ${new Date(user!.created).toLocaleDateString()}`}
+                  </Typography>
+                </FlexBox>
+
+                <FlexBox sx={{ 
+                  flexDirection: "column",
+                  alignItems: "start",
+                  width: "100%"
+                }}>
+                  <FlexBox sx={{ 
+                    justifyContent: "space-between",
+                    width: "100%" 
                   }}>
-                    <TextField 
-                      variant="outlined"
-                      label="First Name"
-                      type="text"
-                      name="firstName"
-                      value={userInputData.firstName}
-                      onChange={handleInputChange}
-                      inputRef={(el) => (inputRefs.current[0] = el)}
-                      onKeyDown={(e) => handleNextInput(e, 0)}
-                      disabled={!canEdit}
-                      required 
-                      slotProps={{
-                        htmlInput: {
-                          enterKeyHint: "next"
-                        },
-                        inputLabel: {
-                          shrink: true
-                        }
-                      }}
-                      sx={{ 
-                        width: "100%", 
-                        "& .MuiInputBase-input": { 
-                          padding: "0.875rem" 
-                        } 
-                      }}
-                    />
-                    <TextField 
-                      variant="outlined"
-                      label="Last Name"
-                      type="text" 
-                      name="lastName"
-                      value={userInputData.lastName}
-                      onChange={handleInputChange}
-                      inputRef={(el) => (inputRefs.current[1] = el)}
-                      onKeyDown={(e) => handleNextInput(e, 1)}
-                      disabled={!canEdit}
-                      slotProps={{
-                        htmlInput: {
-                          enterKeyHint: "next"
-                        },
-                        inputLabel: {
-                          shrink: true
-                        }
-                      }}
-                      sx={{ 
-                        width: "100%", 
-                        "& .MuiInputBase-input": { 
-                          padding: "0.875rem" 
-                        } 
-                      }}
-                    />
-                    <TextField 
-                      variant="outlined"
-                      label="Email"
-                      name="email"
-                      type="email"
-                      value={userInputData.email}
-                      onChange={handleInputChange}
-                      inputRef={(el) => (inputRefs.current[2] = el)}
-                      onKeyDown={(e) => handleNextInput(e, 2)}
-                      disabled={!canEdit}
-                      required 
-                      slotProps={{
-                        htmlInput: {
-                          enterKeyHint: "next"
-                        },
-                        inputLabel: {
-                          shrink: true
-                        }
-                      }}
-                      sx={{ 
-                        width: "100%", 
-                        "& .MuiInputBase-input": { 
-                          padding: "0.875rem" 
-                        } 
-                      }}
-                    />
+                    <Typography>Info</Typography>
                     <Button 
-                      variant="outlined" 
-                      type="submit"
-                      disabled={isLoading}
-                      aria-label="Submit signup"
-                      sx={{ 
-                        visibility: (canEdit ? "visible" : "hidden"),
-                        height: "2.5rem", 
-                        gap: "0.5rem" }}
+                      variant="text" 
+                      onClick={handleEditInfo}
+                      sx={{ width: "4rem" }}
                     >
-                      <NotePencil size={18} />
-                      Update
+                      {!canEdit ? "Edit" : "Cancel"}
                     </Button>
                   </FlexBox>
+
+                  <FormControl 
+                    component="form" 
+                    onSubmit={(e) => handleSubmit(e)}
+                    sx={{ 
+                      width: "100%",
+                      padding: "0.5rem 0.5rem 0 0", 
+                      backgroundColor: "transparent"
+                    }}
+                  >
+                    <FlexBox sx={{ 
+                      flexDirection: "column", 
+                      gap: "2rem" 
+                    }}>
+                      <FlexBox sx={{
+                        flexDirection: "column",
+                        gap: "1rem",
+                        width: "100%",
+                      }}>
+                        <TextField 
+                          variant="outlined"
+                          label="First Name"
+                          type="text"
+                          name="firstName"
+                          value={userInputData.firstName}
+                          onChange={handleInputChange}
+                          inputRef={(el) => (inputRefs.current[0] = el)}
+                          onKeyDown={(e) => handleNextInput(e, 0)}
+                          disabled={!canEdit}
+                          required 
+                          slotProps={{
+                            htmlInput: {
+                              enterKeyHint: "next"
+                            },
+                            inputLabel: {
+                              shrink: true
+                            }
+                          }}
+                          sx={{ 
+                            width: "100%", 
+                            "& .MuiInputBase-input": { 
+                              padding: "0.875rem" 
+                            } 
+                          }}
+                        />
+                        <TextField 
+                          variant="outlined"
+                          label="Last Name"
+                          type="text" 
+                          name="lastName"
+                          value={userInputData.lastName}
+                          onChange={handleInputChange}
+                          inputRef={(el) => (inputRefs.current[1] = el)}
+                          onKeyDown={(e) => handleNextInput(e, 1)}
+                          disabled={!canEdit}
+                          slotProps={{
+                            htmlInput: {
+                              enterKeyHint: "next"
+                            },
+                            inputLabel: {
+                              shrink: true
+                            }
+                          }}
+                          sx={{ 
+                            width: "100%", 
+                            "& .MuiInputBase-input": { 
+                              padding: "0.875rem" 
+                            } 
+                          }}
+                        />
+                        <TextField 
+                          variant="outlined"
+                          label="Email"
+                          name="email"
+                          type="email"
+                          value={userInputData.email}
+                          onChange={handleInputChange}
+                          inputRef={(el) => (inputRefs.current[2] = el)}
+                          onKeyDown={(e) => handleNextInput(e, 2)}
+                          disabled={!canEdit}
+                          required 
+                          slotProps={{
+                            htmlInput: {
+                              enterKeyHint: "next"
+                            },
+                            inputLabel: {
+                              shrink: true
+                            }
+                          }}
+                          sx={{ 
+                            width: "100%", 
+                            "& .MuiInputBase-input": { 
+                              padding: "0.875rem" 
+                            } 
+                          }}
+                        />
+                        <Button 
+                          variant="outlined" 
+                          type="submit"
+                          disabled={isLoading}
+                          aria-label="Submit signup"
+                          sx={{ 
+                            visibility: (canEdit ? "visible" : "hidden"),
+                            height: "2.5rem", 
+                            gap: "0.5rem" }}
+                        >
+                          <NotePencil size={18} />
+                          Update
+                        </Button>
+                      </FlexBox>
+                    </FlexBox>
+                  </FormControl>
                 </FlexBox>
-              </FormControl>
+              </FlexBox>
             </FlexBox>
           </FlexBox>
-        </FlexBox>
+
+          <FlexBox sx={{
+            width: { xs: "8rem", sm: "14rem", md: "20rem", lg: "26rem" },
+            height: "100%",
+            backgroundImage: "url('/images/LLama_Banner.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: "0.4"
+          }}></FlexBox>
+        </>
       )}
     </PageLayout>
   )

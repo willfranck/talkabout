@@ -27,7 +27,7 @@ export default function ChatPage() {
       }, 2400)
       return () => clearTimeout(delayTimer)
     }
-  }, [session])
+  }, [session, showMessage])
 
   return (
     <PageLayout>
