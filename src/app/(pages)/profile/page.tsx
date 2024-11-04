@@ -312,6 +312,7 @@ export default function ProfilePage() {
               alt="Llama banner"
               width={256}
               height={256}
+              priority
               className="w-full h-full object-cover opacity-40"
             />
           </FlexBox>

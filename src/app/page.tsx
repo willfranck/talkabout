@@ -37,6 +37,7 @@ export default function Home() {
             alt="Talkabout Logo - a llama"
             width={176}
             height={176}
+            priority
             className="w-36 md:w-44 h-auto rounded-logo invert dark:invert-0"
           />
           <Typography variant="h1">Talkabout</Typography>
