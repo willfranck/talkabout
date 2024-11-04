@@ -1,5 +1,6 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
+import Image from "next/image"
 import { useUser, useSnackbar } from "@hooks/global"
 import { User } from "@types"
 import { updateUser } from "@services/supabase-actions"
@@ -305,11 +306,15 @@ export default function ProfilePage() {
           <FlexBox sx={{
             width: { xs: "8rem", sm: "14rem", md: "20rem", lg: "26rem" },
             height: "100%",
-            backgroundImage: "url('../../../public/images/LLama_Banner.webp')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: "0.4"
-          }}></FlexBox>
+          }}>
+            <Image 
+              src={"/images/Llama_Banner.webp"}
+              alt="Llama banner"
+              width={256}
+              height={256}
+              className="w-full h-full object-cover opacity-40"
+            />
+          </FlexBox>
         </>
       )}
     </PageLayout>
