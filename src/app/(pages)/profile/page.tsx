@@ -305,7 +305,7 @@ export default function ProfilePage() {
           <FlexBox sx={{
             width: { xs: "8rem", sm: "14rem", md: "20rem", lg: "26rem" },
             height: "100%",
-            backgroundImage: "url('/images/LLama_Banner.webp')",
+            backgroundImage: "url('../../../public/images/LLama_Banner.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             opacity: "0.4"
