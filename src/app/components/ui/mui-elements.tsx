@@ -142,7 +142,7 @@ const MenuNav = ({
       aria-label={link.name} 
       sx={{ 
         height: "2.5rem", 
-        marginLeft: "0.25rem" 
+        margin: "0 0 0.25rem 0.25rem" 
       }}
     >
       <ListItemIcon sx={{ minWidth: "1.875rem" }}>
@@ -203,7 +203,7 @@ const MenuNav = ({
               aria-label="Profile" 
               sx={{ 
                 height: "2.5rem", 
-                marginLeft: "0.25rem" 
+                margin: "0 0 0.25rem 0.25rem" 
               }}
             >
               <ListItemIcon sx={{ minWidth: "1.875rem" }}>
@@ -217,7 +217,7 @@ const MenuNav = ({
               aria-label="Sign Out"
               sx={{ 
                 height: "2.5rem", 
-                marginLeft: "0.25rem" 
+                margin: "0 0 0.25rem 0.25rem" 
               }}
             >
               <ListItemIcon sx={{ minWidth: "1.875rem" }}>

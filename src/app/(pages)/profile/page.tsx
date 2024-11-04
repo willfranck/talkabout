@@ -131,18 +131,19 @@ export default function ProfilePage() {
                 gap: "1rem",
                 width: "100%" 
               }}>
-                <Typography variant="h2">Profile</Typography>
+                <Typography variant="h2" fontWeight="bold">Profile</Typography>
                 <FlexBox sx={{ gap: "0.375rem" }}>
                   <Avatar 
                     {...stringAvatar(user!.firstName, user!.lastName)}
                     sx={{ 
-                      width: "56px", 
-                      height: "56px", 
+                      width: "48px", 
+                      height: "48px", 
+                      fontSize: "1.125rem",
                       color: "secondary.contrastText", 
                       backgroundColor: "primary.dark" 
                     }}
                   ></Avatar>
-                  <Typography variant="body1" sx={{ fontSize: "1.5rem", fontWeight: "" }}>
+                  <Typography variant="body1" fontSize="1.375rem" fontWeight="bold" sx={{ textWrap: "pretty"}}>
                     {`${user!.firstName}`}
                   </Typography>
                 </FlexBox>
@@ -304,7 +305,8 @@ export default function ProfilePage() {
           </FlexBox>
 
           <FlexBox sx={{
-            width: { xs: "8rem", sm: "14rem", md: "20rem", lg: "26rem" },
+            flexShrink: "0",
+            width: { xs: "7rem", sm: "14rem", md: "20rem", lg: "26rem" },
             height: "100%",
           }}>
             <Image 

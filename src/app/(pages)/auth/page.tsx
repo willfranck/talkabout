@@ -247,12 +247,13 @@ export default function LoginPage() {
                 <Button 
                   variant="contained" 
                   onClick={handleOAuthLogin}
-                  disabled={isLoading}
+                  disabled
+                  // disabled={isLoading}
                   aria-label="Sign In with Google"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />
-                  Google
+                  Google   *coming soon*
                 </Button>
                 <Typography variant="body2" sx={{ fontSize: "0.625rem" }}>An account will be created for new users</Typography>
               </FlexBox>
@@ -429,12 +430,13 @@ export default function LoginPage() {
                 <Button 
                   variant="contained" 
                   onClick={handleOAuthLogin}
-                  disabled={isLoading}
+                  disabled
+                  // disabled={isLoading}
                   aria-label="Sign In with Google"
                   sx={{ width: "100%", height: "2.5rem", gap: "0.25rem" }}
                 >
                   <GoogleLogo size={20} weight="fill" />
-                  Google
+                  Google   *coming soon*
                 </Button>
               </FlexBox>
             </FlexBox>
