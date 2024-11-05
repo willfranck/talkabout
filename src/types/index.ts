@@ -81,7 +81,6 @@ export type SupabaseThread = {
   category: "active" | "archived"
   created: string
   last_active: string
-  selected: boolean
 }
 
 export type SupabaseMessage = {
@@ -132,7 +131,7 @@ export const transformSupabaseThread = (thread: SupabaseThread): ChatThread => {
     category: thread.category,
     created: thread.created,
     lastActive: thread.last_active,
-    selected: thread.selected,
+    selected: false,
     messages: []
   };
 }
@@ -144,5 +143,17 @@ export const transformSupabaseMessage = (message: SupabaseMessage): ChatMessage 
     role: message.role,
     content: message.content,
     timestamp: message.timestamp
+  }
+}
+
+export const transformChatThread = (userId: string, thread: ChatThread): Omit<SupabaseThread, "id"> => {
+  const currentTime = new Date().toISOString()
+  return {
+    user_id: userId,
+    local_id: thread.id,
+    topic: thread.topic,
+    category: thread.category,
+    created: thread.created,
+    last_active: currentTime
   }
 }

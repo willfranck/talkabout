@@ -1,9 +1,10 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
 import { ChatThread } from "@types"
+import { saveThread } from "@services/supabase-actions"
 import { threadCategories } from "@globals/values"
 import { useAppDispatch } from "@redux/hooks"
-import { useIsMobileOS } from "@hooks/global"
+import { useUser, useIsMobileOS } from "@hooks/global"
 import theme from "@utils/mui-theme"
 import { 
   createNewThread, 
@@ -41,6 +42,7 @@ import {
 
 export const ChatPanel = () => {
   const dispatch = useAppDispatch()
+  const { user } = useUser()
   const isMobileOS = useIsMobileOS()
   const threads = useThreads()
   const activeThreads = useActiveThreads()
@@ -77,6 +79,14 @@ export const ChatPanel = () => {
     archiveRef.current = currentlyArchived
   }, [archivedThreads, archiveRef])
 
+  const handleNewThreadClick = () => {
+    createNewThread(dispatch)
+    setActiveThreadCategory("active")
+    if (user && selectedThread) {
+      saveThread(user.id, selectedThread)
+    }
+  }
+
   return (
     <FlexBox sx={{
       flexDirection: "column",
@@ -112,7 +122,7 @@ export const ChatPanel = () => {
       <Button 
         onMouseEnter={() => !isMobileOS && displayTextByChar("New Thread ", setDisplayedText)}
         onMouseLeave={() => !isMobileOS && removeTextByChar(displayedText, setDisplayedText)}
-        onClick={() => {createNewThread(dispatch), setActiveThreadCategory("active")}}
+        onClick={handleNewThreadClick}
         aria-label="Create new chat thread"
       >
         <PlusCircle size={24} className="mr-1" />

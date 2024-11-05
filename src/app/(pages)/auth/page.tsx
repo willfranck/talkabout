@@ -5,7 +5,7 @@ import { useSnackbar } from "@hooks/global"
 import { useAppDispatch } from "@redux/hooks"
 import { createThread, addMessage } from "@redux/slices/chat"
 import { useThreads, useMessageHistory } from "@hooks/chat"
-import { logIn, signUp, getMessages } from "@services/supabase-actions"
+import { logIn, signUp, getAllMessages } from "@services/supabase-actions"
 import { User, transformSupabaseThread, transformSupabaseMessage } from "@types"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
@@ -93,7 +93,7 @@ export default function LoginPage() {
         const name = res.user.user_metadata.first_name || ""
         showMessage("success", `Welcome back ${name}!`)
         
-        const messageRes = await getMessages(res.user.id)
+        const messageRes = await getAllMessages(res.user.id)
         if (messageRes.success) {
           if (messageRes.chatThreads) {
             const supabaseThreads = messageRes.chatThreads.map(transformSupabaseThread)
