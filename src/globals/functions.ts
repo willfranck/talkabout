@@ -6,9 +6,9 @@ import {
   setArchivedThread, 
   setRestoreThread,
   deleteMessages,
-  clearAllMessages
+  clearAllThreads
 } from "@redux/slices/chat"
-import { ChatThread } from "@types"
+import { ChatThread, ChatMessage, SupabaseThread, SupabaseMessage } from "@types"
 import { randomTopic } from "@globals/values"
 
 //// Redux Functions
@@ -63,7 +63,28 @@ function deleteMessage(dispatch: AppDispatch, messageId: string) {
 }
 
 function clearAll(dispatch: AppDispatch) {
-  dispatch(clearAllMessages())
+  dispatch(clearAllThreads())
+}
+
+function mapSupabaseThread(supabaseThread: SupabaseThread): ChatThread {
+  return {
+    id: supabaseThread.local_id,
+    topic: supabaseThread.topic,
+    category: supabaseThread.category,
+    created: supabaseThread.created,
+    lastActive: supabaseThread.last_active,
+    selected: supabaseThread.selected,
+    messages: []
+  };
+}
+
+function mapSupabaseMessage(supabaseMessage: SupabaseMessage): ChatMessage {
+  return {
+    id: supabaseMessage.local_id,
+    role: supabaseMessage.role,
+    content: supabaseMessage.content,
+    timestamp: supabaseMessage.timestamp
+  }
 }
 
 //// UI Functions
@@ -97,6 +118,8 @@ export {
   restoreThread,
   deleteMessage,
   clearAll,
+  mapSupabaseThread,
+  mapSupabaseMessage,
   displayTextByChar,
   removeTextByChar
 }

@@ -80,8 +80,30 @@ export interface SupabaseRes {
   success: boolean
   error?: string
   message?: string
-  user?: SupabaseUser
   session?: SupabaseSession
+  user?: SupabaseUser
+  chatThreads?: SupabaseThread[]
+  chatMessages?: SupabaseMessage[]
+}
+
+export type SupabaseThread = {
+  id: string
+  user_id: string
+  local_id: string
+  topic: string
+  category: "active" | "archived"
+  created: string
+  last_active: string
+  selected: boolean
+}
+
+export type SupabaseMessage = {
+  id: string
+  local_id: string
+  thread_id: string
+  role: "user" | "model"
+  content: string
+  timestamp: string
 }
 
 export type ChatMessage = {

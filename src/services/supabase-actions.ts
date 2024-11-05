@@ -1,7 +1,7 @@
 "use server"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
-import { SupabaseRes, SupabaseUser, SupabaseSession } from "@types"
+import { SupabaseRes, SupabaseUser, SupabaseSession, ChatThread } from "@types"
 
 
 async function logIn(formData: FormData): Promise<SupabaseRes> {
@@ -14,7 +14,6 @@ async function logIn(formData: FormData): Promise<SupabaseRes> {
 
   const { data: { user }, error } = await supabase.auth.signInWithPassword(data)
   if (error) {
-    console.log(error.message)
     return { success: false, message: error.message }
   }
 
@@ -22,7 +21,7 @@ async function logIn(formData: FormData): Promise<SupabaseRes> {
   return { success: true, user: user as SupabaseUser }
 }
 
-async function signUp(formData: FormData): Promise<SupabaseRes> {
+async function signUp(formData: FormData, chatHistory: ChatThread[]): Promise<SupabaseRes> {
   const supabase = await createClient()
 
   const firstName = formData.get("firstName") as string
@@ -30,7 +29,7 @@ async function signUp(formData: FormData): Promise<SupabaseRes> {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
-  const { data: { user }, error } = await supabase.auth.signUp({
+  const { data: { user }, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -40,9 +39,44 @@ async function signUp(formData: FormData): Promise<SupabaseRes> {
       }
     }
   })
-  if (error) {
-    console.log(error.message)
-    return { success: false, message: error.message }
+  if (signUpError) {
+    return { success: false, message: signUpError.message }
+  }
+
+  for (const thread of chatHistory) {
+    const { data: threadData, error: threadError } = await supabase
+      .from("chat_threads")
+      .insert({
+        user_id: user?.id,
+        local_id: thread.id,
+        topic: thread.topic,
+        category: thread.category,
+        created: thread.created,
+        last_active: thread.lastActive,
+        selected: thread.selected
+      })
+      .select()
+      .single()
+
+    if (threadError) {
+      return { success: false, message: threadError.message }
+    }
+
+    const messages = thread.messages.map(message => ({
+      thread_id: threadData.id,
+      local_id: message.id,
+      role: message.role,
+      content: message.content,
+      timestamp: message.timestamp
+    }))
+
+    const { error: messageError } = await supabase
+      .from("chat_messages")
+      .insert(messages)
+
+    if (messageError) {
+      return { success: false, message: messageError.message }
+    }
   }
 
   revalidatePath("/", "layout")
@@ -56,6 +90,18 @@ async function signOut(): Promise<SupabaseRes> {
     return { success: false, message: error.message }
   }
   return { success: true }
+}
+
+async function getSession(): Promise<SupabaseRes> {
+  const supabase = await createClient()
+  const { data: { session }, error } = await supabase.auth.getSession()
+  if (error) {
+    return { success: false, message: error.message }
+  }
+  if (session) {
+    return { success: true, session: session as SupabaseSession }
+  }
+  return { success: false, message: "No Session Found" }
 }
 
 async function getUser(): Promise<SupabaseRes> {
@@ -107,16 +153,30 @@ async function deleteUser(): Promise<SupabaseRes> {
   return { success: true }
 }
 
-async function getSession(): Promise<SupabaseRes> {
+async function getMessages(userId: string): Promise<SupabaseRes> {
   const supabase = await createClient()
-  const { data: { session }, error } = await supabase.auth.getSession()
-  if (error) {
-    return { success: false, message: error.message }
+
+  const { data: threadData, error: threadError } = await supabase
+    .from("chat_threads")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created", { ascending: true })
+
+  if (threadError) {
+    return { success: false, message: threadError.message }
   }
-  if (session) {
-    return { success: true, session: session as SupabaseSession }
+
+  const { data: messageData, error: messageError } = await supabase
+    .from("chat_messages")
+    .select("*")
+    .eq("thread_id", threadData?.map((t) => t.id))
+    .order("timestamp", { ascending: true })
+
+  if (messageError) {
+    return { success: false, message: messageError.message }
   }
-  return { success: false, message: "No Session Found" }
+
+  return { success: true, chatThreads: threadData, chatMessages: messageData }
 }
 
 
@@ -124,8 +184,9 @@ export {
   logIn,
   signUp,
   signOut,
+  getSession,
   getUser,
   updateUser,
   deleteUser,
-  getSession
+  getMessages
 }

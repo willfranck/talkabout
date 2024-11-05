@@ -2,7 +2,11 @@
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
-import { logIn, signUp } from "@services/supabase-actions"
+import { useAppDispatch } from "@redux/hooks"
+import { createThread, addMessage } from "@redux/slices/chat"
+import { mapSupabaseThread, mapSupabaseMessage } from "@globals/functions"
+import { useThreads, useMessageHistory } from "@hooks/chat"
+import { logIn, signUp, getMessages } from "@services/supabase-actions"
 import { User } from "@types"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
@@ -38,6 +42,9 @@ type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "ch
 
 export default function LoginPage() {
   const router = useRouter()
+  const threads = useThreads()
+  const messages = useMessageHistory()
+  const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -83,19 +90,47 @@ export default function LoginPage() {
     })
     if (isLogin) {
       const res = await logIn(formData)
-      if (res.success) {
-        const name = res.user?.user_metadata.first_name || ""
+      if (res.success && res.user) {
+        const name = res.user.user_metadata.first_name || ""
         showMessage("success", `Welcome back ${name}!`)
+        
+        const messageRes = await getMessages(res.user.id)
+        if (messageRes.success) {
+          if (messageRes.chatThreads) {
+            const supabaseThreads = messageRes.chatThreads.map(mapSupabaseThread)
+            for (const newThread of supabaseThreads) {
+              const threadExists = threads.some(thread => thread.id === newThread.id)
+              if (!threadExists) {
+                dispatch(createThread(newThread))
+              }
+            }
+          } else {
+            console.log("No threads found");
+          }
+          if (messageRes.chatMessages) {
+            const supabaseMessages = messageRes.chatMessages.map(mapSupabaseMessage)
+            for (const newMessage of supabaseMessages) {
+              const messageExists = messages.some(message => message.id === newMessage.id)
+              if (!messageExists) {
+                dispatch(addMessage(newMessage));
+              }
+            }
+          } else {
+            console.log("No messages found");
+          }
+        }
         router.push("/chat")
+
       } else {
         showMessage("error", res.message || "An undefined error occurred")
       }
       setIsLoading(false)
+
     } else {
-      const res = await signUp(formData)
+      const res = await signUp(formData, threads)
       if (res.success) {
         const name = res.user?.user_metadata.first_name || ""
-        showMessage("success", `Successfully created account\nWelcome to the team ${name}! `)
+        showMessage("success", `Successfully created account\nWelcome ${name}!`)
         router.push("/chat")
       } else {
         showMessage("error", res.message || "An undefined error occurred")
