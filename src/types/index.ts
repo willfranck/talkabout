@@ -88,6 +88,7 @@ export type SupabaseMessage = {
   id: string
   local_id: string
   thread_id: string
+  local_thread_id: string
   role: "user" | "model"
   content: string
   timestamp: string
@@ -95,6 +96,7 @@ export type SupabaseMessage = {
 
 export type ChatMessage = {
   id: string
+  threadId: string
   role: "user" | "model"
   content: string
   timestamp: string
@@ -138,6 +140,7 @@ export const transformSupabaseThread = (thread: SupabaseThread): ChatThread => {
 export const transformSupabaseMessage = (message: SupabaseMessage): ChatMessage => {
   return {
     id: message.local_id,
+    threadId: message.local_thread_id,
     role: message.role,
     content: message.content,
     timestamp: message.timestamp

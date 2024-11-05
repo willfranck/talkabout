@@ -64,11 +64,12 @@ export const ChatInput = () => {
       try {
         const userMessage: ChatMessage = { 
           id: crypto.randomUUID(),
+          threadId: selectedThread.id,
           role: "user", 
           content: userPrompt, 
           timestamp: new Date().toISOString()
         }
-        dispatch(addMessage(userMessage))
+        dispatch(addMessage({ threadId: selectedThread.id, message: userMessage }))
         dispatch(updateLastActive(new Date().toISOString()))
         setUserPrompt("")
 
@@ -77,11 +78,12 @@ export const ChatInput = () => {
           const content = aiReply.data.res
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
+            threadId: selectedThread.id,
             role: "model",
             content: content,
             timestamp: new Date().toISOString()
           }
-          dispatch(addMessage(aiMessage))
+          dispatch(addMessage({ threadId: selectedThread.id, message: aiMessage }))
         }
       } catch (error) {
         console.log(error)

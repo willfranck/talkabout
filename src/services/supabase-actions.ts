@@ -63,8 +63,9 @@ async function signUp(formData: FormData, chatHistory: ChatThread[]): Promise<Su
     }
 
     const messages = thread.messages.map(message => ({
-      thread_id: threadData.id,
       local_id: message.id,
+      thread_id: threadData.id,
+      local_thread_id: message.threadId,
       role: message.role,
       content: message.content,
       timestamp: message.timestamp
@@ -169,7 +170,7 @@ async function getMessages(userId: string): Promise<SupabaseRes> {
   const { data: messageData, error: messageError } = await supabase
     .from("chat_messages")
     .select("*")
-    .eq("thread_id", threadData?.map((t) => t.id))
+    .in("thread_id", threadData?.map((t) => t.id))
     .order("timestamp", { ascending: true })
 
   if (messageError) {

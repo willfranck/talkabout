@@ -41,9 +41,9 @@ type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "ch
 
 export default function LoginPage() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const threads = useThreads()
   const messages = useMessageHistory()
-  const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -101,21 +101,18 @@ export default function LoginPage() {
               const threadExists = threads.some(thread => thread.id === supabaseThread.id)
               if (!threadExists) {
                 dispatch(createThread(supabaseThread))
+
+                if (messageRes.chatMessages) {
+                  const supabaseMessages = messageRes.chatMessages.map(transformSupabaseMessage)
+                  for (const supabaseMessage of supabaseMessages) {
+                    const messageExists = messages.some(message => message.id === supabaseMessage.id)
+                    if (!messageExists && supabaseMessage.threadId === supabaseThread.id) {
+                      dispatch(addMessage({ threadId: supabaseThread.id, message: supabaseMessage }));
+                    }
+                  }
+                }
               }
             }
-          } else {
-            console.log("No threads found");
-          }
-          if (messageRes.chatMessages) {
-            const supabaseMessages = messageRes.chatMessages.map(transformSupabaseMessage)
-            for (const supabaseMessage of supabaseMessages) {
-              const messageExists = messages.some(message => message.id === supabaseMessage.id)
-              if (!messageExists) {
-                dispatch(addMessage(supabaseMessage));
-              }
-            }
-          } else {
-            console.log("No messages found");
           }
         }
         router.push("/chat")
