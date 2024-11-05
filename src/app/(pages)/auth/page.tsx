@@ -98,15 +98,15 @@ export default function LoginPage() {
           if (messageRes.chatThreads) {
             const supabaseThreads = messageRes.chatThreads.map(transformSupabaseThread)
             for (const supabaseThread of supabaseThreads) {
-              const threadExists = threads.some(thread => thread.id === supabaseThread.id)
-              if (!threadExists) {
+              const threadExistsLocally = threads.some(thread => thread.id === supabaseThread.id)
+              if (!threadExistsLocally) {
                 dispatch(createThread(supabaseThread))
 
                 if (messageRes.chatMessages) {
                   const supabaseMessages = messageRes.chatMessages.map(transformSupabaseMessage)
                   for (const supabaseMessage of supabaseMessages) {
-                    const messageExists = messages.some(message => message.id === supabaseMessage.id)
-                    if (!messageExists && supabaseMessage.threadId === supabaseThread.id) {
+                    const messageExistsLocally = messages.some(message => message.id === supabaseMessage.id)
+                    if (!messageExistsLocally && supabaseMessage.threadId === supabaseThread.id) {
                       dispatch(addMessage({ threadId: supabaseThread.id, message: supabaseMessage }));
                     }
                   }
