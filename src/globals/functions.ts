@@ -8,7 +8,7 @@ import {
   deleteMessages,
   clearAllThreads
 } from "@redux/slices/chat"
-import { ChatThread, ChatMessage, SupabaseThread, SupabaseMessage } from "@types"
+import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
 
 //// Redux Functions
