@@ -54,19 +54,6 @@ export type SupabaseUser = {
   is_anonymous: boolean
 }
 
-export const transformSupabaseUser = (supabaseUser: SupabaseUser, chats: ChatThread[] = []): User => {
-  return {
-    id: supabaseUser.id,
-    email: supabaseUser.email,
-    created: supabaseUser.created_at,
-    lastSignIn: supabaseUser.last_sign_in_at,
-    firstName: supabaseUser.user_metadata.first_name,
-    lastName: supabaseUser.user_metadata.last_name,
-    avatar: supabaseUser.user_metadata.avatar_url,
-    chats
-  }
-}
-
 export interface SupabaseSession {
   access_token: string
   token_type: string
@@ -121,4 +108,38 @@ export type ChatThread = {
   created: string
   selected: boolean
   lastActive: string
+}
+
+export const transformSupabaseUser = (supabaseUser: SupabaseUser, chats: ChatThread[] = []): User => {
+  return {
+    id: supabaseUser.id,
+    email: supabaseUser.email,
+    created: supabaseUser.created_at,
+    lastSignIn: supabaseUser.last_sign_in_at,
+    firstName: supabaseUser.user_metadata.first_name,
+    lastName: supabaseUser.user_metadata.last_name,
+    avatar: supabaseUser.user_metadata.avatar_url,
+    chats
+  }
+}
+
+export const transformSupabaseThread = (supabaseThread: SupabaseThread): ChatThread => {
+  return {
+    id: supabaseThread.local_id,
+    topic: supabaseThread.topic,
+    category: supabaseThread.category,
+    created: supabaseThread.created,
+    lastActive: supabaseThread.last_active,
+    selected: supabaseThread.selected,
+    messages: []
+  };
+}
+
+export const transformSupabaseMessage = (supabaseMessage: SupabaseMessage): ChatMessage => {
+  return {
+    id: supabaseMessage.local_id,
+    role: supabaseMessage.role,
+    content: supabaseMessage.content,
+    timestamp: supabaseMessage.timestamp
+  }
 }

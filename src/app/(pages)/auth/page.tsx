@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
 import { useAppDispatch } from "@redux/hooks"
 import { createThread, addMessage } from "@redux/slices/chat"
-import { mapSupabaseThread, mapSupabaseMessage } from "@globals/functions"
 import { useThreads, useMessageHistory } from "@hooks/chat"
 import { logIn, signUp, getMessages } from "@services/supabase-actions"
-import { User } from "@types"
+import { User, transformSupabaseThread, transformSupabaseMessage } from "@types"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
 import { 
@@ -97,22 +96,22 @@ export default function LoginPage() {
         const messageRes = await getMessages(res.user.id)
         if (messageRes.success) {
           if (messageRes.chatThreads) {
-            const supabaseThreads = messageRes.chatThreads.map(mapSupabaseThread)
-            for (const newThread of supabaseThreads) {
-              const threadExists = threads.some(thread => thread.id === newThread.id)
+            const supabaseThreads = messageRes.chatThreads.map(transformSupabaseThread)
+            for (const supabaseThread of supabaseThreads) {
+              const threadExists = threads.some(thread => thread.id === supabaseThread.id)
               if (!threadExists) {
-                dispatch(createThread(newThread))
+                dispatch(createThread(supabaseThread))
               }
             }
           } else {
             console.log("No threads found");
           }
           if (messageRes.chatMessages) {
-            const supabaseMessages = messageRes.chatMessages.map(mapSupabaseMessage)
-            for (const newMessage of supabaseMessages) {
-              const messageExists = messages.some(message => message.id === newMessage.id)
+            const supabaseMessages = messageRes.chatMessages.map(transformSupabaseMessage)
+            for (const supabaseMessage of supabaseMessages) {
+              const messageExists = messages.some(message => message.id === supabaseMessage.id)
               if (!messageExists) {
-                dispatch(addMessage(newMessage));
+                dispatch(addMessage(supabaseMessage));
               }
             }
           } else {

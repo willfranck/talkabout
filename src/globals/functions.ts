@@ -66,27 +66,6 @@ function clearAll(dispatch: AppDispatch) {
   dispatch(clearAllThreads())
 }
 
-function mapSupabaseThread(supabaseThread: SupabaseThread): ChatThread {
-  return {
-    id: supabaseThread.local_id,
-    topic: supabaseThread.topic,
-    category: supabaseThread.category,
-    created: supabaseThread.created,
-    lastActive: supabaseThread.last_active,
-    selected: supabaseThread.selected,
-    messages: []
-  };
-}
-
-function mapSupabaseMessage(supabaseMessage: SupabaseMessage): ChatMessage {
-  return {
-    id: supabaseMessage.local_id,
-    role: supabaseMessage.role,
-    content: supabaseMessage.content,
-    timestamp: supabaseMessage.timestamp
-  }
-}
-
 //// UI Functions
 function displayTextByChar(text: string, setState: React.Dispatch<React.SetStateAction<string>>) {
   let accumulatedText = ""
@@ -118,8 +97,6 @@ export {
   restoreThread,
   deleteMessage,
   clearAll,
-  mapSupabaseThread,
-  mapSupabaseMessage,
   displayTextByChar,
   removeTextByChar
 }
