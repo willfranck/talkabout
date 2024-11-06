@@ -176,7 +176,7 @@ const ThreadCard = ({
             <DeleteButton 
               action={removeThread} 
               dbAction={deleteThread}
-              userId={user!.id}
+              userId={user ? user.id : undefined}
               item={thread}
               itemId={thread.id} 
               location="threads" 
@@ -374,7 +374,7 @@ const ChatMessageCard = ({
                   <DeleteButton 
                     action={deleteMessage} 
                     dbAction={deleteMessages}
-                    userId={user!.id}
+                    userId={user ? user.id : undefined}
                     item={message}
                     itemId={message.id} 
                     location="chat-history" 
