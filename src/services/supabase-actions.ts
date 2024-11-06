@@ -55,7 +55,6 @@ async function signUp(formData: FormData, chatHistory: ChatThread[]): Promise<Su
   if (user) {
     const { error } = await pushAllMessages(user.id, chatHistory, supabase)
     if (error) {
-      console.log(error)
       return { success: false, message: error }
     }
   }
@@ -137,7 +136,6 @@ async function deleteUser(): Promise<SupabaseRes> {
 
 async function pushAllMessages(userId: string, chatHistory: ChatThread[], client?: SupabaseClient): Promise<SupabaseRes> {
   const supabase = client || await createClient()
-  console.log(chatHistory)
   for (const thread of chatHistory) {
     const { data: threadData, error: threadError } = await supabase
       .from("chat_threads")
@@ -153,7 +151,6 @@ async function pushAllMessages(userId: string, chatHistory: ChatThread[], client
       .single()
 
     if (threadError) {
-      console.log(threadError.message)
       return { success: false, message: threadError.message }
     }
 
@@ -171,7 +168,6 @@ async function pushAllMessages(userId: string, chatHistory: ChatThread[], client
       .upsert(messages)
 
     if (messageError) {
-      console.log(messageError.message)
       return { success: false, message: messageError.message }
     }
   }
@@ -228,6 +224,34 @@ async function deleteThread(userId: string, thread: ChatThread): Promise<Supabas
 
   if (error) {
     return { success: false, message: error.message }
+  }
+
+  return { success: true }
+}
+
+async function updateDbThreadTopic(userId: string, thread: ChatThread): Promise<SupabaseRes> {
+  const supabase = await createClient()
+  const { data: threadToUpdate, error: threadError } = await supabase
+    .from("chat_threads")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("local_id", thread.id)
+    .single()
+    
+  if (threadError) {
+    return { success: false, message: threadError.message }
+  }
+  if (!threadToUpdate) {
+    return { success: false, message: "No thread found" }
+  }
+
+  const { error: updateError } = await supabase
+    .from("chat_threads")
+    .update({ topic: thread.topic })
+    .eq("id", threadToUpdate.id)
+
+  if (updateError) {
+    return { success: false, message: updateError.message }
   }
 
   return { success: true }
@@ -312,6 +336,7 @@ export {
   getAllMessages,
   saveThread,
   deleteThread,
+  updateDbThreadTopic,
   saveMessage,
   deleteMessages
 }

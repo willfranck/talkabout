@@ -1,6 +1,5 @@
 import { AppDispatch } from "@redux/store"
 import { 
-  setChats,
   createThread, 
   deleteThread, 
   setSelectedThread,
@@ -9,40 +8,10 @@ import {
   deleteMessages,
   clearAllThreads
 } from "@redux/slices/chat"
-import { getAllMessages, pushAllMessages } from "@services/supabase-actions"
-import { ChatThread, transformSupabaseThread, transformSupabaseMessage } from "@types"
+import { ChatThread } from "@types"
 import { randomTopic } from "@globals/values"
 
 //// Redux Functions
-const fetchAllChats = (userId: string) => async (dispatch: AppDispatch) => {
-  try {
-    const res = await getAllMessages(userId)
-    if (res.success) {
-      if (res.chatThreads) {
-        const supabaseThreads = res.chatThreads.map(transformSupabaseThread)
-        if (res.chatMessages) {
-          const supabaseMessages = res.chatMessages.map(transformSupabaseMessage)
-          
-          dispatch(setChats({ threads: supabaseThreads, messages: supabaseMessages }))
-        }
-      }
-    } else if (res.error) {
-      return { success: false, error: res.error }
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-const pushAllChats = async (userId: string, threads: ChatThread[]) => {
-  try {
-    await pushAllMessages(userId, threads)
-    
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 function createNewThread(dispatch: AppDispatch) {
   const newThread: ChatThread = {
     id: crypto.randomUUID(),
@@ -121,8 +90,6 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 
 
 export {
-  fetchAllChats,
-  pushAllChats,
   createNewThread,
   removeThread,
   selectThread,

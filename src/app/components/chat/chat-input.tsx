@@ -9,7 +9,10 @@ import {
   updateLastActive, 
   updateThreadTopic 
 } from "@redux/slices/chat"
-import { saveMessage } from "@services/supabase-actions"
+import { 
+  saveMessage,
+  updateDbThreadTopic
+} from "@services/supabase-actions"
 import { 
   useThreadCount, 
   useSelectedThread, 
@@ -43,6 +46,9 @@ export const ChatInput = () => {
     if (reply.data.res) {
       const topic = reply.data.res
       dispatch(updateThreadTopic(topic))
+      if (user && selectedThread) {
+        updateDbThreadTopic(user.id, {...selectedThread, topic: topic})
+      }
     }
   }, [dispatch, messageHistory])
 
@@ -55,8 +61,8 @@ export const ChatInput = () => {
     // Runs getTopic() only on NEW messages
     const currentMessages = messageHistory.length
     if (currentMessages > messagesRef.current) {
-      if (currentMessages > 0 && currentMessages % 4 === 2) {
-        getTopic();
+      if (currentMessages > 0 && currentMessages % 6 === 2) {
+        getTopic()
       }
     }
     messagesRef.current = currentMessages
