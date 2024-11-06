@@ -23,6 +23,7 @@ function createNewThread(dispatch: AppDispatch) {
     lastActive: ""
   }
   dispatch(createThread(newThread))
+  return newThread
 }
 
 function selectThread(dispatch: AppDispatch, threadId: string) {

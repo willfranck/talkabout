@@ -5,7 +5,7 @@ import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { useSession, useIsMobileOS, useSnackbar } from "@hooks/global"
 import { signOut } from "@services/supabase-actions"
-import { ChatThread, ChatMessage } from "@types"
+import { ChatThread, ChatMessage, SupabaseRes } from "@types"
 import { styled } from "@mui/material/styles"
 import theme from "@utils/mui-theme"
 import {
@@ -400,23 +400,36 @@ const ToggleGroup = ({
   )
 }
 
-interface IDeleteButton {
-  action: (dispatch: AppDispatch, id: string) => void
+interface IDeleteButton<T extends ChatThread | ChatMessage> {
+  action: (dispatch: AppDispatch, itemId: string) => void
+  dbAction?: (userId: string, item: T) => Promise<SupabaseRes>
+  userId?: string
+  item?: T
   itemId: string
   location: "threads" | "chat-history",
 }
 
-const DeleteButton = ({
+const DeleteButton = <T extends ChatThread | ChatMessage>({
   action,
+  dbAction,
+  userId,
+  item,
   itemId,
   location
-}: IDeleteButton) => {
+}: IDeleteButton<T>) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
 
+  const handleClick = () => {
+    action(dispatch, itemId)
+    if (dbAction && userId && item) {
+      dbAction(userId, item)
+    }
+  }
+
   return (
     <Button 
-      onClick={() => action(dispatch, itemId)}
+      onClick={handleClick}
       tabIndex={-1}
       aria-label="Delete"
       className="actionButton"
@@ -447,7 +460,7 @@ const DeleteButton = ({
 }
 
 interface IArchiveButton {
-  action: (dispatch: AppDispatch, id: string) => void
+  action: (dispatch: AppDispatch, itemId: string) => void
   itemId: string
   location: "active" | "archived"
 }

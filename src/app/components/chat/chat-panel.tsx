@@ -80,10 +80,10 @@ export const ChatPanel = () => {
   }, [archivedThreads, archiveRef])
 
   const handleNewThreadClick = () => {
-    createNewThread(dispatch)
+    const newThread = createNewThread(dispatch)
     setActiveThreadCategory("active")
-    if (user && selectedThread) {
-      saveThread(user.id, selectedThread)
+    if (user) {
+      saveThread(user.id, newThread)
     }
   }
 

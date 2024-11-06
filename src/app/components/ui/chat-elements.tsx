@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useAppDispatch } from "@redux/hooks"
-import { useIsMobileOS } from "@hooks/global"
+import { useUser, useIsMobileOS } from "@hooks/global"
 import { 
   useSelectedThread, 
   useMessageHistory 
@@ -18,6 +18,7 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
+import { deleteThread } from "@services/supabase-actions"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -62,6 +63,7 @@ const ThreadCard = ({
   thread: ChatThread
 }) => {
   const dispatch = useAppDispatch()
+  const { user } = useUser()
   const isMobileOS = useIsMobileOS()
   const [threadTopic, setThreadTopic] = useState("")
 
@@ -173,6 +175,9 @@ const ThreadCard = ({
             />
             <DeleteButton 
               action={removeThread} 
+              dbAction={deleteThread}
+              userId={user ? user.id : undefined}
+              item={thread}
               itemId={thread.id} 
               location="threads" 
             />
