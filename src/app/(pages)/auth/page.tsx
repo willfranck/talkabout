@@ -93,21 +93,21 @@ export default function LoginPage() {
         const name = res.user.user_metadata.first_name || ""
         showMessage("success", `Welcome back ${name}!`)
         
-        const messageRes = await getAllMessages(res.user.id)
-        if (messageRes.success) {
-          if (messageRes.chatThreads) {
-            const supabaseThreads = messageRes.chatThreads.map(transformSupabaseThread)
-            for (const supabaseThread of supabaseThreads) {
-              const threadExistsLocally = threads.some(thread => thread.id === supabaseThread.id)
+        const data = await getAllMessages(res.user.id)
+        if (data.success) {
+          if (data.chatThreads) {
+            const chatThreads = data.chatThreads.map(transformSupabaseThread)
+            for (const chatThread of chatThreads) {
+              const threadExistsLocally = threads.some(thread => thread.id === chatThread.id)
               if (!threadExistsLocally) {
-                dispatch(createThread(supabaseThread))
+                dispatch(createThread(chatThread))
 
-                if (messageRes.chatMessages) {
-                  const supabaseMessages = messageRes.chatMessages.map(transformSupabaseMessage)
-                  for (const supabaseMessage of supabaseMessages) {
-                    const messageExistsLocally = messages.some(message => message.id === supabaseMessage.id)
-                    if (!messageExistsLocally && supabaseMessage.threadId === supabaseThread.id) {
-                      dispatch(addMessage({ threadId: supabaseThread.id, message: supabaseMessage }));
+                if (data.chatMessages) {
+                  const chatMessages = data.chatMessages.map(transformSupabaseMessage)
+                  for (const chatMessage of chatMessages) {
+                    const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
+                    if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
+                      dispatch(addMessage({ threadId: chatThread.id, message: chatMessage }));
                     }
                   }
                 }

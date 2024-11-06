@@ -52,40 +52,11 @@ async function signUp(formData: FormData, chatHistory: ChatThread[]): Promise<Su
     return { success: false, message: signUpError.message }
   }
 
-  for (const thread of chatHistory) {
-    const { data: threadData, error: threadError } = await supabase
-      .from("chat_threads")
-      .insert({
-        user_id: user?.id,
-        local_id: thread.id,
-        topic: thread.topic,
-        category: thread.category,
-        created: thread.created,
-        last_active: thread.lastActive,
-        selected: thread.selected
-      })
-      .select()
-      .single()
-
-    if (threadError) {
-      return { success: false, message: threadError.message }
-    }
-
-    const messages = thread.messages.map(message => ({
-      local_id: message.id,
-      thread_id: threadData.id,
-      local_thread_id: message.threadId,
-      role: message.role,
-      content: message.content,
-      timestamp: message.timestamp
-    }))
-
-    const { error: messageError } = await supabase
-      .from("chat_messages")
-      .insert(messages)
-
-    if (messageError) {
-      return { success: false, message: messageError.message }
+  if (user) {
+    const { error } = await pushAllMessages(user.id, chatHistory, supabase)
+    if (error) {
+      console.log(error)
+      return { success: false, message: error }
     }
   }
 
@@ -114,9 +85,9 @@ async function getSession(): Promise<SupabaseRes> {
   return { success: false, message: "No Session Found" }
 }
 
-async function getUser(supabase?: SupabaseClient): Promise<SupabaseRes> {
-  const client = supabase || await createClient()
-  const { data: { user }, error } = await client.auth.getUser()
+async function getUser(client?: SupabaseClient): Promise<SupabaseRes> {
+  const supabase = client || await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
   if (error) {
     return { success: false, message: error.message }
   }
@@ -164,6 +135,50 @@ async function deleteUser(): Promise<SupabaseRes> {
   return { success: true }
 }
 
+async function pushAllMessages(userId: string, chatHistory: ChatThread[], client?: SupabaseClient): Promise<SupabaseRes> {
+  const supabase = client || await createClient()
+  console.log(chatHistory)
+  for (const thread of chatHistory) {
+    const { data: threadData, error: threadError } = await supabase
+      .from("chat_threads")
+      .upsert({
+        user_id: userId,
+        local_id: thread.id,
+        topic: thread.topic,
+        category: thread.category,
+        created: thread.created,
+        last_active: thread.lastActive,
+      })
+      .select()
+      .single()
+
+    if (threadError) {
+      console.log(threadError.message)
+      return { success: false, message: threadError.message }
+    }
+
+    const messages = thread.messages.map(message => ({
+      local_id: message.id,
+      thread_id: threadData.id,
+      local_thread_id: message.threadId,
+      role: message.role,
+      content: message.content,
+      timestamp: message.timestamp
+    }))
+
+    const { error: messageError } = await supabase
+      .from("chat_messages")
+      .upsert(messages)
+
+    if (messageError) {
+      console.log(messageError.message)
+      return { success: false, message: messageError.message }
+    }
+  }
+
+  return { success: true }
+}
+
 async function getAllMessages(userId: string): Promise<SupabaseRes> {
   const supabase = await createClient()
   const { data: threadData, error: threadError } = await supabase
@@ -194,7 +209,7 @@ async function saveThread(userId: string, thread: ChatThread): Promise<SupabaseR
   const supabaseThread = await transformChatThread(userId, thread)
   const { error: threadError } = await supabase
     .from("chat_threads")
-    .insert(supabaseThread)
+    .upsert(supabaseThread)
 
   if (threadError) {
     return { success: false, message: threadError.message }
@@ -237,7 +252,7 @@ async function saveMessage(userId: string, message: ChatMessage): Promise<Supaba
   const supabaseMessage = await transformChatMessage(thread.id, message)
   const { error: messageError } = await supabase
     .from("chat_messages")
-    .insert(supabaseMessage)
+    .upsert(supabaseMessage)
   
   if (messageError) {
     return { success: false, message: messageError.message }
@@ -280,7 +295,7 @@ async function deleteMessages(userId: string, message: ChatMessage): Promise<Sup
       return { success: false, message: messageError.message }
     }
   }
-  
+
   return { success: true }
 }
 
@@ -293,6 +308,7 @@ export {
   getUser,
   updateUser,
   deleteUser,
+  pushAllMessages,
   getAllMessages,
   saveThread,
   deleteThread,

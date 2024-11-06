@@ -1,9 +1,11 @@
 "use client"
 import { useEffect } from "react"
-import { useSession, useSnackbar } from "@hooks/global"
+import { fetchAllChats, pushAllChats } from "@globals/functions"
+import { useUser, useSession, useSnackbar } from "@hooks/global"
 import { 
   useInitialThread,
-  useSelectedThread 
+  useThreads,
+  useSelectedThread
 } from "@hooks/chat"
 import { PageLayout } from "@ui/mui-layout"
 import { Box } from "@mui/material"
@@ -15,10 +17,27 @@ import { ChatInput } from "@chat/chat-input"
 
 export default function ChatPage() {
   useInitialThread()
+  const { user } = useUser()
   const { session } = useSession()
   const { showMessage } = useSnackbar()
+  const threads = useThreads()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
+
+  useEffect(() => {
+    if (user) {
+      try {
+        if (threads.length > 0) {
+          pushAllChats(user.id, threads)
+        }
+        fetchAllChats(user.id)
+        showMessage("success", "Chat sync successful")
+      
+      } catch (error) {
+        showMessage("error", "Unable to sync chats")
+      }
+    }
+  }, [user, threads])
 
   useEffect(() => {
     if (!session) {

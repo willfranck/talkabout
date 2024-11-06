@@ -28,6 +28,8 @@ const useInitialThread = () => {
       threadCreated.current = true
     }
   }, [dispatch, threads.length])
+
+  return null
 }
 
 const useActiveThreads = () => {
