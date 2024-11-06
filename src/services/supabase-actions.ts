@@ -1,7 +1,15 @@
 "use server"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { createClient } from "@/utils/supabase/server"
-import { SupabaseRes, SupabaseUser, SupabaseSession, ChatThread, transformChatThread } from "@types"
+import { 
+  SupabaseRes, 
+  SupabaseUser, 
+  SupabaseSession, 
+  ChatThread,
+  ChatMessage,
+  transformChatThread,
+  transformChatMessage 
+} from "@types"
 import { revalidatePath } from "next/cache"
 
 
@@ -177,6 +185,7 @@ async function getAllMessages(userId: string): Promise<SupabaseRes> {
   if (messageError) {
     return { success: false, message: messageError.message }
   }
+
   return { success: true, chatThreads: threadData, chatMessages: messageData }
 }
 
@@ -188,24 +197,90 @@ async function saveThread(userId: string, thread: ChatThread): Promise<SupabaseR
     .insert(supabaseThread)
 
   if (threadError) {
-    console.log(`Thread Error: ${threadError.message}`)
     return { success: false, message: threadError.message }
   }
+
   return { success: true }
 }
 
 async function deleteThread(userId: string, thread: ChatThread): Promise<SupabaseRes> {
   const supabase = await createClient()
-  const { error: threadError } = await supabase
+  const { error } = await supabase
     .from("chat_threads")
     .delete()
     .eq("user_id", userId)
     .eq("local_id", thread.id)
 
+  if (error) {
+    return { success: false, message: error.message }
+  }
+
+  return { success: true }
+}
+
+async function saveMessage(userId: string, message: ChatMessage): Promise<SupabaseRes> {
+  const supabase = await createClient()
+  const { data: thread, error: threadError  } = await supabase
+    .from("chat_threads")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("local_id", message.threadId)
+    .single()
+
   if (threadError) {
-    console.log(`Thread Error: ${threadError.message}`)
     return { success: false, message: threadError.message }
   }
+  if (!thread) {
+    return { success: false, message: "Thread not found"}
+  }
+
+  const supabaseMessage = await transformChatMessage(thread.id, message)
+  const { error: messageError } = await supabase
+    .from("chat_messages")
+    .insert(supabaseMessage)
+  
+  if (messageError) {
+    return { success: false, message: messageError.message }
+  }
+
+  return { success: true }
+}
+
+async function deleteMessages(userId: string, message: ChatMessage): Promise<SupabaseRes> {
+  const supabase = await createClient()
+  const { data: thread, error: threadError  } = await supabase
+    .from("chat_threads")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("local_id", message.threadId)
+    .single()
+
+  if (threadError) {
+    return { success: false, message: threadError.message }
+  }
+  if (!thread) {
+    return { success: false, message: "Thread not found"}
+  }
+
+  const supabaseMessage = await transformChatMessage(thread.id, message)
+  const { data: messagesToDelete } = await supabase
+    .from("chat_messages")
+    .select("*")
+    .eq("thread_id", thread.id)
+    .gte("timestamp", supabaseMessage.timestamp)
+    .order('timestamp', { ascending: true })
+  
+  if (messagesToDelete) {
+    const { error: messageError } = await supabase
+      .from("chat_messages")
+      .delete()
+      .in("id", messagesToDelete.map(msg => msg.id))
+      
+    if (messageError) {
+      return { success: false, message: messageError.message }
+    }
+  }
+  
   return { success: true }
 }
 
@@ -220,5 +295,7 @@ export {
   deleteUser,
   getAllMessages,
   saveThread,
-  deleteThread
+  deleteThread,
+  saveMessage,
+  deleteMessages
 }

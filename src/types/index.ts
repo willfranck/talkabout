@@ -157,3 +157,14 @@ export const transformChatThread = (userId: string, thread: ChatThread): Omit<Su
     last_active: currentTime
   }
 }
+
+export const transformChatMessage = (threadId: string, message: ChatMessage): Omit<SupabaseMessage, "id"> => {
+  return {
+    thread_id: threadId,
+    local_id: message.id,
+    local_thread_id: message.threadId,
+    role: message.role,
+    content: message.content,
+    timestamp: message.timestamp
+  }
+}

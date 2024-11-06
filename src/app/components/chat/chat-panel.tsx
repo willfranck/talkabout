@@ -79,11 +79,11 @@ export const ChatPanel = () => {
     archiveRef.current = currentlyArchived
   }, [archivedThreads, archiveRef])
 
-  const handleNewThreadClick = () => {
+  const handleNewThreadClick = async () => {
     const newThread = createNewThread(dispatch)
     setActiveThreadCategory("active")
     if (user) {
-      saveThread(user.id, newThread)
+      await saveThread(user.id, newThread)
     }
   }
 

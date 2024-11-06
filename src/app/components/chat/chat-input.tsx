@@ -2,12 +2,14 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
+import { useUser } from "@hooks/global"
 import { temperatureSettings } from "@globals/values"
 import { 
   addMessage, 
   updateLastActive, 
   updateThreadTopic 
 } from "@redux/slices/chat"
+import { saveMessage } from "@services/supabase-actions"
 import { 
   useThreadCount, 
   useSelectedThread, 
@@ -19,6 +21,7 @@ import { ChatInputField } from "@ui/chat-elements"
 
 export const ChatInput = () => {
   const dispatch = useAppDispatch()
+  const { user } = useUser()
   const threadCount = useThreadCount()
   const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(undefined)
@@ -72,6 +75,9 @@ export const ChatInput = () => {
         dispatch(addMessage({ threadId: selectedThread.id, message: userMessage }))
         dispatch(updateLastActive(new Date().toISOString()))
         setUserPrompt("")
+        if (user) {
+          saveMessage(user.id, userMessage)
+        }
 
         const aiReply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })
         if (aiReply.data.res) {
@@ -84,6 +90,9 @@ export const ChatInput = () => {
             timestamp: new Date().toISOString()
           }
           dispatch(addMessage({ threadId: selectedThread.id, message: aiMessage }))
+          if (user) {
+            saveMessage(user.id, aiMessage)
+          }
         }
       } catch (error) {
         console.log(error)

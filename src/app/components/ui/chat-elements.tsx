@@ -18,7 +18,7 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
-import { deleteThread } from "@services/supabase-actions"
+import { deleteThread, deleteMessages } from "@services/supabase-actions"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -176,7 +176,7 @@ const ThreadCard = ({
             <DeleteButton 
               action={removeThread} 
               dbAction={deleteThread}
-              userId={user ? user.id : undefined}
+              userId={user!.id}
               item={thread}
               itemId={thread.id} 
               location="threads" 
@@ -241,6 +241,7 @@ const ChatMessageCard = ({
 }: {
   message: ChatMessage
 }) => {
+  const { user } = useUser()
   const actionItemProps: IActionList["actionItem"] = {
     item: message,
     actions: [
@@ -372,6 +373,9 @@ const ChatMessageCard = ({
                   </Typography>
                   <DeleteButton 
                     action={deleteMessage} 
+                    dbAction={deleteMessages}
+                    userId={user!.id}
+                    item={message}
                     itemId={message.id} 
                     location="chat-history" 
                   />
