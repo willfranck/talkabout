@@ -11,7 +11,7 @@ import {
 } from "@redux/slices/chat"
 import { 
   saveMessage,
-  updateDbThreadTopic
+  updateDbThread
 } from "@services/supabase-actions"
 import { 
   useThreadCount, 
@@ -47,7 +47,11 @@ export const ChatInput = () => {
       const topic = reply.data.res
       dispatch(updateThreadTopic(topic))
       if (user && selectedThread) {
-        updateDbThreadTopic(user.id, {...selectedThread, topic: topic})
+        updateDbThread(
+          user.id, 
+          {...selectedThread, topic: topic}, 
+          {topic: topic}
+        )
       }
     }
   }, [dispatch, messageHistory])
@@ -83,6 +87,11 @@ export const ChatInput = () => {
         setUserPrompt("")
         if (user) {
           saveMessage(user.id, userMessage)
+          updateDbThread(
+            user.id, 
+            {...selectedThread, lastActive: userMessage.timestamp}, 
+            { last_active: userMessage.timestamp }
+          )
         }
 
         const aiReply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })

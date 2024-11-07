@@ -229,7 +229,13 @@ async function deleteThread(userId: string, thread: ChatThread): Promise<Supabas
   return { success: true }
 }
 
-async function updateDbThreadTopic(userId: string, thread: ChatThread): Promise<SupabaseRes> {
+type UpdateableThreadColumns = {
+  topic: string
+  category: string
+  last_active: string
+}
+
+async function updateDbThread(userId: string, thread: ChatThread, value: Partial<UpdateableThreadColumns>): Promise<SupabaseRes> {
   const supabase = await createClient()
   const { data: threadToUpdate, error: threadError } = await supabase
     .from("chat_threads")
@@ -247,7 +253,7 @@ async function updateDbThreadTopic(userId: string, thread: ChatThread): Promise<
 
   const { error: updateError } = await supabase
     .from("chat_threads")
-    .update({ topic: thread.topic })
+    .update(value)
     .eq("id", threadToUpdate.id)
 
   if (updateError) {
@@ -336,7 +342,7 @@ export {
   getAllMessages,
   saveThread,
   deleteThread,
-  updateDbThreadTopic,
+  updateDbThread,
   saveMessage,
   deleteMessages
 }
