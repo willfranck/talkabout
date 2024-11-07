@@ -3,6 +3,8 @@ import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, useSnackbar } from "@hooks/global"
 import { signOut } from "@services/supabase-actions"
+import { useAppDispatch } from "@redux/hooks"
+import { clearAllThreads } from "@redux/slices/chat"
 import Link from "next/link"
 import Image from "next/image"
 import theme from "@utils/mui-theme"
@@ -43,6 +45,7 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const { session } = useSession()
+  const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
   const [chatDrawerAnchorEl, setChatDrawerAnchorEl] = useState<HTMLElement | null>(null)
   const [navDrawerAnchorEl, setNavDrawerAnchorEl] = useState<HTMLElement | null>(null)
@@ -68,6 +71,7 @@ const Header = () => {
       showMessage("error", res.message || "Undefined error signing out")
     } else {
       showMessage("success", "Signed out.  See you soon!")
+      dispatch(clearAllThreads())
       if (pathname === "/profile") {
         router.push("/")
       }
