@@ -62,16 +62,10 @@ const chatSlice = createSlice({
       const threadToRestore = state.threads.find(thread => thread.id === action.payload)
       if (threadToRestore) threadToRestore.category = "active"
     },
-    // addMessage: (state, action: PayloadAction<ChatMessage>) => {
-    //   const selectedThread = state.threads.find(thread => thread.selected)
-    //   if (selectedThread) {
-    //     selectedThread.messages.push(action.payload)
-    //   }
-    // },
-    addMessage: (state, action: PayloadAction<{ threadId: string; message: ChatMessage }>) => {
-      const thread = state.threads.find(thread => thread.id === action.payload.threadId);
+    addMessage: (state, action: PayloadAction<{ threadId: string, message: ChatMessage }>) => {
+      const thread = state.threads.find(thread => thread.id === action.payload.threadId)
       if (thread) {
-        thread.messages.push(action.payload.message);
+        thread.messages.push(action.payload.message)
       }
     },
     deleteMessages: (state, action: PayloadAction<string>) => {

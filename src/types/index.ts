@@ -139,7 +139,7 @@ export const transformSupabaseThread = (thread: SupabaseThread): ChatThread => {
     lastActive: thread.last_active,
     selected: false,
     messages: []
-  };
+  }
 }
 
 export const transformSupabaseMessage = (message: SupabaseMessage): ChatMessage => {

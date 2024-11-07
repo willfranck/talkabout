@@ -82,7 +82,7 @@ const ThreadCard = ({
           fn: updateDbThread, 
           values: {category: (isActive ? "archived" : "active")}
         },
-        label: isActive ? "Archive" : "Restore",
+        label: isActive ? "archive" : "restore",
         icon: isActive ? <Archive size={24} /> : <ArrowCounterClockwise size={24} />,
         color: theme.palette.primary.main
       },
@@ -226,7 +226,7 @@ const CodeBlock = ({
   className?: string
   children?: React.ReactNode
 }) => {
-  const match = /language-(\w+)/.exec(className || "");
+  const match = /language-(\w+)/.exec(className || "")
 
   return !inline && match ? (
     <pre className={className} {...props}>

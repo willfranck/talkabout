@@ -4,7 +4,7 @@ import { Box } from "@mui/material"
 
 
 interface IconsState {
-  simpleIcons: Record<string, SimpleIcon>;
+  simpleIcons: Record<string, SimpleIcon>
 }
 
 const cloudConfig = {
@@ -57,7 +57,7 @@ const useIcons = (slugs: string[]) => {
         if (fetchedIcons.simpleIcons) {
           ["nextdotjs", "github", "remark"].forEach((slug) => {
             if (fetchedIcons.simpleIcons[slug]) {
-              fetchedIcons.simpleIcons[slug].hex = "#EDEDED";
+              fetchedIcons.simpleIcons[slug].hex = "#EDEDED"
             }
           })
         }

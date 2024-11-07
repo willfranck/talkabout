@@ -68,7 +68,7 @@ export default function ChatPage() {
                 for (const chatMessage of chatMessages) {
                   const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
                   if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
-                    dispatch(addMessage({ threadId: chatThread.id, message: chatMessage }));
+                    dispatch(addMessage({ threadId: chatThread.id, message: chatMessage }))
                   }
                 }
               }
