@@ -266,7 +266,7 @@ export interface IActionList<T extends ChatThread | ChatMessage> {
   actionItem: {
     item: T
     actions: {
-      function: ((dispatch: AppDispatch, id: string) => void)
+      redux: ((dispatch: AppDispatch, id: string) => void)
       dbDelete?: ((userId: string, item: T) => Promise<SupabaseRes>)
       dbUpdate?: {
         fn: ((userId: string, thread: T, value: Partial<UpdateableThreadColumns>) => Promise<SupabaseRes>)
@@ -308,7 +308,7 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
       key={action.label}
       aria-label={action.label}
       onClick={async () => { 
-        action.function(dispatch, actionItem.item.id);
+        action.redux(dispatch, actionItem.item.id);
         if (user && action.dbDelete) {
           await action.dbDelete(user.id, actionItem.item)
         };

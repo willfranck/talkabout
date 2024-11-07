@@ -77,7 +77,7 @@ const ThreadCard = ({
     item: thread,
     actions: [
       {
-        function: isActive ? archiveThread : restoreThread,
+        redux: isActive ? archiveThread : restoreThread,
         dbUpdate: {
           fn: updateDbThread, 
           values: {category: (isActive ? "archived" : "active")}
@@ -87,7 +87,7 @@ const ThreadCard = ({
         color: theme.palette.primary.main
       },
       {
-        function: removeThread,
+        redux: removeThread,
         dbDelete: deleteThread,
         label: "delete",
         icon: <Trash size={24} />,
@@ -251,7 +251,7 @@ const ChatMessageCard = ({
     item: message,
     actions: [
       {
-        function: deleteMessage,
+        redux: deleteMessage,
         dbDelete: deleteMessages,
         label: "delete",
         icon: <Trash size={24} />,

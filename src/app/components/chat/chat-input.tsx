@@ -47,11 +47,7 @@ export const ChatInput = () => {
       const topic = reply.data.res
       dispatch(updateThreadTopic(topic))
       if (user && selectedThread) {
-        updateDbThread(
-          user.id, 
-          {...selectedThread, topic: topic}, 
-          {topic: topic}
-        )
+        updateDbThread(user.id, selectedThread, {topic: topic})
       }
     }
   }, [dispatch, messageHistory])
@@ -87,14 +83,14 @@ export const ChatInput = () => {
         setUserPrompt("")
         if (user) {
           await saveMessage(user.id, userMessage)
-          await updateDbThread(
-            user.id, 
-            {...selectedThread, lastActive: userMessage.timestamp}, 
-            { last_active: userMessage.timestamp }
-          )
+          await updateDbThread(user.id, selectedThread, { last_active: userMessage.timestamp })
         }
 
-        const aiReply = await axios.post("/api/chat", { history: messageHistory, prompt: userPrompt, temperature: aiTemperature })
+        const aiReply = await axios.post("/api/chat", { 
+          history: messageHistory, 
+          prompt: userPrompt, 
+          temperature: aiTemperature 
+        })
         if (aiReply.data.res) {
           const content = aiReply.data.res
           const aiMessage: ChatMessage = {
