@@ -1,17 +1,60 @@
 import { AppDispatch } from "@redux/store"
 import { 
+  ChatThread,
+  transformSupabaseThread,
+  transformSupabaseMessage,
+  ChatMessage
+ } from "@types"
+import { 
   createThread, 
   deleteThread, 
   setSelectedThread,
   setArchivedThread, 
   setRestoreThread,
+  addMessage,
   deleteMessages,
   clearAllThreads
 } from "@redux/slices/chat"
-import { ChatThread } from "@types"
+import { getAllMessages } from "@services/supabase-actions"
 import { randomTopic } from "@globals/values"
 
 //// Redux Functions
+type Action =
+  | { type: "chat/createThread", payload: ChatThread }
+  | { type: "chat/addMessage", payload: { threadId: string, message: ChatMessage } }
+
+const syncDbMessages = async (userId: string, threads: ChatThread[], messages: ChatMessage[]) => {
+  try {
+    const reduxActions: Action[] = []
+    const data = await getAllMessages(userId)
+    if (data.success) {
+      if (data.chatThreads) {
+        const chatThreads = data.chatThreads.map(transformSupabaseThread)
+        for (const chatThread of chatThreads) {
+          const threadExistsLocally = threads.some(thread => thread.id === chatThread.id)
+          if (!threadExistsLocally) {
+            reduxActions.push(createThread(chatThread))
+
+            if (data.chatMessages) {
+              const chatMessages = data.chatMessages.map(transformSupabaseMessage)
+              for (const chatMessage of chatMessages) {
+                const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
+                if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
+                  reduxActions.push(addMessage({ threadId: chatThread.id, message: chatMessage }))
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return reduxActions
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
 function createNewThread(dispatch: AppDispatch) {
   const newThread: ChatThread = {
     id: crypto.randomUUID(),
@@ -90,6 +133,7 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 
 
 export {
+  syncDbMessages,
   createNewThread,
   removeThread,
   selectThread,

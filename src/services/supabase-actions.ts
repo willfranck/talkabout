@@ -14,7 +14,7 @@ import {
 import { revalidatePath } from "next/cache"
 
 
-async function logIn(formData: FormData): Promise<SupabaseRes> {
+async function logIn(formData: FormData, chatHistory: ChatThread[]): Promise<SupabaseRes> {
   const supabase = await createClient()
 
   const data = {
@@ -25,6 +25,13 @@ async function logIn(formData: FormData): Promise<SupabaseRes> {
   const { data: { user }, error } = await supabase.auth.signInWithPassword(data)
   if (error) {
     return { success: false, message: error.message }
+  }
+
+  if (user) {
+    const { error: messageError } = await pushAllMessages(user.id, chatHistory, supabase)
+    if (messageError) {
+      return { success: false, message: messageError }
+    }
   }
 
   revalidatePath("/", "layout")
@@ -54,9 +61,9 @@ async function signUp(formData: FormData, chatHistory: ChatThread[]): Promise<Su
   }
 
   if (user) {
-    const { error } = await pushAllMessages(user.id, chatHistory, supabase)
-    if (error) {
-      return { success: false, message: error }
+    const { error: messageError } = await pushAllMessages(user.id, chatHistory, supabase)
+    if (messageError) {
+      return { success: false, message: messageError }
     }
   }
 

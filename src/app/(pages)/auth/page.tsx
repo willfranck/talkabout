@@ -2,11 +2,12 @@
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
-import { useAppDispatch } from "@redux/hooks"
-import { createThread, addMessage } from "@redux/slices/chat"
-import { useThreads, useMessageHistory } from "@hooks/chat"
-import { logIn, signUp, getAllMessages } from "@services/supabase-actions"
-import { User, transformSupabaseThread, transformSupabaseMessage } from "@types"
+import { useThreads } from "@hooks/chat"
+import { User } from "@types"
+import { 
+  logIn, 
+  signUp
+} from "@services/supabase-actions"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
 import { 
@@ -41,9 +42,7 @@ type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "ch
 
 export default function LoginPage() {
   const router = useRouter()
-  const dispatch = useAppDispatch()
   const threads = useThreads()
-  const messages = useMessageHistory()
   const { showMessage } = useSnackbar()
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -88,33 +87,12 @@ export default function LoginPage() {
       formData.append(key, userInputData[key as keyof UserInputData])
     })
     if (isLogin) {
-      const res = await logIn(formData)
+      // Pushes any threads/messages created while logged out into the user's DB storage
+      const res = await logIn(formData, threads)
       if (res.success && res.user) {
         const name = res.user.user_metadata.first_name || ""
         showMessage("success", `Welcome back ${name}!`)
-        
-        const data = await getAllMessages(res.user.id)
-        if (data.success) {
-          if (data.chatThreads) {
-            const chatThreads = data.chatThreads.map(transformSupabaseThread)
-            for (const chatThread of chatThreads) {
-              const threadExistsLocally = threads.some(thread => thread.id === chatThread.id)
-              if (!threadExistsLocally) {
-                dispatch(createThread(chatThread))
 
-                if (data.chatMessages) {
-                  const chatMessages = data.chatMessages.map(transformSupabaseMessage)
-                  for (const chatMessage of chatMessages) {
-                    const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
-                    if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
-                      dispatch(addMessage({ threadId: chatThread.id, message: chatMessage }))
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
         router.push("/chat")
 
       } else {
@@ -123,6 +101,7 @@ export default function LoginPage() {
       setIsLoading(false)
 
     } else {
+      // Pushes any threads/messages created before signing up into the user's new DB storage
       const res = await signUp(formData, threads)
       if (res.success) {
         const name = res.user?.user_metadata.first_name || ""
@@ -153,6 +132,8 @@ export default function LoginPage() {
 
   return (
     <PageLayout>
+      <LoadingDialog open={isLoading} message="Authenticating..." />
+
       <FlexBox sx={{
         flexDirection: "column",
         width: "96%", 
@@ -274,7 +255,7 @@ export default function LoginPage() {
                 width: "100%",
                 gap: "1rem"
               }}>
-                <Divider orientation="horizontal" flexItem sx={{ marginBottom: "1rem" }} />
+                <Divider orientation="horizontal" sx={{ marginBottom: "1rem" }} flexItem />
                 <Button 
                   variant="contained" 
                   onClick={handleOAuthLogin}
@@ -506,8 +487,6 @@ export default function LoginPage() {
           </FlexBox>
         </Card>
       </FlexBox>
-
-      <LoadingDialog open={isLoading} />
     </PageLayout>
   )
 }

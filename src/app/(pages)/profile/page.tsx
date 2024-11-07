@@ -125,7 +125,7 @@ export default function ProfilePage() {
 
   return (
     <PageLayout>
-      <LoadingDialog open={isLoading} />
+      <LoadingDialog open={isLoading} message="Reticulating splines..." />
       
       {user && (
         <>
@@ -156,7 +156,7 @@ export default function ProfilePage() {
                     sx={{ 
                       width: "48px", 
                       height: "48px", 
-                      fontSize: "1.125rem",
+                      fontSize: "1.25rem",
                       color: "secondary.contrastText", 
                       backgroundColor: "primary.dark" 
                     }}

@@ -16,10 +16,6 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setChats: (state, action: PayloadAction<{ threads: ChatThread[], messages: ChatMessage[]}>) => {
-      state.threads = [...state.threads, ...action.payload.threads]
-      state.messages = [...state.messages, ...action.payload.messages]
-    },
     createThread: (state, action: PayloadAction<ChatThread>) => {
       state.threads.forEach(thread => {
         thread.selected = false
@@ -84,7 +80,6 @@ const chatSlice = createSlice({
 })
 
 export const {
-  setChats,
   createThread, 
   deleteThread, 
   updateThreadTopic,

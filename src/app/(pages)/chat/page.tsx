@@ -1,14 +1,7 @@
 "use client"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useAppDispatch } from "@redux/hooks"
-import { 
-  getAllMessages, 
-  pushAllMessages 
-} from "@services/supabase-actions"
-import { 
-  transformSupabaseThread, 
-  transformSupabaseMessage 
-} from "@types"
+import { syncDbMessages } from "@globals/functions"
 import { 
   useUser, 
   useSession, 
@@ -20,15 +13,11 @@ import {
   useSelectedThread,
   useMessageHistory
 } from "@hooks/chat"
-import { 
-  createThread, 
-  addMessage 
-} from "@redux/slices/chat"
 import { PageLayout } from "@ui/mui-layout"
 import { Box } from "@mui/material"
 import { 
   FlexBox, 
-  // LoadingDialog 
+  LoadingDialog 
 } from "@ui/mui-elements"
 import { ChatPanel } from "@chat/chat-panel"
 import { ChatHistory } from "@ui/chat-elements"
@@ -45,41 +34,32 @@ export default function ChatPage() {
   const messages = useMessageHistory()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
+  const [isLoading, setIsLoading] = useState(true)
+  
 
   useEffect(() => {
-    if (!user?.id) return
-    // Couldn't get this to work on page reload as an import
+    if (!user?.id) {
+      setIsLoading(false)
+      return
+    }
+    
     const syncData = async () => {
-      if (threads && threads.length > 0) {
-        pushAllMessages(user.id, threads)
-          .catch(() => showMessage("error", "Unable to save chats"))
-      }
-      const data = await getAllMessages(user.id)
-      if (data.success) {
-        if (data.chatThreads) {
-          const chatThreads = data.chatThreads.map(transformSupabaseThread)
-          for (const chatThread of chatThreads) {
-            const threadExistsLocally = threads.some(thread => thread.id === chatThread.id)
-            if (!threadExistsLocally) {
-              dispatch(createThread(chatThread))
+      setIsLoading(true)
 
-              if (data.chatMessages) {
-                const chatMessages = data.chatMessages.map(transformSupabaseMessage)
-                for (const chatMessage of chatMessages) {
-                  const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
-                  if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
-                    dispatch(addMessage({ threadId: chatThread.id, message: chatMessage }))
-                  }
-                }
-              }
-            }
-          }
+      try {
+        const reduxActions = await syncDbMessages(user.id, threads, messages)
+        for (const action of reduxActions) {
+          dispatch(action)
         }
-      } else {
-        showMessage("error", "Unable to fetch chats")
+      } catch (error) {
+        showMessage("error", "Unable to sync messages")
+      
+      } finally {
+        setIsLoading(false)
       }
     }
     syncData()
+
   }, [dispatch, user?.id])
 
   useEffect(() => {
@@ -93,6 +73,8 @@ export default function ChatPage() {
 
   return (
     <PageLayout>
+      <LoadingDialog open={isLoading} message="Syncing messages..." />
+      
       <Box 
         component="aside"
         sx={{

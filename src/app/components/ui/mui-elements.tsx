@@ -39,7 +39,8 @@ import {
   Tooltip,
   TooltipProps,
   tooltipClasses,
-  Dialog
+  Dialog,
+  Typography
 } from "@mui/material"
 import { 
   SignIn,
@@ -536,9 +537,11 @@ const ArchiveButton = ({
 }
 
 const LoadingDialog = ({
-  open
+  open,
+  message
 }: {
   open: boolean
+  message: string
 }) => {
   return (
     <Dialog 
@@ -546,13 +549,21 @@ const LoadingDialog = ({
       sx={{ 
         "& .MuiPaper-root": {
           background: "transparent",
-          "& > *": {
+          boxShadow: "none",
+          "& svg": {
             animation: "spin 0.8s linear infinite"
           } 
         }
       }}
     >
-      <SpinnerGap size={36} weight="bold" />
+      <FlexBox sx={{
+        flexDirection: "column",
+        gap: "1rem",
+        padding: "1rem",
+      }}>
+        <SpinnerGap size={36} weight="bold" />
+        <Typography>{message}</Typography>
+      </FlexBox>
     </Dialog>
   )
 }
