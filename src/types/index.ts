@@ -83,6 +83,12 @@ export type SupabaseThread = {
   last_active: string
 }
 
+export type UpdateableThreadColumns = {
+  topic: string
+  category: string
+  last_active: string
+}
+
 export type SupabaseMessage = {
   id: string
   local_id: string

@@ -3,9 +3,19 @@ import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
-import { useSession, useIsMobileOS, useSnackbar } from "@hooks/global"
+import { 
+  useSession, 
+  useIsMobileOS, 
+  useSnackbar, 
+  useUser
+} from "@hooks/global"
+import { 
+  ChatThread, 
+  ChatMessage, 
+  SupabaseRes, 
+  UpdateableThreadColumns 
+} from "@types"
 import { signOut } from "@services/supabase-actions"
-import { ChatThread, ChatMessage, SupabaseRes } from "@types"
 import { styled } from "@mui/material/styles"
 import theme from "@utils/mui-theme"
 import {
@@ -249,11 +259,16 @@ const MenuNav = ({
   )
 }
 
-export interface IActionList {
+export interface IActionList<T extends ChatThread | ChatMessage> {
   actionItem: {
-    item: ChatThread | ChatMessage
+    item: T
     actions: {
       function: ((dispatch: AppDispatch, id: string) => void)
+      dbDelete?: ((userId: string, item: T) => Promise<SupabaseRes>)
+      dbUpdate?: {
+        fn: ((userId: string, thread: T, value: Partial<UpdateableThreadColumns>) => Promise<SupabaseRes>)
+        values: Partial<UpdateableThreadColumns>
+      }
       icon: React.ReactNode
       label: string
       color: string
@@ -265,15 +280,16 @@ export interface IActionList {
   anchorHeight: string
 }
 
-const ActionsPopover = ({
+const ActionsPopover = <T extends ChatThread | ChatMessage> ({
   actionItem,
   subheader,
   anchorIcon,
   anchorWidth,
   anchorHeight
-}: IActionList) => {
+}: IActionList<T>) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
+  const { user } = useUser()
   const [popoverAnchorEl, setPopoverAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(popoverAnchorEl)
 
@@ -288,7 +304,16 @@ const ActionsPopover = ({
     <ListItemButton 
       key={action.label}
       aria-label={action.label}
-      onClick={() => { action.function(dispatch, actionItem.item.id), handlePopoverClose}} 
+      onClick={async () => { 
+        action.function(dispatch, actionItem.item.id);
+        if (user && action.dbDelete) {
+          await action.dbDelete(user.id, actionItem.item)
+        };
+        if (user && action.dbUpdate) {
+          await action.dbUpdate.fn(user.id, actionItem.item, action.dbUpdate.values)
+        };
+        handlePopoverClose()
+      }} 
       sx={{ 
         height: "2.5rem", 
         paddingRight: "1.25rem",

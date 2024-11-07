@@ -18,7 +18,11 @@ import {
   deleteMessage, 
   displayTextByChar
 } from "@globals/functions"
-import { deleteThread, deleteMessages } from "@services/supabase-actions"
+import { 
+  deleteThread, 
+  deleteMessages, 
+  updateDbThread 
+} from "@services/supabase-actions"
 import theme from "@utils/mui-theme"
 import {
   alpha,
@@ -48,7 +52,8 @@ import {
   Snowflake,
   Trash,
   Archive,
-  PaperPlaneRight
+  PaperPlaneRight,
+  ArrowCounterClockwise
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -66,19 +71,25 @@ const ThreadCard = ({
   const { user } = useUser()
   const isMobileOS = useIsMobileOS()
   const [threadTopic, setThreadTopic] = useState("")
+  const isActive = thread.category === "active"
 
-  const actionItemProps: IActionList["actionItem"] = {
+  const actionItemProps: IActionList<ChatThread>["actionItem"] = {
     item: thread,
     actions: [
       {
-        function: archiveThread,
-        label: "Archive",
-        icon: <Archive size={24} />,
+        function: isActive ? archiveThread : restoreThread,
+        dbUpdate: {
+          fn: updateDbThread, 
+          values: {category: (isActive ? "archived" : "active")}
+        },
+        label: isActive ? "Archive" : "Restore",
+        icon: isActive ? <Archive size={24} /> : <ArrowCounterClockwise size={24} />,
         color: theme.palette.primary.main
       },
       {
         function: removeThread,
-        label: "Delete",
+        dbDelete: deleteThread,
+        label: "delete",
         icon: <Trash size={24} />,
         color: theme.palette.error.main
       }
@@ -163,13 +174,7 @@ const ThreadCard = ({
         {!isMobileOS && (
           <>
             <ArchiveButton 
-              action={
-                thread.category === "active" 
-                ? archiveThread 
-                  : thread.category === "archived" 
-                  ? restoreThread 
-                    : () => {}
-              } 
+              action={isActive ? archiveThread : restoreThread} 
               itemId={thread.id} 
               location={thread.category}
             />
@@ -242,11 +247,12 @@ const ChatMessageCard = ({
   message: ChatMessage
 }) => {
   const { user } = useUser()
-  const actionItemProps: IActionList["actionItem"] = {
+  const actionItemProps: IActionList<ChatMessage>["actionItem"] = {
     item: message,
     actions: [
       {
         function: deleteMessage,
+        dbDelete: deleteMessages,
         label: "delete",
         icon: <Trash size={24} />,
         color: theme.palette.error.main

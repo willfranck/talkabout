@@ -4,7 +4,8 @@ import { createClient } from "@/utils/supabase/server"
 import { 
   SupabaseRes, 
   SupabaseUser, 
-  SupabaseSession, 
+  SupabaseSession,
+  UpdateableThreadColumns, 
   ChatThread,
   ChatMessage,
   transformChatThread,
@@ -227,12 +228,6 @@ async function deleteThread(userId: string, thread: ChatThread): Promise<Supabas
   }
 
   return { success: true }
-}
-
-type UpdateableThreadColumns = {
-  topic: string
-  category: string
-  last_active: string
 }
 
 async function updateDbThread(userId: string, thread: ChatThread, value: Partial<UpdateableThreadColumns>): Promise<SupabaseRes> {
