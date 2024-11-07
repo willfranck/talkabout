@@ -109,19 +109,19 @@ export default function ProfilePage() {
     setIsLoading(false)
   }
 
-  // const handleDeleteUser = async () => {
-  //   setIsLoading(true)
-  //   setCanEdit(false)
+  const handleDeleteUser = async () => {
+    // setIsLoading(true)
+    // setCanEdit(false)
 
-  //   const res = await deleteUser()
-  //   if (res.success) {
-  //     showMessage("success", "Account deleted")
-  //     await refreshUser()
-  //   } else {
-  //     showMessage("error", res.message || "An undefined error occurred")
-  //   }
-  //   setIsLoading(false)
-  // }
+    // const res = await deleteUser()
+    // if (res.success) {
+    //   showMessage("success", "Account deleted")
+    //   await refreshUser()
+    // } else {
+    //   showMessage("error", res.message || "An undefined error occurred")
+    // }
+    // setIsLoading(false)
+  }
 
   return (
     <PageLayout>
@@ -341,7 +341,7 @@ export default function ProfilePage() {
                       >
                         Clear All Chats
                       </Button>
-                      {/* <Button 
+                      <Button 
                         variant="outlined" 
                         color="error" 
                         onClick={handleDeleteUser}
@@ -349,8 +349,8 @@ export default function ProfilePage() {
                         disabled
                         sx={{ width: { xs: "100%", sm:"50%" } }}
                       >
-                        Delete Account
-                      </Button> */}
+                        *Delete Acct Coming Soon*
+                      </Button>
                     </FlexBox>
                   </FlexBox>
                 </FlexBox>

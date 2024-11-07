@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from "react"
 import { User, transformSupabaseUser } from "@types"
-import { getUser } from "@services/supabase-actions"
 import { useThreads } from "./chat"
+import { getUser } from "@services/supabase-actions"
 import { SessionContext, SessionContextProps } from "@providers/session-provider"
 import { SnackbarContext, SnackbarContextProps } from "@providers/mui-snackbar-provider"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { setUser } from "@redux/slices/user"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const useIsMobileOS = (): boolean => {
@@ -37,14 +39,15 @@ interface UserReturn {
 }
 
 const useUser = (): UserReturn => {
-  const [user, setUser] = useState<User | null>(null)
-  const userChats = useThreads()
+  const dispatch = useAppDispatch()
+  const { user } = useAppSelector(state => state.user)
+  const threads = useThreads()
 
   const getUserData = async () => {
     const res = await getUser()
     if (res.success && res.user) {
-      const userData = transformSupabaseUser(res.user, userChats)
-      setUser(userData)
+      const userData = transformSupabaseUser(res.user, threads)
+      dispatch(setUser(userData))
     }
   }
 

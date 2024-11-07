@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useSession, useSnackbar } from "@hooks/global"
 import { signOut } from "@services/supabase-actions"
 import { useAppDispatch } from "@redux/hooks"
+import { clearUser } from "@redux/slices/user"
 import { clearAllThreads } from "@redux/slices/chat"
 import Link from "next/link"
 import Image from "next/image"
@@ -71,6 +72,7 @@ const Header = () => {
       showMessage("error", res.message || "Undefined error signing out")
     } else {
       showMessage("success", "Signed out.  See you soon!")
+      dispatch(clearUser())
       dispatch(clearAllThreads())
       if (pathname === "/profile") {
         router.push("/")

@@ -35,10 +35,10 @@ export default function ChatPage() {
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
   const [isLoading, setIsLoading] = useState(true)
-  
 
+  
   useEffect(() => {
-    if (!user?.id) {
+    if (!session || !user?.id) {
       setIsLoading(false)
       return
     }
@@ -59,8 +59,7 @@ export default function ChatPage() {
       }
     }
     syncData()
-
-  }, [dispatch, user?.id])
+  }, [dispatch, session, user?.id])
 
   useEffect(() => {
     if (!session) {
@@ -79,7 +78,8 @@ export default function ChatPage() {
         component="aside"
         sx={{
           display: { xs: "none", md: "block" },
-          height: "100%"
+          height: "100%",
+          opacity: (isLoading ? "33%" : "100%")
         }}
       >
         <ChatPanel />
@@ -89,7 +89,8 @@ export default function ChatPage() {
         flexGrow: "1",
         height: "100%",
         gap: "1rem",
-        padding: { xs: "0 0 0.5rem", sm: "0 1rem 0.875rem", lg: "0 2rem 1rem 0" }
+        padding: { xs: "0 0 0.5rem", sm: "0 1rem 0.875rem", lg: "0 2rem 1rem 0" },
+        opacity: (isLoading ? "33%" : "100%")
       }}>
         <ChatHistory messages={messageHistory} />
         <ChatInput />

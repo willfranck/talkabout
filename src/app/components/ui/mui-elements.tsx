@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
-import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
+import { clearUser } from "@redux/slices/user"
 import { clearAllThreads } from "@redux/slices/chat"
+import { signOut } from "@services/supabase-actions"
 import { 
   useSession, 
   useIsMobileOS, 
@@ -16,7 +18,6 @@ import {
   SupabaseRes, 
   UpdateableThreadColumns 
 } from "@types"
-import { signOut } from "@services/supabase-actions"
 import { styled } from "@mui/material/styles"
 import theme from "@utils/mui-theme"
 import {
@@ -139,6 +140,7 @@ const MenuNav = ({
     } else {
       onClose()
       showMessage("success", "Signed out.  See you soon!")
+      dispatch(clearUser())
       dispatch(clearAllThreads())
       if (pathname === "/profile") {
         router.push("/")
@@ -543,6 +545,8 @@ const LoadingDialog = ({
   open: boolean
   message: string
 }) => {
+  if (!open) return null
+  
   return (
     <Dialog 
       open={open} 
