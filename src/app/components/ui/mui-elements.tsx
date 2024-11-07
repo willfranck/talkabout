@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
+import { clearAllThreads } from "@redux/slices/chat"
 import { 
   useSession, 
   useIsMobileOS, 
@@ -126,6 +127,7 @@ const MenuNav = ({
   const pathname = usePathname()
   const router = useRouter()
   const { session } = useSession()
+  const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
 
   const handleSignOut = async () => {
@@ -136,6 +138,7 @@ const MenuNav = ({
     } else {
       onClose()
       showMessage("success", "Signed out.  See you soon!")
+      dispatch(clearAllThreads())
       if (pathname === "/profile") {
         router.push("/")
       }

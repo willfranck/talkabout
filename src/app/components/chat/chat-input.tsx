@@ -86,8 +86,8 @@ export const ChatInput = () => {
         dispatch(updateLastActive(new Date().toISOString()))
         setUserPrompt("")
         if (user) {
-          saveMessage(user.id, userMessage)
-          updateDbThread(
+          await saveMessage(user.id, userMessage)
+          await updateDbThread(
             user.id, 
             {...selectedThread, lastActive: userMessage.timestamp}, 
             { last_active: userMessage.timestamp }
@@ -106,7 +106,7 @@ export const ChatInput = () => {
           }
           dispatch(addMessage({ threadId: selectedThread.id, message: aiMessage }))
           if (user) {
-            saveMessage(user.id, aiMessage)
+            await saveMessage(user.id, aiMessage)
           }
         }
       } catch (error) {
