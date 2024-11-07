@@ -358,9 +358,7 @@ const ChatMessageCard = ({
                 {message.content}
               </ReactMarkdown>
             )}
-            <FlexBox sx={{ 
-              gap: "0.375rem"
-            }}>
+            <FlexBox sx={{ gap: "0.375rem" }}>
               {message.role === "user" ? (
                 <>
                   <ActionsPopover 
