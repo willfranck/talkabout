@@ -43,9 +43,10 @@ const useActiveThreads = () => {
 
 const useLastActiveThread = () => {
   const activeThreads = useActiveThreads()
+  const messages = useMessages()
   const lastActiveThread = useMemo(() => 
-    getLastActiveThread(activeThreads),
-    [activeThreads]
+    getLastActiveThread(activeThreads, messages),
+    [activeThreads, messages]
   )
   return lastActiveThread
 }
@@ -63,7 +64,7 @@ const useSelectedThread = () => {
   const selectedThread = useAppSelector(
     (state) => state.chat.threads.find(thread => thread.selected)
   )
-  return selectedThread
+  return useMemo(() => selectedThread, [selectedThread])
 }
 
 const useMessages = () => {
@@ -75,11 +76,15 @@ const useMessages = () => {
 
 const useThreadMessageHistory = () => {
   const selectedThread = useSelectedThread()
-  const messageHistory = useMemo(() =>
-    selectedThread?.messages || [],
-    [selectedThread]
-  )
-  return messageHistory
+  const messages = useMessages()
+  // const messageHistory = useMemo(() =>
+  //   selectedThread?.messages || [],
+  //   [selectedThread]
+  // )
+  return useMemo(() => {
+    if (!selectedThread) return []
+    return messages.filter(msg => msg.threadId === selectedThread.id)
+  }, [selectedThread, messages])
 }
 
 

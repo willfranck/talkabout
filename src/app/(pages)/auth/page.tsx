@@ -2,7 +2,7 @@
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSnackbar } from "@hooks/global"
-import { useThreads } from "@hooks/chat"
+import { useMessages, useThreads } from "@hooks/chat"
 import { User, transformSupabaseUser } from "@types"
 import { useAppDispatch } from "@redux/hooks"
 import { setUser } from "@redux/slices/user"
@@ -38,7 +38,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 // import { createClient } from "@utils/supabase/client"
 
-type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "chats"> & {
+type UserInputData = Pick<User, "email" | "firstName" | "lastName"> & {
   password: string
 }
 
@@ -46,6 +46,7 @@ export default function LoginPage() {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const threads = useThreads()
+  const messages = useMessages()
   const { showMessage } = useSnackbar()
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -91,7 +92,7 @@ export default function LoginPage() {
     })
     if (isLogin) {
       // Pushes any threads/messages created while logged out into the user's DB storage
-      const res = await logIn(formData, threads)
+      const res = await logIn(formData, threads, messages)
       if (res.success && res.user) {
         const user = await transformSupabaseUser(res.user, threads)
         dispatch(setUser(user))
@@ -108,7 +109,7 @@ export default function LoginPage() {
 
     } else {
       // Pushes any threads/messages created before signing up into the user's new DB storage
-      const res = await signUp(formData, threads)
+      const res = await signUp(formData, threads, messages)
       if (res.success && res.user) {
         const user = await transformSupabaseUser(res.user, threads)
         dispatch(setUser(user))

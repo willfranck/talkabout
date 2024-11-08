@@ -78,7 +78,7 @@ export const ChatInput = () => {
           content: userPrompt, 
           timestamp: new Date().toISOString()
         }
-        dispatch(addMessage({ threadId: selectedThread.id, message: userMessage }))
+        dispatch(addMessage(userMessage))
         dispatch(updateLastActive(new Date().toISOString()))
         setUserPrompt("")
         if (user) {
@@ -100,7 +100,7 @@ export const ChatInput = () => {
             content: content,
             timestamp: new Date().toISOString()
           }
-          dispatch(addMessage({ threadId: selectedThread.id, message: aiMessage }))
+          dispatch(addMessage(aiMessage))
           if (user) {
             await saveMessage(user.id, aiMessage)
           }

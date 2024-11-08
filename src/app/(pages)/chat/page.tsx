@@ -10,8 +10,8 @@ import {
 import { 
   // useInitialThread,
   useThreads,
-  useSelectedThread,
-  useMessages
+  useMessages,
+  useThreadMessageHistory
 } from "@hooks/chat"
 import { PageLayout } from "@ui/mui-layout"
 import { Box } from "@mui/material"
@@ -32,8 +32,7 @@ export default function ChatPage() {
   const { showMessage } = useSnackbar()
   const threads = useThreads()
   const messages = useMessages()
-  const selectedThread = useSelectedThread()
-  const messageHistory = selectedThread ? selectedThread.messages : []
+  const messageHistory = useThreadMessageHistory()
   const [isLoading, setIsLoading] = useState(false)
   
   useEffect(() => {
@@ -69,7 +68,8 @@ export default function ChatPage() {
       }, 2400)
       return () => clearTimeout(delayTimer)
     }
-  }, [session, showMessage])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
 
   return (
     <PageLayout>

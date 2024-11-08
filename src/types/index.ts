@@ -110,7 +110,6 @@ export type ChatMessage = {
 export type ChatThread = {
   id: string
   topic: string
-  messages: ChatMessage[]
   category: "active" | "archived"
   created: string
   selected: boolean
@@ -138,7 +137,7 @@ export const transformSupabaseThread = (thread: SupabaseThread): ChatThread => {
     created: thread.created,
     lastActive: thread.last_active,
     selected: false,
-    messages: []
+    // messages: []
   }
 }
 

@@ -21,29 +21,33 @@ import { randomTopic } from "@globals/values"
 //// Redux Functions
 type Action =
   | { type: "chat/createThread", payload: ChatThread }
-  | { type: "chat/addMessage", payload: { threadId: string, message: ChatMessage } }
+  | { type: "chat/addMessage", payload: ChatMessage }
 
 const syncDbMessages = async (userId: string, threads: ChatThread[], messages: ChatMessage[]) => {
   try {
-    const reduxActions: Action[] = []
-    const data = await getAllMessages(userId)
-
+    // Create Maps of existing threads/messages
     const threadMap = new Map(threads.map(thread => [thread.id, thread]))
     const messageMap = new Map(messages.map(message => [message.id, message]))
 
-    if (data.success && data.chatThreads) {
-      const transformedThreads = data.chatThreads.map(transformSupabaseThread)
-      for (const chatThread of transformedThreads) {
-        if (!threadMap.has(chatThread.id)) {
-          reduxActions.push(createThread(chatThread))
+    const reduxActions: Action[] = []
+    const data = await getAllMessages(userId)
+    
+    // Iterate through Maps to determine actions
+    if (data.success) {
+      if (data.chatThreads) {
+        const transformedThreads = data.chatThreads.map(transformSupabaseThread)
+        for (const chatThread of transformedThreads) {
+          if (!threadMap.has(chatThread.id)) {
+            reduxActions.push(createThread(chatThread))
+          }
         }
       }
-    }
-    if (data.chatMessages) {
-      const transformedMessages = data.chatMessages.map(transformSupabaseMessage)
-      for (const chatMessage of transformedMessages) {
-        if (!messageMap.has(chatMessage.id)) {
-          reduxActions.push(addMessage({ threadId: chatMessage.threadId, message: chatMessage }))
+      if (data.chatMessages) {
+        const transformedMessages = data.chatMessages.map(transformSupabaseMessage)
+        for (const chatMessage of transformedMessages) {
+          if (!messageMap.has(chatMessage.id)) {
+            reduxActions.push(addMessage(chatMessage))
+          }
         }
       }
     }
@@ -57,7 +61,6 @@ function createNewThread(dispatch: AppDispatch) {
   const newThread: ChatThread = {
     id: crypto.randomUUID(),
     topic: randomTopic(),
-    messages: [],
     category: "active",
     created: new Date().toISOString(),
     selected: true,
@@ -71,14 +74,15 @@ function selectThread(dispatch: AppDispatch, threadId: string) {
   dispatch(setSelectedThread(threadId))
 }
 
-function getLastActiveThread(activeThreads: ChatThread[]) {
+function getLastActiveThread(activeThreads: ChatThread[], messages: ChatMessage[]) {
   if (activeThreads.length === 0) return null
 
   const lastActiveThread = activeThreads.reduce((latest, current) => {
     return current.lastActive > latest.lastActive ? current : latest
   }, activeThreads[0])
 
-  if (lastActiveThread && lastActiveThread.messages.length > 0) {
+  const lastActiveThreadMessages = messages.filter(msg => msg.threadId === lastActiveThread.id)
+  if (lastActiveThread && lastActiveThreadMessages.length > 0) {
     return lastActiveThread.id
   } else {
     const lastCreatedThread = activeThreads.reduce((latest, current) => {

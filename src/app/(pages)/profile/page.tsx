@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import { useThreads, useThreadCount } from "@hooks/chat"
+import { useThreadCount, useMessages } from "@hooks/chat"
 import { useUser, useSnackbar } from "@hooks/global"
 import { User } from "@types"
 import { updateUser } from "@services/supabase-actions"
@@ -23,36 +23,28 @@ import {
 import { NotePencil } from "@phosphor-icons/react/dist/ssr"
 
 
-type UserInputData = Omit<User, "id" | "created" | "lastSignIn" | "avatar" | "chats">
+type UserInputData = Pick<User, "email" | "firstName" | "lastName">
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch()
   const { showMessage } = useSnackbar()
   const { user, refreshUser } = useUser()
-  const [isLoading, setIsLoading] = useState(true)
-  const threads = useThreads()
   const threadCount = useThreadCount()
+  const messages = useMessages()
+  const [isLoading, setIsLoading] = useState(true)
   const [canEdit, setCanEdit] = useState(false)
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
-  const [userInputData, setUserInputData] = useState<User>({
-    id: "",
+  const [userInputData, setUserInputData] = useState<UserInputData>({
     email: "",
-    created: "",
-    lastSignIn: "",
     firstName: "",
-    lastName: "",
-    avatar: "",
-    chats: []
+    lastName: ""
   })
 
   useEffect(() => {
     if (!user) return
     
     if (user) {
-      setUserInputData({
-        ...user,
-        avatar: user.avatar || ""
-      })
+      setUserInputData(user)
     }
     setIsLoading(false)
   }, [user])
@@ -62,10 +54,6 @@ export default function ProfilePage() {
       children: `${first.split(" ")[0][0]}${last?.split(" ")[0][0] || ""}`
     }
   }
-
-  const messageCount = threads.reduce((total, thread) => {
-    return total + thread.messages.length
-  }, 0)
 
   const handleEditInfo = () => {
     setCanEdit((canEdit) => !canEdit)
@@ -178,9 +166,9 @@ export default function ProfilePage() {
                   alignItems: "start",
                   gap: "0.25rem" 
                 }}>
-                  <Typography sx={{ marginBottom: "0.5rem" }}>Stats</Typography>
+                  <Typography sx={{ marginBottom: "0.25rem" }}>Stats</Typography>
                   <Typography variant="body2">
-                    {`Threads: ${threadCount}    Messages: ${messageCount}`}
+                    {`Threads: ${threadCount}    Messages: ${messages.length}`}
                   </Typography>
                   <Typography variant="body2">
                     {`Joined:  ${new Date(user!.created).toLocaleDateString()}`}
@@ -236,12 +224,8 @@ export default function ProfilePage() {
                           disabled={!canEdit}
                           required 
                           slotProps={{
-                            htmlInput: {
-                              enterKeyHint: "next"
-                            },
-                            inputLabel: {
-                              shrink: true
-                            }
+                            htmlInput: { enterKeyHint: "next" },
+                            inputLabel: { shrink: true }
                           }}
                           sx={{ 
                             width: "100%", 
@@ -261,12 +245,8 @@ export default function ProfilePage() {
                           onKeyDown={(e) => handleNextInput(e, 1)}
                           disabled={!canEdit}
                           slotProps={{
-                            htmlInput: {
-                              enterKeyHint: "next"
-                            },
-                            inputLabel: {
-                              shrink: true
-                            }
+                            htmlInput: { enterKeyHint: "next" },
+                            inputLabel: { shrink: true }
                           }}
                           sx={{ 
                             width: "100%", 
@@ -287,12 +267,8 @@ export default function ProfilePage() {
                           disabled={!canEdit}
                           required 
                           slotProps={{
-                            htmlInput: {
-                              enterKeyHint: "next"
-                            },
-                            inputLabel: {
-                              shrink: true
-                            }
+                            htmlInput: { enterKeyHint: "go" },
+                            inputLabel: { shrink: true }
                           }}
                           sx={{ 
                             width: "100%", 
