@@ -4,7 +4,7 @@ import { useAppDispatch } from "@redux/hooks"
 import { useUser, useIsMobileOS } from "@hooks/global"
 import { 
   useSelectedThread, 
-  useMessageHistory 
+  useThreadMessageHistory 
 } from "@hooks/chat"
 import { 
   ChatThread, 
@@ -407,7 +407,7 @@ const ChatHistory = ({
 }) => {
   const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(selectedThread?.id) 
-  const messageHistory = useMessageHistory()
+  const messageHistory = useThreadMessageHistory()
   const messagesRef = useRef<number>(messageHistory.length)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
   const scrollOffset = 32

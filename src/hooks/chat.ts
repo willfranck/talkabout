@@ -7,14 +7,14 @@ const useThreads = () => {
   const threads = useAppSelector(
     (state) => state.chat.threads
   )
-  return threads
+  return useMemo(() => threads, [threads])
 }
 
 const useThreadCount = () => {
   const threadCount = useAppSelector(
     (state) => state.chat.threads.length
   )
-  return threadCount
+  return useMemo(() => threadCount, [threadCount])
 }
 
 const useInitialThread = () => {
@@ -66,7 +66,14 @@ const useSelectedThread = () => {
   return selectedThread
 }
 
-const useMessageHistory = () => {
+const useMessages = () => {
+  const messages = useAppSelector(
+    (state) => state.chat.messages
+  )
+  return useMemo(() => messages, [messages])
+}
+
+const useThreadMessageHistory = () => {
   const selectedThread = useSelectedThread()
   const messageHistory = useMemo(() =>
     selectedThread?.messages || [],
@@ -84,5 +91,6 @@ export {
   useLastActiveThread,
   useArchivedThreads,
   useSelectedThread,
-  useMessageHistory
+  useMessages,
+  useThreadMessageHistory
 }

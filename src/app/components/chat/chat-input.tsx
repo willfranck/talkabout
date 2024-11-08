@@ -16,7 +16,7 @@ import {
 import { 
   useThreadCount, 
   useSelectedThread, 
-  useMessageHistory 
+  useThreadMessageHistory 
 } from "@hooks/chat"
 import { ChatMessage } from "@types"
 import { ChatInputField } from "@ui/chat-elements"
@@ -28,7 +28,7 @@ export const ChatInput = () => {
   const threadCount = useThreadCount()
   const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(undefined)
-  const messageHistory = useMessageHistory()
+  const messageHistory = useThreadMessageHistory()
   const messagesRef = useRef(messageHistory.length)
   const [userPrompt, setUserPrompt] = useState("")
   const [aiTemperature, setAiTemperature] = useState(temperatureSettings.hot)

@@ -32,16 +32,16 @@ const syncDbMessages = async (userId: string, threads: ChatThread[], messages: C
     const messageMap = new Map(messages.map(message => [message.id, message]))
 
     if (data.success && data.chatThreads) {
-      const chatThreads = data.chatThreads.map(transformSupabaseThread)
-      for (const chatThread of chatThreads) {
+      const transformedThreads = data.chatThreads.map(transformSupabaseThread)
+      for (const chatThread of transformedThreads) {
         if (!threadMap.has(chatThread.id)) {
           reduxActions.push(createThread(chatThread))
         }
       }
     }
     if (data.chatMessages) {
-      const chatMessages = data.chatMessages.map(transformSupabaseMessage)
-      for (const chatMessage of chatMessages) {
+      const transformedMessages = data.chatMessages.map(transformSupabaseMessage)
+      for (const chatMessage of transformedMessages) {
         if (!messageMap.has(chatMessage.id)) {
           reduxActions.push(addMessage({ threadId: chatMessage.threadId, message: chatMessage }))
         }
@@ -49,7 +49,6 @@ const syncDbMessages = async (userId: string, threads: ChatThread[], messages: C
     }
     return reduxActions
   } catch (error) {
-    console.log(error)
     return []
   }
 }

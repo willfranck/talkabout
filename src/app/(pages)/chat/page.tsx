@@ -11,7 +11,7 @@ import {
   // useInitialThread,
   useThreads,
   useSelectedThread,
-  useMessageHistory
+  useMessages
 } from "@hooks/chat"
 import { PageLayout } from "@ui/mui-layout"
 import { Box } from "@mui/material"
@@ -31,7 +31,7 @@ export default function ChatPage() {
   const { session } = useSession()
   const { showMessage } = useSnackbar()
   const threads = useThreads()
-  const messages = useMessageHistory()
+  const messages = useMessages()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
   const [isLoading, setIsLoading] = useState(false)
