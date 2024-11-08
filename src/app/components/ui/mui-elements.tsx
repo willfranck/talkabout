@@ -136,10 +136,10 @@ const MenuNav = ({
     const res = await signOut()
     if (res.error) {
       onClose()
-      showMessage("error", res.message || "Undefined error signing out")
+      showMessage("error", res.message || "Undefined error signing out", 3000)
     } else {
       onClose()
-      showMessage("success", "Signed out.  See you soon!")
+      showMessage("success", "Signed out.  See you soon!", 3000)
       dispatch(clearUser())
       dispatch(clearAllThreads())
       if (pathname === "/profile") {

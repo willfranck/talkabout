@@ -9,7 +9,9 @@ import {
 export type SnackbarContextProps = {
   showMessage: (
     type: "info" | "success" | "warning" | "error",
-    message: string) => void
+    message: string,
+    duration: number
+  ) => void
 }
 
 export const SnackbarContext = createContext<SnackbarContextProps>({ showMessage: () => {} })
@@ -18,9 +20,11 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarSeverity, setSnackbarSeverity] = useState<"info" | "success" | "warning" | "error">("info")
   const [snackbarMessage, setSnackbarMessage] = useState("")
-  const showMessage = (type: "info" | "success" | "warning" | "error", message: string) => {
+  const [snackbarDuration, setSnackbarDuration] = useState(0)
+  const showMessage = (type: "info" | "success" | "warning" | "error", message: string, duration: number) => {
     setSnackbarSeverity(type)
     setSnackbarMessage(message)
+    setSnackbarDuration(duration)
     setSnackbarOpen(true)
   }
   const handleClose = () => setSnackbarOpen(false)
@@ -31,7 +35,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       <Snackbar
         open={snackbarOpen}
         onClose={handleClose}
-        autoHideDuration={6000}
+        autoHideDuration={snackbarDuration}
         anchorOrigin={{ 
           vertical: "top", 
           horizontal: "center" 

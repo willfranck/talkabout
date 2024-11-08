@@ -89,10 +89,10 @@ export default function ProfilePage() {
     })
     const res = await updateUser(formData)
     if (res.success) {
-      showMessage("success", "Updated account\n\nCheck your new email for the confirmation link to complete the update if it was changed")
+      showMessage("success", "Updated account\n\nCheck your new email for the confirmation link to complete the update if it was changed", 6000)
       await refreshUser()
     } else {
-      showMessage("error", res.message || "An undefined error occurred")
+      showMessage("error", res.message || "An undefined error occurred", 3000)
     }
     setIsLoading(false)
   }
@@ -103,10 +103,10 @@ export default function ProfilePage() {
 
     // const res = await deleteUser()
     // if (res.success) {
-    //   showMessage("success", "Account deleted")
+    //   showMessage("success", "Account deleted", 6000)
     //   await refreshUser()
     // } else {
-    //   showMessage("error", res.message || "An undefined error occurred")
+    //   showMessage("error", res.message || "An undefined error occurred", 3000)
     // }
     // setIsLoading(false)
   }

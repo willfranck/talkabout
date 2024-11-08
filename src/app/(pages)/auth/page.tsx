@@ -10,6 +10,7 @@ import {
   logIn, 
   signUp
 } from "@services/supabase-actions"
+import { syncDbMessages } from "@globals/functions"
 import { PageLayout } from "@ui/mui-layout"
 import theme from "@utils/mui-theme"
 import { 
@@ -51,6 +52,7 @@ export default function LoginPage() {
   const [hasAccount, setHasAccount] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState("")
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
   const [userInputData, setUserInputData] = useState<UserInputData>({
     firstName: "",
@@ -85,6 +87,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, isLogin: boolean) => {
     e.preventDefault()
+    setLoadingMessage("Authenticating...")
     setIsLoading(true)
     const formData = new FormData()
     Object.keys(userInputData).forEach(key => {
@@ -94,18 +97,30 @@ export default function LoginPage() {
       // Pushes any threads/messages created while logged out into the user's DB storage
       const res = await logIn(formData, threads, messages)
       if (res.success && res.user) {
+        setLoadingMessage("Syncing data...")
         const user = await transformSupabaseUser(res.user, threads)
         dispatch(setUser(user))
 
+        try {
+          const reduxActions = await syncDbMessages(user.id, threads, messages)
+          for (const action of reduxActions) {
+            dispatch(action)
+          }
+        } catch (error) {
+          showMessage("error", "Unable to sync messages", 3000)
+        }
+        localStorage.setItem("sync-messages", Date.now().toString())
+
         const name = user.firstName || ""
-        showMessage("success", `Welcome back ${name}!`)
+        showMessage("success", `Welcome back ${name}!`, 6000)
 
         router.push("/chat")
 
       } else {
-        showMessage("error", res.message || "An undefined error occurred")
+        showMessage("error", res.message || "An undefined error occurred", 3000)
       }
       setIsLoading(false)
+      setLoadingMessage("")
 
     } else {
       // Pushes any threads/messages created before signing up into the user's new DB storage
@@ -115,12 +130,12 @@ export default function LoginPage() {
         dispatch(setUser(user))
 
         const name = user.firstName || ""
-        showMessage("success", `Successfully created account\nWelcome ${name}!`)
+        showMessage("success", `Successfully created account\nWelcome ${name}!`, 6000)
         
         router.push("/chat")
 
       } else {
-        showMessage("error", res.message || "An undefined error occurred")
+        showMessage("error", res.message || "An undefined error occurred", 3000)
       }
       setIsLoading(false)
     }
@@ -144,7 +159,7 @@ export default function LoginPage() {
 
   return (
     <PageLayout>
-      <LoadingDialog open={isLoading} message="Authenticating..." />
+      <LoadingDialog open={isLoading} message={loadingMessage} />
 
       <FlexBox sx={{
         flexDirection: "column",
