@@ -34,7 +34,7 @@ export default function ChatPage() {
   const messages = useMessageHistory()
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   
   useEffect(() => {
