@@ -70,6 +70,43 @@ export function SupabaseSessionProvider({
     }
   }, [supabase, initialSession, refreshSessionInternal])
 
+  // Session check callback
+  const checkAndRefreshSession = useCallback(async () => {
+    if (document.visibilityState === 'visible') {
+      setIsSessionLoading(true)
+      try {
+        const { data: { session: freshSession } } = await supabase.auth.getSession()
+        if (freshSession?.expires_at) {
+          const expiresAt = new Date(freshSession.expires_at * 1000)
+          const isExpiringSoon = expiresAt.getTime() - Date.now() < 60000
+
+          if (isExpiringSoon) {
+            const { data: { session } } = await supabase.auth.refreshSession()
+            setSession(session)
+          } else {
+            setSession(freshSession)
+          }
+        }
+      } finally {
+        setIsSessionLoading(false)
+      }
+    }
+  }, [supabase.auth])
+
+  // Call session check periodically (10 minutes)
+  useEffect(() => {
+    const intervalId = setInterval(checkAndRefreshSession, 10 * 60 * 1000)
+    return () => clearInterval(intervalId)
+  }, [checkAndRefreshSession])
+
+  // Call session check after inactivity
+  useEffect(() => {
+    const handleVisibilityChange = () => checkAndRefreshSession()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [checkAndRefreshSession])
+
+  
   return (
     <SessionContext.Provider value={{ session, isSessionLoading }}>
       {children}
