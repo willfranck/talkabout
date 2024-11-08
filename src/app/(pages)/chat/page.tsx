@@ -58,8 +58,8 @@ export default function ChatPage() {
         setIsLoading(false)
       }
     }
-    const debounceSync = setTimeout(syncData, 120000)
-    return () => clearTimeout(debounceSync)
+    const debounceSync = setInterval(syncData, 30000)
+    return () => clearInterval(debounceSync)
   }, [dispatch, session, user?.id])
 
   useEffect(() => {
