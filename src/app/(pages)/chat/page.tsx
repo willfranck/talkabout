@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useAppDispatch } from "@redux/hooks"
-import { syncDbMessages } from "@globals/functions"
+import { syncDbMessages, debounce } from "@globals/functions"
 import { 
   useUser, 
   useSession, 
@@ -35,7 +35,6 @@ export default function ChatPage() {
   const selectedThread = useSelectedThread()
   const messageHistory = selectedThread ? selectedThread.messages : []
   const [isLoading, setIsLoading] = useState(false)
-
   
   useEffect(() => {
     if (!session || !user?.id) {
@@ -44,8 +43,9 @@ export default function ChatPage() {
     }
     
     const syncData = async () => {
-      setIsLoading(true)
+      if (debounce("sync-messages", 10000)) return
 
+      setIsLoading(true)
       try {
         const reduxActions = await syncDbMessages(user.id, threads, messages)
         for (const action of reduxActions) {
@@ -58,8 +58,8 @@ export default function ChatPage() {
         setIsLoading(false)
       }
     }
-    const debounceSync = setInterval(syncData, 30000)
-    return () => clearInterval(debounceSync)
+    syncData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, session, user?.id])
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function ChatPage() {
       }, 2400)
       return () => clearTimeout(delayTimer)
     }
-  }, [session])
+  }, [session, showMessage])
 
   return (
     <PageLayout>

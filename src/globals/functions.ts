@@ -27,24 +27,23 @@ const syncDbMessages = async (userId: string, threads: ChatThread[], messages: C
   try {
     const reduxActions: Action[] = []
     const data = await getAllMessages(userId)
-    if (data.success) {
-      if (data.chatThreads) {
-        const chatThreads = data.chatThreads.map(transformSupabaseThread)
-        for (const chatThread of chatThreads) {
-          const threadExistsLocally = threads.some(thread => thread.id === chatThread.id)
-          if (!threadExistsLocally) {
-            reduxActions.push(createThread(chatThread))
 
-            if (data.chatMessages) {
-              const chatMessages = data.chatMessages.map(transformSupabaseMessage)
-              for (const chatMessage of chatMessages) {
-                const messageExistsLocally = messages.some(message => message.id === chatMessage.id)
-                if (!messageExistsLocally && chatMessage.threadId === chatThread.id) {
-                  reduxActions.push(addMessage({ threadId: chatThread.id, message: chatMessage }))
-                }
-              }
-            }
-          }
+    const threadMap = new Map(threads.map(thread => [thread.id, thread]))
+    const messageMap = new Map(messages.map(message => [message.id, message]))
+
+    if (data.success && data.chatThreads) {
+      const chatThreads = data.chatThreads.map(transformSupabaseThread)
+      for (const chatThread of chatThreads) {
+        if (!threadMap.has(chatThread.id)) {
+          reduxActions.push(createThread(chatThread))
+        }
+      }
+    }
+    if (data.chatMessages) {
+      const chatMessages = data.chatMessages.map(transformSupabaseMessage)
+      for (const chatMessage of chatMessages) {
+        if (!messageMap.has(chatMessage.id)) {
+          reduxActions.push(addMessage({ threadId: chatMessage.threadId, message: chatMessage }))
         }
       }
     }
@@ -110,6 +109,20 @@ function clearAll(dispatch: AppDispatch) {
   dispatch(clearAllThreads())
 }
 
+//// Debounce Function
+function debounce(key: string, delay: number) {
+  const now = Date.now()
+  const prev = localStorage.getItem(key)
+    ? parseInt(localStorage.getItem(key) as string)
+    : 0
+  
+  if (now - prev < delay) {
+    return true
+  }
+  localStorage.setItem(key, now.toString())
+  return false
+}
+
 //// UI Functions
 function displayTextByChar(text: string, setState: React.Dispatch<React.SetStateAction<string>>) {
   let accumulatedText = ""
@@ -142,6 +155,7 @@ export {
   restoreThread,
   deleteMessage,
   clearAll,
+  debounce,
   displayTextByChar,
   removeTextByChar
 }
