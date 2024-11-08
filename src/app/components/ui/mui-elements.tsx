@@ -378,7 +378,10 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
           width: "75%"
         }}
       >
-        <List sx={{ paddingTop: "0" }}>
+        <List sx={{ 
+          paddingTop: "0", 
+          paddingBottom: "0.25rem" 
+        }}>
           <ListSubheader sx={{
             lineHeight: "2rem",
             color: "primary.dark"
@@ -435,8 +438,7 @@ interface IDeleteButton<T extends ChatThread | ChatMessage> {
   action: (dispatch: AppDispatch, itemId: string) => void
   dbAction?: (userId: string, item: T) => Promise<SupabaseRes>
   userId?: string
-  item?: T
-  itemId: string
+  item: T
   location: "threads" | "chat-history",
 }
 
@@ -445,14 +447,13 @@ const DeleteButton = <T extends ChatThread | ChatMessage>({
   dbAction,
   userId,
   item,
-  itemId,
   location
 }: IDeleteButton<T>) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
 
   const handleClick = () => {
-    action(dispatch, itemId)
+    action(dispatch, item.id)
     if (dbAction && userId && item) {
       dbAction(userId, item)
     }
@@ -490,23 +491,37 @@ const DeleteButton = <T extends ChatThread | ChatMessage>({
   )
 }
 
-interface IArchiveButton {
+interface IArchiveButton<T extends ChatThread> {
   action: (dispatch: AppDispatch, itemId: string) => void
-  itemId: string
+  dbAction?: {
+    fn: ((userId: string, thread: T, value: Partial<UpdateableThreadColumns>) => Promise<SupabaseRes>)
+    values: Partial<UpdateableThreadColumns>
+  }
+  userId?: string
+  item: T
   location: "active" | "archived"
 }
 
-const ArchiveButton = ({
+const ArchiveButton = <T extends ChatThread>({
   action,
-  itemId,
+  dbAction,
+  userId,
+  item,
   location
-}: IArchiveButton) => {
+}: IArchiveButton<T>) => {
   const dispatch = useAppDispatch()
   const isMobileOS = useIsMobileOS()
 
+  const handleClick = () => {
+    action(dispatch, item.id)
+    if (dbAction && userId && item) {
+      dbAction.fn(userId, item, dbAction.values)
+    }
+  }
+
   return (
     <Button 
-      onClick={() => action(dispatch, itemId)}
+      onClick={handleClick}
       tabIndex={-1}
       aria-label="Archive/Restore toggle"
       className="actionButton"

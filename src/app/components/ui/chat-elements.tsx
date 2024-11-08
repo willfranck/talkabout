@@ -78,17 +78,17 @@ const ThreadCard = ({
     actions: [
       {
         redux: isActive ? archiveThread : restoreThread,
-        dbUpdate: {
+        dbUpdate: user ? {
           fn: updateDbThread, 
           values: {category: (isActive ? "archived" : "active")}
-        },
+        } : undefined,
         label: isActive ? "archive" : "restore",
         icon: isActive ? <Archive size={24} /> : <ArrowCounterClockwise size={24} />,
         color: theme.palette.primary.main
       },
       {
         redux: removeThread,
-        dbDelete: deleteThread,
+        dbDelete: user ? deleteThread : undefined,
         label: "delete",
         icon: <Trash size={24} />,
         color: theme.palette.error.main
@@ -175,15 +175,19 @@ const ThreadCard = ({
           <>
             <ArchiveButton 
               action={isActive ? archiveThread : restoreThread} 
-              itemId={thread.id} 
+              dbAction={user ? {
+                fn: updateDbThread,
+                values: {category: (isActive ? "archived" : "active" )}
+              } : undefined}
+              userId={user ? user.id : undefined}
+              item={thread} 
               location={thread.category}
             />
             <DeleteButton 
               action={removeThread} 
-              dbAction={deleteThread}
+              dbAction={user ? deleteThread : undefined}
               userId={user ? user.id : undefined}
               item={thread}
-              itemId={thread.id} 
               location="threads" 
             />
           </>
@@ -377,10 +381,9 @@ const ChatMessageCard = ({
                   </Typography>
                   <DeleteButton 
                     action={deleteMessage} 
-                    dbAction={deleteMessages}
+                    dbAction={user ? deleteMessages : undefined}
                     userId={user ? user.id : undefined}
                     item={message}
-                    itemId={message.id} 
                     location="chat-history" 
                   />
                 </>
