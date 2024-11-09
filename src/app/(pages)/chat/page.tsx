@@ -37,7 +37,7 @@ export default function ChatPage() {
     if (!session || !user?.id) return
     
     const syncData = async () => {
-      if (debounce("sync-messages", 10000)) return
+      if (debounce("sync-messages", 6000)) return
 
       try {
         const reduxActions = await syncDbMessages(user.id, threads, messages)

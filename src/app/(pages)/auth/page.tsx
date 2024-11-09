@@ -118,9 +118,8 @@ export default function LoginPage() {
 
       } else {
         showMessage("error", res.message || "An undefined error occurred", 3000)
+        setIsLoading(false)
       }
-      setIsLoading(false)
-      setLoadingMessage("")
 
     } else {
       // Pushes any threads/messages created before signing up into the user's new DB storage
@@ -136,8 +135,8 @@ export default function LoginPage() {
 
       } else {
         showMessage("error", res.message || "An undefined error occurred", 3000)
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
   }
 

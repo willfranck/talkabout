@@ -6,6 +6,7 @@ import { useUser } from "@hooks/global"
 import { temperatureSettings } from "@globals/values"
 import { 
   addMessage, 
+  deleteMessages, 
   updateLastActive, 
   updateThreadTopic 
 } from "@redux/slices/chat"
@@ -86,11 +87,22 @@ export const ChatInput = () => {
           await updateDbThread(user.id, selectedThread, { last_active: userMessage.timestamp })
         }
 
+        const loadingMessage: ChatMessage = {
+          id: crypto.randomUUID(),
+          threadId: selectedThread.id,
+          role: "model",
+          content: "Reticulating splines...",
+          timestamp: new Date().toISOString()
+        }
+        dispatch(addMessage(loadingMessage))
+
         const aiReply = await axios.post("/api/chat", { 
           history: messageHistory, 
           prompt: userPrompt, 
           temperature: aiTemperature 
         })
+        dispatch(deleteMessages(loadingMessage.id))
+        
         if (aiReply.data.res) {
           const content = aiReply.data.res
           const aiMessage: ChatMessage = {

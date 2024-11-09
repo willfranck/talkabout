@@ -60,6 +60,7 @@ import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import hljs from "highlight.js"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
+import { cn } from "@utils/clsx"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -357,8 +358,9 @@ const ChatMessageCard = ({
                 rehypePlugins={[
                   [rehypeSanitize, defaultSchema],
                   rehypeHighlight
-                ]
-              }>
+                ]}
+                className={cn({"thinking italic": message.content === "Reticulating splines..."})}
+              >
                 {message.content}
               </ReactMarkdown>
             )}
@@ -411,7 +413,7 @@ const ChatHistory = ({
   const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(selectedThread?.id) 
   const messageHistory = useThreadMessageHistory()
-  const messagesRef = useRef<number>(messageHistory.length)
+  const messagesRef = useRef<number>(0)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
   const scrollOffset = 32
   
@@ -440,7 +442,7 @@ const ChatHistory = ({
     // Handles NEW messages
     } else {
       if (current) {
-        if (currentMessages > messagesRef.current) {
+        if (currentMessages >= messagesRef.current && messagesRef.current !== 0) {
           const newMessage = current.lastChild as HTMLElement
           const newMessageHeight = newMessage ? newMessage.offsetHeight : 0
           requestAnimationFrame(() => {

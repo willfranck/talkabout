@@ -121,6 +121,15 @@
   }
 }
 
+@keyframes thinking {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
 /*//// Base Styles */
 html {
   -webkit-text-size-adjust: 100%;
@@ -190,6 +199,10 @@ code {
 
 .rounded-bl-only {
   border-radius: 0 0 0 0.375rem;
+}
+
+.thinking {
+  animation: thinking 1.2s ease-out infinite;
 }
 
 @media screen and (max-width: 767px) {
