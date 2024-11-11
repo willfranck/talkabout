@@ -73,7 +73,7 @@ export const ChatInput = () => {
           content: "Reticulating splines...",
           timestamp: new Date().toISOString()
         }
-        setTimeout(() => {
+        const setLoadingMsg = setTimeout(() => {
           dispatch(addMessage(loadingMessage))
         }, 480)
 
@@ -113,8 +113,12 @@ export const ChatInput = () => {
             aiMessage
           ]
           if (chatHistory.length % 4 === 2) {
-            await getTopic(chatHistory)
+            const setGetTopic = setTimeout(() => {
+              getTopic(chatHistory)
+            }, 480)
+            return () => clearTimeout(setGetTopic)
           }
+          return () => clearTimeout(setLoadingMsg)
         }
       } catch (error) {
         console.log(error)
