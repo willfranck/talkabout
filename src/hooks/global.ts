@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useCallback, useContext } from "react"
 import { User, transformSupabaseUser } from "@types"
 import { useThreads } from "./chat"
 import { getUser } from "@services/supabase-actions"
@@ -43,17 +43,17 @@ const useUser = (): UserReturn => {
   const { user } = useAppSelector(state => state.user)
   const threads = useThreads()
 
-  const getUserData = async () => {
+  const getUserData = useCallback(async () => {
     const res = await getUser()
     if (res.success && res.user) {
       const userData = transformSupabaseUser(res.user, threads)
       dispatch(setUser(userData))
     }
-  }
+  }, [dispatch, threads])
 
   useEffect(() => {
     getUserData()
-  }, [])
+  }, [getUserData])
 
   const refreshUser = async () => {
     await getUserData()

@@ -1,9 +1,10 @@
 import { AppDispatch } from "@redux/store"
 import { 
   ChatThread,
+  ChatMessage,
   transformSupabaseThread,
   transformSupabaseMessage,
-  ChatMessage
+  ReduxActions
  } from "@types"
 import { 
   createThread, 
@@ -15,45 +16,137 @@ import {
   deleteMessages,
   clearAllThreads
 } from "@redux/slices/chat"
-import { getAllMessages } from "@services/supabase-actions"
+import { 
+  getAllMessages, 
+  saveThread, 
+  saveMessage 
+} from "@services/supabase-actions"
 import { randomTopic } from "@globals/values"
 
-//// Redux Functions
-type Action =
-  | { type: "chat/createThread", payload: ChatThread }
-  | { type: "chat/addMessage", payload: ChatMessage }
+//// Utility Functions
+const retry = async <T>(
+  fn: () => Promise<T>,
+  attempts: number,
+  delay: number
+): Promise<T> => {
+  try {
+    return await fn()
+  } catch (error) {
+    if (attempts === 1) throw error
+    await new Promise(resolve => setTimeout(resolve, delay))
+    return retry(fn, attempts - 1, delay)
+  }
+}
 
-const syncDbMessages = async (userId: string, threads: ChatThread[], messages: ChatMessage[]) => {
+const chunk = <T>(array: T[], size: number): T[][] => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+    array.slice(i * size, i * size + size)
+  )
+}
+
+//// Redux Functions
+interface SyncResult {
+  actions: ReduxActions[]
+  errors: Error[]
+  stats: {
+    threadsAddedLocal: number
+    msgsAddedLocal: number
+    threadsSavedToDb: number
+    msgsSavedToDb: number
+  }
+}
+
+const syncDbMessages = async (
+  userId: string, 
+  threads: ChatThread[], 
+  messages: ChatMessage[],
+  options = {
+    batchSize: 50,
+    retryAttempts: 3,
+    retryDelay: 1000
+  }
+): Promise<SyncResult> => {
+  const reduxActions: ReduxActions[] = []
+  const errors: Error[] = []
+  const stats = {
+    threadsAddedLocal: 0,
+    msgsAddedLocal: 0,
+    threadsSavedToDb: 0,
+    msgsSavedToDb: 0
+  }
+
   try {
     // Create Maps of existing threads/messages
     const threadMap = new Map(threads.map(thread => [thread.id, thread]))
     const messageMap = new Map(messages.map(message => [message.id, message]))
 
-    const reduxActions: Action[] = []
-    const data = await getAllMessages(userId)
+    const data = await retry(
+      () => getAllMessages(userId),
+      options.retryAttempts,
+      options.retryDelay
+    )
+
+    if (!data.success) throw new Error("Failed fetching DB messages after retries")
     
-    // Iterate through Maps to determine actions
-    if (data.success) {
-      if (data.chatThreads) {
-        const transformedThreads = data.chatThreads.map(transformSupabaseThread)
-        for (const chatThread of transformedThreads) {
-          if (!threadMap.has(chatThread.id)) {
-            reduxActions.push(createThread(chatThread))
+    // Create Maps of incoming DB threads/messages
+    const dbThreadMap = new Map(data.chatThreads?.map(thread => [thread.id, thread]) || [])
+    const dbMessageMap = new Map(data.chatMessages?.map(message => [message.id, message]) || [])
+    
+    // Iterate through maps in batches
+    if (data.chatThreads) {
+      const transformedThreads = data.chatThreads.map(transformSupabaseThread)
+      for (const batch of chunk(transformedThreads, options.batchSize)) {
+        await Promise.all(batch.map(async chatThread => {
+          try {
+            if (!threadMap.has(chatThread.id)) {
+              reduxActions.push(createThread(chatThread))
+              stats.threadsAddedLocal++
+            }
+          } catch (error) {
+            errors.push(new Error(`Failed to add thread ${chatThread.id}: Error: ${error}`))
           }
-        }
-      }
-      if (data.chatMessages) {
-        const transformedMessages = data.chatMessages.map(transformSupabaseMessage)
-        for (const chatMessage of transformedMessages) {
-          if (!messageMap.has(chatMessage.id)) {
-            reduxActions.push(addMessage(chatMessage))
-          }
-        }
+        }))
       }
     }
-    return reduxActions
+    if (data.chatMessages) {
+      const transformedMessages = data.chatMessages.map(transformSupabaseMessage)
+      for (const batch of chunk(transformedMessages, options.batchSize)) {
+        await Promise.all(batch.map(async chatMessage => {
+          try {
+            if (!messageMap.has(chatMessage.id)) {
+              reduxActions.push(addMessage(chatMessage))
+              stats.msgsAddedLocal++
+            }
+          } catch (error) {
+            errors.push(new Error(`Failed to add message ${chatMessage.id}: Error: ${error}`))
+          }
+        }))
+      }
+    }
+
+    // Sync any unsaved local threads/messages
+    for (const batch of chunk(threads, options.batchSize)) {
+      await Promise.all(batch.map(async thread => {
+        if (!dbThreadMap.has(thread.id)) {
+          await saveThread(userId, thread)
+          stats.threadsSavedToDb++
+        }
+      }))
+    }
+    for (const batch of chunk(messages, options.batchSize)) {
+      await Promise.all(batch.map(async message => {
+        if (!dbMessageMap.has(message.id)) {
+          await saveMessage(userId, message)
+          stats.msgsSavedToDb++
+        }
+      }))
+    }
+
+    return { actions: reduxActions, errors, stats }
+
   } catch (error) {
-    return []
+    errors.push(error as Error)
+    return { actions: [], errors, stats }
   }
 }
 

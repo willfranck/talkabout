@@ -116,6 +116,10 @@ export type ChatThread = {
   lastActive: string
 }
 
+export type ReduxActions = 
+  | { type: "chat/createThread", payload: ChatThread }
+  | { type: "chat/addMessage", payload: ChatMessage }
+
 export const transformSupabaseUser = (user: SupabaseUser, chats: ChatThread[] = []): User => {
   return {
     id: user.id,

@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
 import { useUser } from "@hooks/global"
@@ -28,9 +28,7 @@ export const ChatInput = () => {
   const { user } = useUser()
   const threadCount = useThreadCount()
   const selectedThread = useSelectedThread()
-  const threadRef = useRef<string | undefined>(undefined)
   const messageHistory = useThreadMessageHistory()
-  const messagesRef = useRef(messageHistory.length)
   const [userPrompt, setUserPrompt] = useState("")
   const [aiTemperature, setAiTemperature] = useState(temperatureSettings.hot)
 
@@ -42,32 +40,17 @@ export const ChatInput = () => {
     setUserPrompt(event.target.value)
   }
 
-  const getTopic = useCallback(async () => { 
-    const reply = await axios.post("/api/chat-topic", { history: messageHistory })
+  const getTopic = async (messages: ChatMessage[]) => {
+    const reply = await axios.post("/api/chat-topic", { history: messages })
     if (reply.data.res) {
       const topic = reply.data.res
       dispatch(updateThreadTopic(topic))
+      
       if (user && selectedThread) {
         updateDbThread(user.id, selectedThread, {topic: topic})
       }
     }
-  }, [dispatch, messageHistory])
-
-  useEffect(() => {
-    // Prevents getTopic() if selected thread hasn't changed || on page navigation
-    if (threadRef.current !== selectedThread?.id) {
-      threadRef.current = selectedThread?.id
-      return
-    }
-    // Runs getTopic() only on NEW messages
-    const currentMessages = messageHistory.length
-    if (currentMessages > messagesRef.current) {
-      if (currentMessages > 0 && currentMessages % 6 === 2) {
-        getTopic()
-      }
-    }
-    messagesRef.current = currentMessages
-  }, [selectedThread, messageHistory, getTopic])
+  }
 
   const handleSubmit = async () => {
     if (selectedThread) {
@@ -82,19 +65,26 @@ export const ChatInput = () => {
         dispatch(addMessage(userMessage))
         dispatch(updateLastActive(new Date().toISOString()))
         setUserPrompt("")
-        if (user) {
-          await saveMessage(user.id, userMessage)
-          await updateDbThread(user.id, selectedThread, { last_active: userMessage.timestamp })
-        }
 
         const loadingMessage: ChatMessage = {
-          id: crypto.randomUUID(),
+          id: "0",
           threadId: selectedThread.id,
           role: "model",
           content: "Reticulating splines...",
           timestamp: new Date().toISOString()
         }
-        dispatch(addMessage(loadingMessage))
+        setTimeout(() => {
+          dispatch(addMessage(loadingMessage))
+        }, 360)
+
+        if (user) {
+          await saveMessage(user.id, userMessage)
+          await updateDbThread(
+            user.id, 
+            selectedThread, 
+            { last_active: userMessage.timestamp }
+          )
+        }
 
         const aiReply = await axios.post("/api/chat", { 
           history: messageHistory, 
@@ -115,6 +105,15 @@ export const ChatInput = () => {
           dispatch(addMessage(aiMessage))
           if (user) {
             await saveMessage(user.id, aiMessage)
+          }
+
+          const chatHistory = [
+            ...messageHistory, 
+            userMessage, 
+            aiMessage
+          ]
+          if (chatHistory.length % 4 === 2) {
+            await getTopic(chatHistory)
           }
         }
       } catch (error) {

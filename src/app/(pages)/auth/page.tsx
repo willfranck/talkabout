@@ -102,10 +102,11 @@ export default function LoginPage() {
         dispatch(setUser(user))
 
         try {
-          const reduxActions = await syncDbMessages(user.id, threads, messages)
-          for (const action of reduxActions) {
+          const result = await syncDbMessages(user.id, threads, messages)
+          result.actions.forEach(action => 
             dispatch(action)
-          }
+          )
+
         } catch (error) {
           showMessage("error", "Unable to sync messages", 3000)
         }

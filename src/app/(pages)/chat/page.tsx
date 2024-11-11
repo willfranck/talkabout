@@ -37,19 +37,21 @@ export default function ChatPage() {
     if (!session || !user?.id) return
     
     const syncData = async () => {
-      if (debounce("sync-messages", 6000)) return
+      if (debounce("sync-messages", 10000)) return
 
       try {
-        const reduxActions = await syncDbMessages(user.id, threads, messages)
-        for (const action of reduxActions) {
+        const result = await syncDbMessages(user.id, threads, messages)
+        result.actions.forEach(action => 
           dispatch(action)
-        }
+        )
       } catch (error) {
+        console.log(error)
         showMessage("error", "Unable to sync messages", 3000)
       }
     }
     syncData()
-  }, [dispatch, session, user, threads, messages])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, session, user?.id])
 
   useEffect(() => {
     if (!session) {
