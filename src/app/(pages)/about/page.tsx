@@ -1,18 +1,20 @@
 "use client"
-import Image from "next/image"
 import { PageLayout } from "@ui/mui-layout"
 import { FlexBox } from "@ui/mui-elements"
-import { Box, Typography } from "@mui/material"
+import { Box, Divider, Typography, useMediaQuery } from "@mui/material"
+import theme from "@utils/mui-theme"
 import { IconCloud } from "@app/components/about/icon-cloud"
+import { CaretCircleUp } from "@phosphor-icons/react/dist/ssr"
 
 
 export default function AboutPage() {
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   return (
     <PageLayout>
       <FlexBox sx={{
         flexDirection: { xs: "column", sm: "row" },
         justifyContent: "start",
-        gap: { xs: "3rem", sm: "2rem", md: "4rem", lg: "8rem" },
+        gap: { xs: "3rem", sm: "2rem", md: "4rem", lg: "6rem" },
         height: "100%",
         padding: "2rem 1.5rem",
         overflowY: "auto"
@@ -21,17 +23,6 @@ export default function AboutPage() {
           flexDirection: "column", 
           marginY: "auto" 
         }}>
-          <FlexBox sx={{ gap: "0.5rem" }}>
-            <Image 
-              src={"/images/Llama.webp"}
-              alt="Talkabout Logo - a llama"
-              width={28}
-              height={28}
-              className="w-7 h-auto rounded-logo invert dark:invert-0"
-            />
-            <Typography fontSize="1.5rem" fontWeight="bold">Talkabout</Typography>
-          </FlexBox>
-          <Typography variant="body2">made with love ... also with these technologies...</Typography>
           <FlexBox sx={{
             minWidth: "20rem",
             maxWidth: "40rem",
@@ -42,7 +33,21 @@ export default function AboutPage() {
           }}>
             <IconCloud />
           </FlexBox>
+          <FlexBox sx={{ gap: "0.25rem" }}>
+            <Typography variant="body2">made with love ... also with these technologies</Typography>
+            <CaretCircleUp size={18} color={theme.palette.secondary.main} />
+          </FlexBox>
         </FlexBox>
+
+        <Divider 
+          orientation={isSmallScreen ? "horizontal" : "vertical"} 
+          sx={{ 
+            alignSelf: "center", 
+            width: (isSmallScreen ? "75%" : "auto"),
+            height: (isSmallScreen ? "auto" : "60%") 
+          }}
+          flexItem 
+        />
 
         <FlexBox sx={{
           flexDirection: "column",

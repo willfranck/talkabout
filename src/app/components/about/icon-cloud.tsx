@@ -35,6 +35,7 @@ const ICON_SLUGS = [
   "mui",
   "react",
   "typescript",
+  "redux",
   "googlegemini",
   "tailwindcss",
   "nodedotjs",
