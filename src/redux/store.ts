@@ -19,4 +19,4 @@ export const createStore = () => {
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof createStore>
-export type AppDispatch = AppStore['store']['dispatch']
+export type AppDispatch = AppStore["store"]["dispatch"]
