@@ -75,7 +75,7 @@ export const ChatInput = () => {
         }
         setTimeout(() => {
           dispatch(addMessage(loadingMessage))
-        }, 360)
+        }, 480)
 
         if (user) {
           await saveMessage(user.id, userMessage)

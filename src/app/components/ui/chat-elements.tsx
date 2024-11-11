@@ -446,7 +446,7 @@ const ChatHistory = ({
           const newMessage = current.lastChild as HTMLElement
           const newMessageHeight = newMessage ? newMessage.offsetHeight : 0
           requestAnimationFrame(() => {
-            current.scrollTo({ top: current.scrollHeight - (newMessageHeight + 12), behavior: "smooth" })
+            current.scrollTo({ top: current.scrollHeight - (newMessageHeight + scrollOffset), behavior: "smooth" })
           })
         }
       }
