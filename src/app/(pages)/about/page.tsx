@@ -14,14 +14,14 @@ export default function AboutPage() {
       <FlexBox sx={{
         flexDirection: { xs: "column", sm: "row" },
         justifyContent: "start",
-        gap: { xs: "3rem", sm: "2rem", md: "4rem", lg: "6rem" },
+        gap: { xs: "2rem", md: "3rem", lg: "6rem" },
         height: "100%",
-        padding: "2rem 1.5rem",
+        padding: "1.5rem 2rem",
         overflowY: "auto"
       }}>
         <FlexBox sx={{ 
           flexDirection: "column", 
-          marginY: "auto" 
+          marginY: "auto"
         }}>
           <FlexBox sx={{
             minWidth: "20rem",
@@ -33,7 +33,10 @@ export default function AboutPage() {
           }}>
             <IconCloud />
           </FlexBox>
-          <FlexBox sx={{ gap: "0.25rem" }}>
+          <FlexBox sx={{ 
+            gap: "0.25rem",
+            marginBottom: "1rem" 
+          }}>
             <Typography variant="body2">made with love ... also with these technologies</Typography>
             <CaretCircleUp size={18} color={theme.palette.secondary.main} />
           </FlexBox>
@@ -43,7 +46,7 @@ export default function AboutPage() {
           orientation={isSmallScreen ? "horizontal" : "vertical"} 
           sx={{ 
             alignSelf: "center", 
-            width: (isSmallScreen ? "75%" : "auto"),
+            width: (isSmallScreen ? "95%" : "auto"),
             height: (isSmallScreen ? "auto" : "60%") 
           }}
           flexItem 
@@ -96,7 +99,7 @@ export default function AboutPage() {
               <Typography variant="body2" sx={{ maxWidth: "100ch" }}>
                 Most AI Chats are boring.  This is an exercise to spice it up and create something unique. <br />
                 - The goal is to still be helpful, but also have fun in the meantime. <br />
-                - Have it help you with your homework, some code, or learning about a new topic... <br />
+                - Have it help you with your homework, some code, learning about a new topic... <br />
                 or simply troll it, have it roast you, talk smack. <br />
               </Typography>
               <Typography 
