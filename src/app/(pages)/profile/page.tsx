@@ -137,7 +137,16 @@ export default function ProfilePage() {
                 gap: "1rem",
                 width: "100%" 
               }}>
-                <Typography variant="h2" fontWeight="bold">Profile</Typography>
+                <Typography 
+                  variant="h2" 
+                  fontWeight="bold" 
+                  sx={{ 
+                    width: "100%", 
+                    textAlign: { xs: "center", sm: "start" }
+                  }}
+                >
+                  Profile
+                </Typography>
                 <FlexBox sx={{ gap: "0.375rem" }}>
                   <Avatar 
                     {...stringAvatar(user!.firstName, user!.lastName)}
