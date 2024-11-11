@@ -6,7 +6,7 @@ import { useUser, useSnackbar } from "@hooks/global"
 import { User } from "@types"
 import { updateUser } from "@services/supabase-actions"
 import { useAppDispatch } from "@redux/hooks"
-import { clearAll } from "@globals/functions"
+import { clearChatStore } from "@globals/functions"
 import { PageLayout} from "@ui/mui-layout"
 import { 
   FlexBox, 
@@ -320,7 +320,7 @@ export default function ProfilePage() {
                       <Button 
                         variant="outlined" 
                         color="error" 
-                        onClick={() => clearAll(dispatch)}
+                        onClick={() => clearChatStore(dispatch)}
                         aria-label="Clear all chats"
                         sx={{ width: { xs: "100%", sm:"50%" } }}
                       >

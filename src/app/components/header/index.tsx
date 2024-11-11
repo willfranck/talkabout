@@ -5,7 +5,7 @@ import { useSession, useSnackbar } from "@hooks/global"
 import { signOut } from "@services/supabase-actions"
 import { useAppDispatch } from "@redux/hooks"
 import { clearUser } from "@redux/slices/user"
-import { clearAllThreads } from "@redux/slices/chat"
+import { clearChats } from "@redux/slices/chat"
 import Link from "next/link"
 import Image from "next/image"
 import theme from "@utils/mui-theme"
@@ -73,7 +73,7 @@ const Header = () => {
     } else {
       showMessage("success", "Signed out.  See you soon!", 3000)
       dispatch(clearUser())
-      dispatch(clearAllThreads())
+      dispatch(clearChats())
       if (pathname === "/profile") {
         router.push("/")
       }

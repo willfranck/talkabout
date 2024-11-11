@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { AppDispatch } from "@redux/store"
 import { useAppDispatch } from "@redux/hooks"
 import { clearUser } from "@redux/slices/user"
-import { clearAllThreads } from "@redux/slices/chat"
+import { clearChats } from "@redux/slices/chat"
 import { signOut } from "@services/supabase-actions"
 import { 
   useSession, 
@@ -141,7 +141,7 @@ const MenuNav = ({
       onClose()
       showMessage("success", "Signed out.  See you soon!", 3000)
       dispatch(clearUser())
-      dispatch(clearAllThreads())
+      dispatch(clearChats())
       if (pathname === "/profile") {
         router.push("/")
       }

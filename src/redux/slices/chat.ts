@@ -74,8 +74,9 @@ const chatSlice = createSlice({
         || (message.threadId === messageToDelete.threadId && index < messageIndex)
       )
     },
-    clearAllThreads: (state) => {
+    clearChats: (state) => {
       state.threads = []
+      state.messages = []
     },
   }
 })
@@ -90,7 +91,7 @@ export const {
   setRestoreThread,
   addMessage,
   deleteMessages, 
-  clearAllThreads
+  clearChats
 } = chatSlice.actions
 
 export default chatSlice.reducer

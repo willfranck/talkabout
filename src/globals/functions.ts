@@ -14,7 +14,7 @@ import {
   setRestoreThread,
   addMessage,
   deleteMessages,
-  clearAllThreads
+  clearChats
 } from "@redux/slices/chat"
 import { 
   getAllMessages, 
@@ -201,8 +201,8 @@ function deleteMessage(dispatch: AppDispatch, messageId: string) {
   dispatch(deleteMessages(messageId))
 }
 
-function clearAll(dispatch: AppDispatch) {
-  dispatch(clearAllThreads())
+function clearChatStore(dispatch: AppDispatch) {
+  dispatch(clearChats())
 }
 
 //// Debounce Function
@@ -250,7 +250,7 @@ export {
   archiveThread,
   restoreThread,
   deleteMessage,
-  clearAll,
+  clearChatStore,
   debounce,
   displayTextByChar,
   removeTextByChar
