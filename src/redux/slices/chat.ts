@@ -29,6 +29,9 @@ const chatSlice = createSlice({
       state.threads = state.threads.filter(thread => 
         thread.id !== action.payload
       )
+      state.messages = state.messages.filter(message => 
+        message.threadId !== action.payload
+      )
     },
     updateThreadTopic: (state, action: PayloadAction<string>) => {
       const selectedThread = state.threads.find(thread => thread.selected)
