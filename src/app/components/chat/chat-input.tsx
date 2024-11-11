@@ -91,7 +91,12 @@ export const ChatInput = () => {
           prompt: userPrompt, 
           temperature: aiTemperature 
         })
-        dispatch(deleteMessages(loadingMessage.id))
+
+        const removeLoadingMessage = () => {
+          dispatch(deleteMessages(loadingMessage.id))
+          return () => clearTimeout(setLoadingMsg)
+        }
+        removeLoadingMessage()
         
         if (aiReply.data.res) {
           const content = aiReply.data.res
@@ -118,7 +123,6 @@ export const ChatInput = () => {
             }, 480)
             return () => clearTimeout(setGetTopic)
           }
-          return () => clearTimeout(setLoadingMsg)
         }
       } catch (error) {
         console.log(error)
