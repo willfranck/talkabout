@@ -413,6 +413,7 @@ const ChatHistory = ({
 }) => {
   const selectedThread = useSelectedThread()
   const threadRef = useRef<string | undefined>(selectedThread?.id) 
+  const [threadBanner, setThreadBanner] = useState("")
   const messageHistory = useThreadMessageHistory()
   const messagesRef = useRef<number>(0)
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
@@ -456,6 +457,12 @@ const ChatHistory = ({
     messagesRef.current = currentMessages
   }, [messages, messageHistory, selectedThread])
 
+  useEffect(() => {
+    if (selectedThread) {
+      displayTextByChar(selectedThread.topic, setThreadBanner)
+    }
+  }, [selectedThread?.topic])
+
   return (
     <FlexBox 
       ref={scrollAreaRef}
@@ -463,18 +470,37 @@ const ChatHistory = ({
         flexDirection: "column",
         justifyContent: "start",
         gap: "1.5rem",
-        padding: { xs: "2.75rem 1.5rem 0 1.5rem", md: "2rem 1.5rem 1rem" },
+        padding: { xs: "3.25rem 1.5rem 0 1.5rem", md: "2rem 1.5rem 1rem" },
         width: "100%",
         height: "100%",
         overflowY: "auto"
       }}
     >
+      <FlexBox sx={{ 
+        display: { xs: "flex", md: "none" },
+        position: "absolute",
+        top: "3.5rem",
+        zIndex: "10",
+        width: "100%",
+        paddingY: "0.5rem",
+        backgroundColor: alpha("#141414", 0.7),
+        backdropFilter: "blur(40px)"
+      }}>
+        <Typography 
+          variant="body1"
+          fontWeight="bold"
+          color={theme.palette.primary.main}
+        >
+          {threadBanner}
+        </Typography>
+      </FlexBox>
       {messages.length === 0 && (
         <FlexBox sx={{
           flexDirection: "column",
           gap: "1rem",
           width: "100%",
           height: "100%",
+          opacity: "0",
           animation: "fadeIn 240ms ease-out forwards"
         }}>
           <Image 
@@ -487,34 +513,12 @@ const ChatHistory = ({
           <Typography variant="body2">much empty in here</Typography>
         </FlexBox>
       )}
-      {messages.length > 0 && (
-        <>
-          <FlexBox sx={{ 
-            display: { xs: "flex", md: "none" },
-            position: "absolute",
-            top: "3.5rem",
-            zIndex: "10",
-            width: "100%",
-            paddingY: "0.5rem",
-            backgroundColor: alpha("#141414", 0.8),
-            backdropFilter: "blur(40px)"
-          }}>
-            <Typography 
-              variant="body1"
-              fontWeight="bold"
-              color={theme.palette.primary.main}
-            >
-              {selectedThread?.topic}
-            </Typography>
-          </FlexBox>
-          {messages.map((message) => (
-            <ChatMessageCard 
-              key={message.id} 
-              message={message} 
-            />
-          ))}
-        </>
-      )}
+      {messages.length > 0 && messages.map((message) => (
+        <ChatMessageCard 
+          key={message.id} 
+          message={message} 
+        />
+      ))}
     </FlexBox>
   )
 }
