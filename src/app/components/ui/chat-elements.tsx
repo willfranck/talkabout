@@ -508,6 +508,7 @@ const ChatHistory = ({
             alt="Llama logo"
             width={128}
             height={128}
+            priority
             className="w-32 h-auto rounded-logo opacity-30 invert dark:invert-0"
           />
           <Typography variant="body2">much empty in here</Typography>
