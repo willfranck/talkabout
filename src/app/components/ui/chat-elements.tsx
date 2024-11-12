@@ -61,7 +61,6 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
-import { cn } from "@utils/clsx"
 
 //// Chat Elements
 const ThreadCard = ({ 
@@ -290,7 +289,6 @@ const ChatMessageCard = ({
             [rehypeSanitize, sanitizeSchema],
             rehypeHighlight
           ]}
-          className={cn({"thinking italic": message.id === "0"})}
         >
           {message.content}
         </ReactMarkdown>
@@ -376,7 +374,13 @@ const ChatMessageCard = ({
             {message.role === "user" ? (
               <Typography>{message.content}</Typography>
             ) : (
-              <MarkdownRenderer />
+              message.id === "0" ? (
+                <Typography className="thinking italic">
+                  {message.content}
+                </Typography>
+              ) : (
+                <MarkdownRenderer />
+              )
             )}
             <FlexBox sx={{ gap: "0.375rem" }}>
               {message.role === "user" ? (
@@ -502,7 +506,9 @@ const ChatHistory = ({
         <Typography 
           variant="body1"
           fontWeight="bold"
-          color={theme.palette.primary.main}
+          color={theme.palette.primary.light}
+          sx={{ paddingX: "1rem" }}
+          className="line-clamp-1 overflow-hidden text-ellipsis"
         >
           {threadBanner}
         </Typography>
