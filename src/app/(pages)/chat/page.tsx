@@ -15,9 +15,7 @@ import {
 } from "@hooks/chat"
 import { PageLayout } from "@ui/mui-layout"
 import { Box } from "@mui/material"
-import { 
-  FlexBox
-} from "@ui/mui-elements"
+import { FlexBox } from "@ui/mui-elements"
 import { ChatPanel } from "@chat/chat-panel"
 import { ChatHistory } from "@ui/chat-elements"
 import { ChatInput } from "@chat/chat-input"

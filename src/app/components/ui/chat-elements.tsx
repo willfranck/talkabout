@@ -54,12 +54,12 @@ import {
   Trash,
   Archive,
   PaperPlaneRight,
-  ArrowCounterClockwise
+  ArrowCounterClockwise,
+  Warning
 } from "@phosphor-icons/react/dist/ssr"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
-import hljs from "highlight.js"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import { cn } from "@utils/clsx"
 
@@ -276,21 +276,38 @@ const ChatMessageCard = ({
     tagNames: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]
   }
 
-  // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders **Only works on desktop**
-  // useEffect(() => {
-  //   document.querySelectorAll("code").forEach((block) => {
-  //     const codeBlock = block as HTMLElement
-  //     if (codeBlock.dataset.highlighted !== "yes") {
-  //       hljs.highlightElement(codeBlock)
-  //       codeBlock.dataset.highlighted = "yes"
-  //     }
-  //   })
-  // }, [message])
+  const MarkdownRenderer = () => {
+    try {
+      return (
+        <ReactMarkdown 
+          components={{
+            code: CodeBlock 
+          }}
+          remarkPlugins={[
+            remarkGfm,
+          ]} 
+          rehypePlugins={[
+            [rehypeSanitize, sanitizeSchema],
+            rehypeHighlight
+          ]}
+          className={cn({"thinking italic": message.id === "0"})}
+        >
+          {message.content}
+        </ReactMarkdown>
+      )
+    } catch (error) {
+      return (
+        <FlexBox sx={{ gap: "0.5rem"}}>
+          <Warning size={24} color={theme.palette.warning.light} />
+          <Typography color={theme.palette.primary.light}>
+            Something went wrong processing this message <br />
+            Please delete your last message and try again
+          </Typography>
+        </FlexBox>
+      )
+    }
+  }
 
-  // Works on both desktop and mobile, but it may cause re-renders
-  useEffect(() => {
-    hljs.highlightAll()
-  }, [])
 
   return (
     <Card sx={{
@@ -359,21 +376,7 @@ const ChatMessageCard = ({
             {message.role === "user" ? (
               <Typography>{message.content}</Typography>
             ) : (
-              <ReactMarkdown 
-                components={{
-                  code: CodeBlock 
-                }}
-                remarkPlugins={[
-                  remarkGfm,
-                ]} 
-                rehypePlugins={[
-                  [rehypeSanitize, sanitizeSchema],
-                  rehypeHighlight
-                ]}
-                className={cn({"thinking italic": message.content === "Reticulating splines..."})}
-              >
-                {message.content}
-              </ReactMarkdown>
+              <MarkdownRenderer />
             )}
             <FlexBox sx={{ gap: "0.375rem" }}>
               {message.role === "user" ? (
