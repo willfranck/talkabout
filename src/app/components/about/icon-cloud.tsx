@@ -75,15 +75,20 @@ const useIcons = (slugs: string[]) => {
     return <Box>Loading...</Box>
   }
 
-  return Object.values(icons.simpleIcons).map((icon) => (
-    renderSimpleIcon({
+  return Object.values(icons.simpleIcons).map((icon, index) => {
+    const iconElement = renderSimpleIcon({
       icon,
       size: 42,
       aProps: {
         onClick: (e: React.MouseEvent) => e.preventDefault()
       }
     })
-  ))
+    return (
+      <Box key={`${icon.title}-${index}`}>
+        {iconElement}
+      </Box>
+    )
+  })
 }
 
 
