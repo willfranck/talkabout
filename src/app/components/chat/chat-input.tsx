@@ -65,7 +65,7 @@ export const ChatInput = () => {
       dispatch(addMessage(userMessage))
       dispatch(updateLastActive(new Date().toISOString()))
       setUserPrompt("")
-      
+
       try {
         const loadingMessage: ChatMessage = {
           id: "0",
@@ -101,7 +101,6 @@ export const ChatInput = () => {
         
         if (aiReply.data.res) {
           const content = aiReply.data.res
-          console.log(content)
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
             threadId: selectedThread.id,
