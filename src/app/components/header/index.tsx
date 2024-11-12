@@ -26,13 +26,13 @@ import { MobileDrawer } from "@ui/mui-layout"
 import { ChatPanel } from "@chat/chat-panel"
 import { 
   House, 
-  ChatTeardropText, 
+  ChatTeardropText,
+  List, 
   Info,
   SignIn,
   SignOut,
   UserCircleGear,
-  SquaresFour,
-  CaretLeft
+  SquaresFour
 } from "@phosphor-icons/react/dist/ssr"
 
 
@@ -126,15 +126,10 @@ const Header = () => {
                 color="primary"
                 sx={{
                   display: { xs: "flex", md: "none" },
-                  visibility: (pathname === "/chat" ? "visible" : "hidden" ),
-                  width: "2.5rem",
-                  "&:hover": {
-                    color: "highlight.light"
-                  }
+                  visibility: (pathname === "/chat" ? "visible" : "hidden" )
                 }}
               >
-                <CaretLeft size={12} weight="fill" />
-                <ChatTeardropText size={24} className="-translate-x-1" />
+                <List size={24} />
               </IconButton>
             </ToolTip>
             <MobileDrawer open={openChat} onClose={handleChatDrawerClose} anchor="left">
@@ -216,7 +211,7 @@ const Header = () => {
               display: { xs: "flex", sm: "none" },
             }}
           >
-            <SquaresFour size={24} weight="light" color={theme.palette.primary.light} />
+            <SquaresFour size={24} weight="light" color={theme.palette.primary.main} />
           </IconButton>
           <MobileDrawer open={openNav} onClose={handleNavDrawerClose} anchor="right">
             <MenuNav links={links} onClose={handleNavDrawerClose} />
