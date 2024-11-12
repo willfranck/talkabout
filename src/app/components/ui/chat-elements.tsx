@@ -483,8 +483,8 @@ const ChatHistory = ({
         zIndex: "10",
         width: "100%",
         paddingY: "0.5rem",
-        backgroundColor: alpha("#141414", 0.7),
-        backdropFilter: "blur(40px)"
+        backgroundColor: alpha("#141414", 0.6),
+        backdropFilter: "blur(20px)"
       }}>
         <Typography 
           variant="body1"
