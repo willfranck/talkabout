@@ -2,7 +2,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
-import { useUser } from "@hooks/global"
+import { useUser, useSnackbar } from "@hooks/global"
 import { temperatureSettings } from "@globals/values"
 import { 
   addMessage, 
@@ -26,6 +26,7 @@ import { ChatInputField } from "@ui/chat-elements"
 export const ChatInput = () => {
   const dispatch = useAppDispatch()
   const { user } = useUser()
+  const { showMessage } = useSnackbar()
   const threadCount = useThreadCount()
   const selectedThread = useSelectedThread()
   const messageHistory = useThreadMessageHistory()
@@ -54,18 +55,18 @@ export const ChatInput = () => {
 
   const handleSubmit = async () => {
     if (selectedThread) {
+      const userMessage: ChatMessage = { 
+        id: crypto.randomUUID(),
+        threadId: selectedThread.id,
+        role: "user", 
+        content: userPrompt, 
+        timestamp: new Date().toISOString()
+      }
+      dispatch(addMessage(userMessage))
+      dispatch(updateLastActive(new Date().toISOString()))
+      setUserPrompt("")
+      
       try {
-        const userMessage: ChatMessage = { 
-          id: crypto.randomUUID(),
-          threadId: selectedThread.id,
-          role: "user", 
-          content: userPrompt, 
-          timestamp: new Date().toISOString()
-        }
-        dispatch(addMessage(userMessage))
-        dispatch(updateLastActive(new Date().toISOString()))
-        setUserPrompt("")
-
         const loadingMessage: ChatMessage = {
           id: "0",
           threadId: selectedThread.id,
@@ -100,6 +101,7 @@ export const ChatInput = () => {
         
         if (aiReply.data.res) {
           const content = aiReply.data.res
+          console.log(content)
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
             threadId: selectedThread.id,
@@ -126,6 +128,8 @@ export const ChatInput = () => {
         }
       } catch (error) {
         console.log(error)
+        dispatch(deleteMessages(userMessage.id))
+        showMessage("error", "Something went wrong with that response\nPlease try your query again", 6000)
       }
     }
   }
