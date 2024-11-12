@@ -66,18 +66,18 @@ export const ChatInput = () => {
       dispatch(updateLastActive(new Date().toISOString()))
       setUserPrompt("")
 
-      try {
-        const loadingMessage: ChatMessage = {
-          id: "0",
-          threadId: selectedThread.id,
-          role: "model",
-          content: "Reticulating splines...",
-          timestamp: new Date().toISOString()
-        }
-        const setLoadingMsg = setTimeout(() => {
-          dispatch(addMessage(loadingMessage))
-        }, 480)
+      const loadingMessage: ChatMessage = {
+        id: "0",
+        threadId: selectedThread.id,
+        role: "model",
+        content: "Reticulating splines...",
+        timestamp: new Date().toISOString()
+      }
+      const setLoadingMsg = setTimeout(() => {
+        dispatch(addMessage(loadingMessage))
+      }, 480)
 
+      try {
         if (user) {
           await saveMessage(user.id, userMessage)
           await updateDbThread(

@@ -266,6 +266,16 @@ const ChatMessageCard = ({
     ]
   }
 
+  const sanitizeSchema = {
+    ...defaultSchema,
+    attributes: {
+      ...defaultSchema.attributes,
+      "*": ["className", "id"],
+      a: ["href", "target", "rel"]
+    },
+    tagNames: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]
+  }
+
   // Initializes highlighting if the element hasn't been highlighted already, preventing re-renders **Only works on desktop**
   // useEffect(() => {
   //   document.querySelectorAll("code").forEach((block) => {
@@ -357,7 +367,7 @@ const ChatMessageCard = ({
                   remarkGfm,
                 ]} 
                 rehypePlugins={[
-                  [rehypeSanitize, defaultSchema],
+                  [rehypeSanitize, sanitizeSchema],
                   rehypeHighlight
                 ]}
                 className={cn({"thinking italic": message.content === "Reticulating splines..."})}
@@ -428,7 +438,7 @@ const ChatHistory = ({
         current.scrollTo({ top: current.scrollHeight + scrollOffset, behavior: "instant" })
       })
     }
-  }, [])
+  }, [scrollOffset])
 
   useEffect(() => {
     const { current } = scrollAreaRef
@@ -455,13 +465,13 @@ const ChatHistory = ({
       }
     }
     messagesRef.current = currentMessages
-  }, [messages, messageHistory, selectedThread])
+  }, [messages, messageHistory, selectedThread, scrollOffset])
 
   useEffect(() => {
     if (selectedThread) {
       displayTextByChar(selectedThread.topic, setThreadBanner)
     }
-  }, [selectedThread?.topic])
+  }, [selectedThread, selectedThread?.topic])
 
   return (
     <FlexBox 
