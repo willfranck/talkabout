@@ -20,7 +20,7 @@ import {
   useThreadMessageHistory 
 } from "@hooks/chat"
 import { ChatMessage } from "@types"
-import { ChatInputField } from "@ui/chat-elements"
+import { ChatInputField } from "@chat/chat-elements"
 
 
 export const ChatInput = () => {

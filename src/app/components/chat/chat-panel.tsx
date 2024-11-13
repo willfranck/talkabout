@@ -32,7 +32,7 @@ import {
 } from "@ui/mui-elements"
 import { 
   ChatHistoryTabs 
-} from "@ui/chat-elements"
+} from "@chat/chat-elements"
 import { 
   ChatTeardropText, 
   PlusCircle, 

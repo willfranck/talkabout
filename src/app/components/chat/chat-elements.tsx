@@ -558,7 +558,7 @@ const TemperatureControls = ({
   onTemperatureChange
 }: ITemperature) => {
   const isMobileOS = useIsMobileOS()
-  const tooltipContent = `Adjust the responses to suit the mood\n-\nHot - Spicy, Fun, Unhinged\nCold - Relaxed, Cheeky, Informative\n_`
+  const tooltipContent = `Adjust the responses to suit the mood\n-\nHot:  Spicy, Fun, Unhinged\nCold:  Relaxed, Cheeky, Informative\n_`
   const [aiTemperature, setAiTemperature] = useState(defaultTemperature)
   const handleButtonClick = (e: React.MouseEvent<HTMLElement>, value: number) => {
     e.preventDefault()
