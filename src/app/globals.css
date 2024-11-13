@@ -205,9 +205,18 @@ code {
   animation: thinking 1.2s ease-out infinite;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 600px) {
   pre,
+  code,
   pre code {
     font-size: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 964px) {
+  pre,
+  code,
+  pre code {
+    font-size: 0.675rem;
   }
 }

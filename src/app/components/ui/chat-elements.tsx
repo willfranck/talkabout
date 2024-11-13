@@ -240,7 +240,7 @@ const CodeBlock = ({
       </code>
     </pre>
   ) : (
-    <code className="px-0.5 text-[#26C6DA] font-bold" {...props}>
+    <code className="px-0.5 text-[12px] md:text-[14px] text-[#26C6DA] font-bold" {...props}>
       {children}
     </code>
   )
