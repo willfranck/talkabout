@@ -69,7 +69,7 @@ const ToolTip = styled(({ className, ...props }: TooltipProps) => (
   },
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: alpha(theme.palette.info.dark, 0.3),
-    backdropFilter: "blur(20px)",
+    backdropFilter: "blur(5px)",
     textAlign: "center",
     padding: "0.5rem",
   },
@@ -375,16 +375,26 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
           horizontal: "left"
         }}
         sx={{
-          width: "75%"
+          width: "75%",
+          "& .MuiPaper-root": {
+            background: "transparent",
+            backdropFilter: "blur(5px)"
+          }
         }}
       >
         <List sx={{ 
           paddingTop: "0", 
-          paddingBottom: "0.25rem" 
+          paddingBottom: "0.25rem", 
+          backgroundColor: alpha(theme.palette.info.contrastText, 0.4),
+          boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
+          borderRadius: "0.4rem"
         }}>
           <ListSubheader sx={{
             lineHeight: "2rem",
-            color: "primary.dark"
+            color: "secondary.light",
+            backgroundColor: alpha(theme.palette.info.light, 0.4),
+            boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
+            borderRadius: "0.4rem 0.4rem 0 0"
           }}>
             {subheader}
           </ListSubheader>

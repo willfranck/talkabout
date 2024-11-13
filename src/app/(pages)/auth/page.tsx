@@ -491,7 +491,7 @@ export default function LoginPage() {
           margin: "auto 0 0.5rem",
           padding: "1rem",
           backgroundColor: alpha(theme.palette.primary.dark, 0.025),
-          backdropFilter: "blur(20px)"
+          backdropFilter: "blur(5px)"
         }}>
           <Info size={24} color={theme.palette.primary.light} />
           <FlexBox sx={{

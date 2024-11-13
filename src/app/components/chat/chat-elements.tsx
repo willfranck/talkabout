@@ -85,14 +85,14 @@ const ThreadCard = ({
         } : undefined,
         label: isActive ? "archive" : "restore",
         icon: isActive ? <Archive size={24} /> : <ArrowCounterClockwise size={24} />,
-        color: theme.palette.primary.main
+        color: theme.palette.secondary.dark
       },
       {
         redux: removeThread,
         dbDelete: user ? deleteThread : undefined,
         label: "delete",
         icon: <Trash size={24} />,
-        color: theme.palette.error.main
+        color: theme.palette.error.dark
       }
     ]
   }
@@ -114,7 +114,7 @@ const ThreadCard = ({
           width: "100%",
           padding: "0.5rem",
           bgcolor: (thread.selected ? alpha(theme.palette.primary.main, 0.25) : ""),
-          backdropFilter: "blur(20px)",
+          backdropFilter: "blur(5px)",
           boxShadow: (thread.selected ? `inset 0 0 0 1px ${theme.palette.highlight.main}` : ""),
           opacity: "0",
           animation: "fadeInFromLeft 240ms ease-out forwards",
@@ -321,7 +321,7 @@ const ChatMessageCard = ({
         ? alpha(theme.palette.primary.dark, 0.1) 
         : alpha(theme.palette.primary.dark, 0.25)
       ),
-      backdropFilter: "blur(20px)",
+      backdropFilter: "blur(5px)",
       opacity: 0,
       animation: "fadeIn 240ms ease-out forwards",
       "& .actionButton": {
@@ -501,7 +501,7 @@ const ChatHistory = ({
         width: "100%",
         paddingY: "0.5rem",
         backgroundColor: alpha("#141414", 0.5),
-        backdropFilter: "blur(20px)"
+        backdropFilter: "blur(5px)"
       }}>
         <Typography 
           variant="body1"
