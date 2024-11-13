@@ -240,7 +240,7 @@ const CodeBlock = ({
       </code>
     </pre>
   ) : (
-    <code className={className} {...props}>
+    <code className="px-0.5 text-[14px] text-[#26C6DA] font-bold" {...props}>
       {children}
     </code>
   )
@@ -500,7 +500,7 @@ const ChatHistory = ({
         zIndex: "10",
         width: "100%",
         paddingY: "0.5rem",
-        backgroundColor: alpha("#141414", 0.6),
+        backgroundColor: alpha("#141414", 0.5),
         backdropFilter: "blur(20px)"
       }}>
         <Typography 
