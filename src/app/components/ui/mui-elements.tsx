@@ -395,7 +395,7 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
             color: "secondary.dark",
             backgroundColor: alpha(theme.palette.info.light, 0.3),
             boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
-            borderRadiu: "0.4rem 0.4rem 0 0"
+            borderRadius: "0.4rem 0.4rem 0 0"
           }}>
             {subheader}
           </ListSubheader>
