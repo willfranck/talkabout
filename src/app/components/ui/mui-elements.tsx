@@ -341,7 +341,8 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
           "& .MuiTypography-root": { 
             color: action.color, 
             textWrap: "nowrap",
-            textTransform: "capitalize" 
+            textTransform: "capitalize",
+            fontWeight: "600" 
           }
         }} 
       />
@@ -385,16 +386,16 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
         <List sx={{ 
           paddingTop: "0", 
           paddingBottom: "0.25rem", 
-          backgroundColor: alpha(theme.palette.info.contrastText, 0.4),
+          backgroundColor: alpha(theme.palette.info.contrastText, 0.3),
           boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
           borderRadius: "0.4rem"
         }}>
           <ListSubheader sx={{
             lineHeight: "2rem",
-            color: "secondary.light",
-            backgroundColor: alpha(theme.palette.info.light, 0.4),
+            color: "secondary.dark",
+            backgroundColor: alpha(theme.palette.info.light, 0.3),
             boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
-            borderRadius: "0.4rem 0.4rem 0 0"
+            borderRadiu: "0.4rem 0.4rem 0 0"
           }}>
             {subheader}
           </ListSubheader>
