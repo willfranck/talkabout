@@ -322,27 +322,26 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
       }} 
       sx={{ 
         height: "2.5rem", 
-        paddingRight: "1.25rem",
-        "& *": {
-          color: action.color
-        }
+        paddingRight: "1.25rem"
       }}
     >
       <ListItemIcon sx={{ 
         minWidth: "0", 
         marginRight: "0.375rem", 
-        textWrap: "nowrap"
+        "& > svg": {
+          color: action.color,
+        }
       }}>
         {action.icon}
       </ListItemIcon>
       <ListItemText 
         primary={action.label} 
         sx={{ 
-          "& .MuiTypography-root": { 
+          "& > .MuiTypography-root": { 
             color: action.color, 
-            textWrap: "nowrap",
+            fontWeight: "600",
             textTransform: "capitalize",
-            fontWeight: "600" 
+            textWrap: "nowrap"
           }
         }} 
       />
@@ -386,7 +385,7 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
         <List sx={{ 
           paddingTop: "0", 
           paddingBottom: "0.25rem", 
-          backgroundColor: alpha(theme.palette.highlight.light, 0.6),
+          backgroundColor: alpha(theme.palette.secondary.contrastText, 0.7),
           boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
           borderRadius: "0.4rem"
         }}>
@@ -394,7 +393,7 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
             lineHeight: "2rem",
             fontWeight: "600",
             color: "secondary.light",
-            backgroundColor: alpha(theme.palette.highlight.dark, 0.6),
+            backgroundColor: alpha(theme.palette.highlight.dark, 0.7),
             boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
             borderRadius: "0.4rem 0.4rem 0 0"
           }}>
