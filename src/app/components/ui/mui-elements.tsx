@@ -386,14 +386,15 @@ const ActionsPopover = <T extends ChatThread | ChatMessage> ({
         <List sx={{ 
           paddingTop: "0", 
           paddingBottom: "0.25rem", 
-          backgroundColor: alpha(theme.palette.info.contrastText, 0.3),
+          backgroundColor: alpha(theme.palette.highlight.light, 0.6),
           boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
           borderRadius: "0.4rem"
         }}>
           <ListSubheader sx={{
             lineHeight: "2rem",
-            color: "secondary.dark",
-            backgroundColor: alpha(theme.palette.info.light, 0.3),
+            fontWeight: "600",
+            color: "secondary.light",
+            backgroundColor: alpha(theme.palette.highlight.dark, 0.6),
             boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.dark}`,
             borderRadius: "0.4rem 0.4rem 0 0"
           }}>

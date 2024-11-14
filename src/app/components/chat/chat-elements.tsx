@@ -85,7 +85,7 @@ const ThreadCard = ({
         } : undefined,
         label: isActive ? "archive" : "restore",
         icon: isActive ? <Archive size={24} /> : <ArrowCounterClockwise size={24} />,
-        color: theme.palette.secondary.light
+        color: theme.palette.secondary.dark
       },
       {
         redux: removeThread,
