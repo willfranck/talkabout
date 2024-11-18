@@ -19,10 +19,9 @@ import {
   useSelectedThread, 
   useThreadMessageHistory 
 } from "@hooks/chat"
-import { ChatMessage, ChatRes } from "@types"
+import { ChatMessage } from "@types"
 import { ChatInputField } from "@chat/chat-elements"
 
-type ChatError = NonNullable<ChatRes["error"]>
 
 export const ChatInput = () => {
   const dispatch = useAppDispatch()
