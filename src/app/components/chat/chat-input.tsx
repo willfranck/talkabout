@@ -42,9 +42,12 @@ export const ChatInput = () => {
   }
 
   const getTopic = async (messages: ChatMessage[]) => {
-    const reply = await axios.post("/api/chat-topic", { history: messages })
-    if (reply.data.res) {
-      const topic = reply.data.res
+    const aiReply = await axios.post("/api/chat-topic", { history: messages })
+    if (aiReply.data.error) {
+      showMessage("info", "Couldn't update the thread topic at this time\nC'est la vie", 3000)
+    }
+    if (aiReply.data.content) {
+      const topic = aiReply.data.content
       dispatch(updateThreadTopic(topic))
       
       if (user && selectedThread) {
@@ -98,9 +101,13 @@ export const ChatInput = () => {
           return () => clearTimeout(setLoadingMsg)
         }
         removeLoadingMessage()
-        
-        if (aiReply.data.res) {
-          const content = aiReply.data.res
+
+        if (aiReply.data.error) {
+          throw new Error(aiReply.data.error)
+        }
+
+        if (aiReply.data.content) {
+          const content = aiReply.data.content
           const aiMessage: ChatMessage = {
             id: crypto.randomUUID(),
             threadId: selectedThread.id,
@@ -118,7 +125,7 @@ export const ChatInput = () => {
             userMessage, 
             aiMessage
           ]
-          if (chatHistory.length % 4 === 2) {
+          if (chatHistory.length % 6 === 2) {
             const setGetTopic = setTimeout(() => {
               getTopic(chatHistory)
             }, 480)
@@ -126,9 +133,26 @@ export const ChatInput = () => {
           }
         }
       } catch (error) {
-        console.log(error)
+        setUserPrompt(userMessage.content)
         dispatch(deleteMessages(userMessage.id))
-        showMessage("error", "Something went wrong with that response\nPlease try your query again", 6000)
+
+        const status = axios.isAxiosError(error) ? error.response?.status : undefined
+        const getErrorMessage = (status?: number) => {
+          switch (status) {
+            case 429:
+              return "The AI service is overwhelmed\nToo many requests for the best hay\n\nPlease try your query again shortly"
+            case 503:
+              return "The AI service is unavailable\nProbably wandered off for alfalfa\n\nPlease try your query again shortly"
+            case 504: 
+              return "The AI service gateway timed out\nThe llama might be napping\n\nPlease try your query again"
+            default:
+              return status
+                ? `Something went wrong with code: ${status}\n\nPlease try your query again`
+                : "Something unexplainable went wrong\n\nPlease try your query again"
+          }
+        }
+        const errorMessage = getErrorMessage(status)
+        showMessage("error", errorMessage, 6000)
       }
     }
   }

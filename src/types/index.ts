@@ -177,3 +177,13 @@ export const transformChatMessage = (threadId: string, message: ChatMessage): Om
     timestamp: message.timestamp
   }
 }
+
+export interface ChatRes {
+  success: boolean
+  content?: string
+  error?: {
+    message: string
+    code?: number
+    cause?: unknown
+  }
+}
