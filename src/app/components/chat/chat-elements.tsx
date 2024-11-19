@@ -286,7 +286,16 @@ const ChatMessageCard = ({
             li: (props) => <li className="markdown-list-item">{props.children}</li>,
             strong: (props) => <strong className="markdown-strong">{props.children}</strong>, 
             em: (props) => <em className="markdown-em">{props.children}</em>,
-            a: (props) => <a href={props.href} className="markdown-a">{props.children}</a>
+            a: (props) => (
+              <a 
+                href={props.href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="markdown-a" 
+              >
+                {props.children}
+              </a>
+            )
           }}
           remarkPlugins={[
             remarkGfm,

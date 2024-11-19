@@ -142,7 +142,7 @@ export default function ProfilePage() {
                   fontWeight="bold" 
                   sx={{ 
                     width: "100%", 
-                    textAlign: { xs: "center", sm: "start" }
+                    textAlign: "center"
                   }}
                 >
                   Profile

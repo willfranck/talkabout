@@ -1,19 +1,27 @@
 "use client"
+import Link from "next/link"
 import { PageLayout } from "@ui/mui-layout"
 import { FlexBox } from "@ui/mui-elements"
 import { 
   alpha, 
   useMediaQuery, 
-  Divider, 
   Typography, 
   List,
   ListItem,
-  ListSubheader
+  ListSubheader,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider 
 } from "@mui/material"
 import theme from "@utils/mui-theme"
 import { IconCloud } from "@about/icon-cloud"
 import { content } from "@about/about-content"
-import { CaretCircleUp } from "@phosphor-icons/react/dist/ssr"
+import { 
+  CaretCircleUp, 
+  LinkedinLogo,
+  GithubLogo
+ } from "@phosphor-icons/react/dist/ssr"
 
 
 export default function AboutPage() {
@@ -28,7 +36,7 @@ export default function AboutPage() {
   }) => {
     const listElements = listItemContent.map((itemContent, index) => {
       return (
-        <ListItem key={index} sx={{ display: "list-item" }}>
+        <ListItem key={index} sx={{  }}>
           <Typography 
             variant="body2" 
             sx={{ 
@@ -77,15 +85,14 @@ export default function AboutPage() {
         <FlexBox sx={{ 
           flexGrow: "1",
           flexDirection: "column",
-          height: "100%", 
+          width: { xs: "100%", sm: "auto" },
+          height: { xs: "auto", sm: "100%" }, 
           marginY: "auto",
           padding: "1rem",
           backgroundColor: alpha(theme.palette.primary.dark, 0.08),
         }}>
           <FlexBox sx={{
-            minWidth: "20rem",
-            maxWidth: "40rem",
-            maxHeight: "40rem",
+            width: { xs: "14rem", sm: "20rem", md: "24rem", lg: "30rem" },
             borderRadius: "9999px",
             background: "radial-gradient(circle, rgba(0, 96, 100, 0.4) 0%, rgba(0, 96, 100, 0) 66%)"
           }}>
@@ -114,6 +121,8 @@ export default function AboutPage() {
 
         <FlexBox sx={{
           flexGrow: "2",
+          flexDirection: "column",
+          justifyContent: "start",
           height: "100%",
           overflowY: "auto"
         }}>
@@ -147,6 +156,45 @@ export default function AboutPage() {
               >
                 Most of all... Enjoy!
               </Typography>
+            </FlexBox>
+          </FlexBox>
+
+          <FlexBox sx={{ 
+            flexDirection: "column", 
+            gap: "0.5rem",
+            width: "100%",
+            paddingY: "1rem",
+            borderTop: "2px solid",
+            borderColor: alpha(theme.palette.primary.dark, 0.2)
+          }}>
+            <Typography variant="body2">@willfranckcodes</Typography>
+            <FlexBox>
+              <List dense sx={{ display: "flex" }}>
+                <ListItemButton
+                  LinkComponent={Link}
+                  href="https://www.linkedin.com/in/william-franck/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn profile page"
+                >
+                  <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                    <LinkedinLogo size={24} />
+                  </ListItemIcon>
+                  <ListItemText primary="LinkedIn" />
+                </ListItemButton>
+                <ListItemButton
+                  LinkComponent={Link}
+                  href="https://github.com/willfranck"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub profile page"
+                >
+                  <ListItemIcon sx={{ minWidth: "1.875rem" }}>
+                    <GithubLogo size={24} />
+                  </ListItemIcon>
+                  <ListItemText primary="GitHub" />
+                </ListItemButton>
+              </List>
             </FlexBox>
           </FlexBox>
         </FlexBox>
