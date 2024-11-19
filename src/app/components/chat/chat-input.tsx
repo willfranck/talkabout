@@ -133,15 +133,18 @@ export const ChatInput = () => {
           }
         }
       } catch (error) {
+        setUserPrompt(userMessage.content)
         dispatch(deleteMessages(userMessage.id))
 
         const status = axios.isAxiosError(error) ? error.response?.status : undefined
         const getErrorMessage = (status?: number) => {
           switch (status) {
-            case 503:
-              return "The AI service responded as unavailable\nProbably wandered off grazing on alfalfa\n\nPlease try your query again shortly"
             case 429:
-              return "The AI's server is overwhelmed\nToo many requests for the best hay perhaps\n\nPlease try your query again shortly"
+              return "The AI service is overwhelmed\nToo many requests for the best hay\n\nPlease try your query again shortly"
+            case 503:
+              return "The AI service is unavailable\nProbably wandered off for alfalfa\n\nPlease try your query again shortly"
+            case 504: 
+              return "The AI service gateway timed out\nThe llama might be napping\n\nPlease try your query again"
             default:
               return status
                 ? `Something went wrong with code: ${status}\n\nPlease try your query again`
