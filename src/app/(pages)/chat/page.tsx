@@ -54,7 +54,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (!session) {
       const delayTimer = setTimeout(() => {
-        showMessage("info", "   Trial Mode\n\n- Sign In/Up -\n to save chats", 6000)
+        showMessage("info", "Trial Mode\n\nSign In/Up\nto save chats permanently", 6000)
       }, 2400)
       return () => clearTimeout(delayTimer)
     }
