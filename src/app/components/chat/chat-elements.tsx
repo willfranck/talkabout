@@ -280,7 +280,13 @@ const ChatMessageCard = ({
       return (
         <ReactMarkdown 
           components={{
-            code: CodeBlock 
+            code: CodeBlock,
+            ul: (props) => <ul className="markdown-list">{props.children}</ul>, 
+            ol: (props) => <ol className="markdown-list">{props.children}</ol>, 
+            li: (props) => <li className="markdown-list-item">{props.children}</li>,
+            strong: (props) => <strong className="markdown-strong">{props.children}</strong>, 
+            em: (props) => <em className="markdown-em">{props.children}</em>,
+            a: (props) => <a href={props.href} className="markdown-a">{props.children}</a>
           }}
           remarkPlugins={[
             remarkGfm,

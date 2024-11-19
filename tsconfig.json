@@ -21,6 +21,7 @@
     "paths": {
       "@*": ["./src/*"],
       "@images/*": ["./public/images/*"],
+      "@about/*": ["./src/app/components/about/*"],
       "@chat/*": ["./src/app/components/chat/*"],
       "@header/*": ["./src/app/components/header/*"],
       "@ui/*": ["./src/app/components/ui/*"],

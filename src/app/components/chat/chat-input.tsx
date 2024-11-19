@@ -147,8 +147,8 @@ export const ChatInput = () => {
               return "The AI service gateway timed out\nThe llama might be napping\n\nPlease try your query again"
             default:
               return status
-                ? `Something went wrong with code: ${status}\n\nPlease try your query again`
-                : "Something unexplainable went wrong\n\nPlease try your query again"
+                ? `Something went wrong with code: ${status}\nLlamas are fickle like that\n\nPlease try your query again`
+                : "Something unexplainable went wrong\nLlamas are fickle like that\n\nPlease try your query again"
           }
         }
         const errorMessage = getErrorMessage(status)
