@@ -8,6 +8,14 @@ export async function POST(req: NextRequest) {
     const res = await ChatService({ history, prompt, temperature })
 
     if (!res.success && res.error) {
+      // GoogleGenAIErrors return as a message string with the code in brackets
+      if (!res.error.code) {
+        const matchStatus = res.error.message.match(/\[(\d{3})[^\]]*\]/)
+        const parsedStatus = matchStatus ? parseInt(matchStatus[1]) : 500
+
+        return NextResponse.json({ error: res.error.message }, { status: parsedStatus })
+      }
+      // GoogleGenAIFetchErrors return with codes as a number
       return NextResponse.json({ error: res.error.message }, { status: res.error.code })
     
     } else if (!res.success) {
