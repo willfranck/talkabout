@@ -18,7 +18,7 @@ import theme from "@utils/mui-theme"
 import { IconCloud } from "@about/icon-cloud"
 import { content } from "@about/about-content"
 import { 
-  CaretCircleUp, 
+  ArrowBendRightUp,
   LinkedinLogo,
   GithubLogo
  } from "@phosphor-icons/react/dist/ssr"
@@ -105,7 +105,7 @@ export default function AboutPage() {
             <Typography variant="body2">
               made with love ... also with these technologies
             </Typography>
-            <CaretCircleUp size={18} color={theme.palette.secondary.main} />
+            <ArrowBendRightUp size={18} color={theme.palette.secondary.main} className="-translate-y-[5px]" />
           </FlexBox>
         </FlexBox>
 
