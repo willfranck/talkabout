@@ -160,6 +160,7 @@ svg {
 }
 
 pre {
+  width: fit-content;
   font-size: 0.825rem;
   text-wrap: pretty;
   border-radius: 10px;
@@ -167,18 +168,19 @@ pre {
 
 code {
   font-size: 0.825rem;
+  text-wrap: pretty;
 }
 
 .markdown-list {
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: 1rem;
   padding: 0.5rem;
 }
 
 .markdown-list-item {
-  display: flex;
-  flex-direction: column;
+  display: inline;
+  white-space: normal;
 }
 
 .markdown-strong {

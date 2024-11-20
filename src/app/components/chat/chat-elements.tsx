@@ -352,7 +352,7 @@ const ChatMessageCard = ({
     }}>
       <FlexBox sx={{
         alignItems: "start",
-        gap: "0.75rem",
+        gap: "1.25rem",
       }}>
         {message.role === "model" && (
           <Box sx={{ 
@@ -381,7 +381,7 @@ const ChatMessageCard = ({
           <FlexBox sx={{
             flexDirection: "column",
             alignItems: (message.role === "user" ? "end" : "start"),
-            gap: "0.5rem",
+            gap: "0.75rem",
             width: "100%",
             maxHeight: "fit-content",
             overflowWrap: "anywhere",
