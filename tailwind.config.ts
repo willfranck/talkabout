@@ -13,6 +13,9 @@ const config: Config = {
         md: "964px",
         lg: "1200px"
       },
+      backgroundImage: {
+        "llama-banner": "url('/images/Llama_banner.webp')"
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

@@ -171,12 +171,15 @@ const MenuNav = ({
   return (
     <FlexBox 
       sx={{ 
+        position: "relative",
         flexDirection: "column",
-        alignItems: "start",
+        justifyContent: "start",
         width: "100%",
+        height: "100%",
         gap: "0.5rem",
-        padding: "0.5rem 0 0.5rem 0.75rem"
+        padding: "0.5rem 0 0.25rem 0.75rem"
       }}
+      className="before:absolute before:inset-0 before:content-[''] before:bg-llama-banner before:bg-cover before:opacity-[0.04]"
     >
       <List sx={{
         width: "100%",
@@ -185,7 +188,8 @@ const MenuNav = ({
         <ListSubheader sx={{
           width: "100%",
           lineHeight: "2rem",
-          color: "primary.dark"
+          color: "primary.dark",
+          background: "transparent"
         }}>
           Navigation
         </ListSubheader>
@@ -205,7 +209,8 @@ const MenuNav = ({
         <ListSubheader sx={{
           width: "100%",
           lineHeight: "2rem",
-          color: "primary.dark"
+          color: "primary.dark",
+          background: "transparent"
         }}>
           Account
         </ListSubheader>
