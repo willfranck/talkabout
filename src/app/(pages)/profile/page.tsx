@@ -129,7 +129,7 @@ export default function ProfilePage() {
               width: "100%",
               maxWidth: "30rem",
               marginY: "auto",
-              padding: "1rem 0.5rem 3rem 1.5rem",
+              padding: "2rem 0.5rem 3rem 1.5rem",
             }}>
               <FlexBox sx={{ 
                 flexDirection: "column",
@@ -142,6 +142,7 @@ export default function ProfilePage() {
                   fontWeight="bold" 
                   sx={{ 
                     width: "100%", 
+                    marginBottom: "2rem",
                     textAlign: "center"
                   }}
                 >
