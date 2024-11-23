@@ -426,7 +426,6 @@ const ToggleGroup = ({
   const toggleButtons = values.map((value) => (
     <ToggleButton sx={{
       width: "5rem",
-      height: "1.75rem",
       textTransform: "capitalize",
     }}
       key={value} 
@@ -440,7 +439,7 @@ const ToggleGroup = ({
 
   return (
     <ToggleButtonGroup sx={{
-      height: "2rem",
+      height: "1.75rem",
     }}
       size="small"
       value={activeTab}
