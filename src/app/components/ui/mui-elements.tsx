@@ -179,7 +179,7 @@ const MenuNav = ({
         gap: "0.5rem",
         padding: "0.5rem 0 0.25rem 0.75rem"
       }}
-      className="before:absolute before:inset-0 before:content-[''] before:bg-llama-banner before:bg-cover before:opacity-[0.04]"
+      className="before:absolute before:inset-0 before:content-[''] before:bg-llama-banner before:bg-cover before:opacity-[0.025]"
     >
       <List sx={{
         width: "100%",
