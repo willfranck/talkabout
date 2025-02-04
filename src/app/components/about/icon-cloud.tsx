@@ -56,9 +56,11 @@ const useIcons = (slugs: string[]) => {
       try {
         const fetchedIcons = await fetchSimpleIcons({ slugs })
         if (fetchedIcons.simpleIcons) {
-          ["nextdotjs", "github", "remark"].forEach((slug) => {
+          // Icons are all now returning with hex prop of #000 - temporary single color fix
+          // ["nextdotjs", "github", "remark"].forEach((slug) => {
+          Object.keys(fetchedIcons.simpleIcons).forEach((slug) => {
             if (fetchedIcons.simpleIcons[slug]) {
-              fetchedIcons.simpleIcons[slug].hex = "#EDEDED"
+              fetchedIcons.simpleIcons[slug].hex = "#26C6DA"
             }
           })
         }
