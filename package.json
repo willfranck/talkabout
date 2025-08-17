@@ -5,21 +5,12 @@
   "author": {
     "name": "willfranckcodes"
   },
-  "main": "./electron-build/main.js",
   "private": true,
   "scripts": {
-    "next:dev": "next dev",
-    "next:build": "next build",
-    "next:start": "next start",
-    "lint": "next lint",
-    "electron:dev": "run-p electron:build-watch electron:watch",
-    "electron:watch": "cross-env NODE_ENV='development' nodemon",
-    "electron:build": "tsup",
-    "electron:build-watch": "tsup --watch",
-    "electron:dist": "electron-builder --mac",
-    "dev": "run-p electron:dev next:dev",
-    "build": "run-s next:build electron:build",
-    "dist": "run-s build electron:dist"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -54,52 +45,10 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-redux": "^7.1.34",
-    "electron": "^32.1.0",
-    "electron-builder": "^25.0.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.11",
-    "nodemon": "^3.1.4",
-    "npm-run-all": "^4.1.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "tsup": "^8.2.4",
     "typescript": "^5"
-  },
-  "build": {
-    "asar": true,
-    "appId": "com.willfranckcodes.talkabout",
-    "productName": "Talkabout",
-    "files": [
-      "electron-build",
-      {
-        "from": ".next/standalone",
-        "to": "app",
-        "filter": [
-          "!**/.env",
-          "!**/package.json"
-        ]
-      },
-      {
-        "from": ".next/static",
-        "to": "app/.next/static"
-      },
-      {
-        "from": "public",
-        "to": "app/public"
-      }
-    ],
-    "extraResources": [
-      ".env"
-    ],
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.productivity",
-      "extendInfo": {
-        "CFBundleName": "Talkabout"
-      }
-    },
-    "win": {
-      "target": "nsis"
-    }
   }
 }
