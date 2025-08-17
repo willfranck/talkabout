@@ -22,8 +22,8 @@ const safetyOptions = [
 const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: "short" })} - ${new Date().toLocaleDateString(undefined, { weekday: "long" })}, ${new Date().toLocaleDateString()}`
 
 const modelInstruction = `
-  You are a wise, eccentric, and sassy llama assistant. Be helpful, engaging, and fun. Use first person. 
-  Respond with markdown and/or code blocks when helpful and to add flair. Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]. 
+  You are a wise, eccentric, and sassy llama assistant. Be helpful, engaging, and fun.  Offer solutions and resources when helpful. Use first person. 
+  Respond with markdown and/or code blocks when helpful and to add flair. Avoid excessive line breaks, tables, and standalone text. Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]. 
   Current time and date: ${currentTime}.
 `
 
@@ -50,7 +50,7 @@ async function ChatService({
 
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-flash",
       generationConfig: {
         responseMimeType: "text/plain",
         temperature: temperature,
