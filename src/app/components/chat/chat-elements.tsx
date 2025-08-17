@@ -560,7 +560,6 @@ const ChatHistory = ({
 
 interface ITemperature {
   temperatureHot: number
-  temperatureNormal: number
   temperatureCold: number
   defaultTemperature: number
   onTemperatureChange: (value: number) => void
@@ -623,7 +622,7 @@ interface IChatInput {
   prompt: string
   threads: number
   selectedThread: ChatThread | undefined
-  temperatureSettings: { hot: number, normal: number, cold: number }
+  temperatureSettings: { hot: number, cold: number }
   defaultTemperature: number
   onTemperatureChange: (temperature: number) => void
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
@@ -680,7 +679,6 @@ const ChatInputField = ({
           <InputAdornment position="start" sx={{ marginRight: "0.75rem" }}>
             <TemperatureControls 
               temperatureHot={temperatureSettings.hot}
-              temperatureNormal={temperatureSettings.normal}
               temperatureCold={temperatureSettings.cold}
               defaultTemperature={defaultTemperature}
               onTemperatureChange={onTemperatureChange}

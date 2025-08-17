@@ -11,24 +11,26 @@ import { ChatMessage, ChatRes } from "@types"
 const geminiApiKey = process.env.GEMINI_API_KEY
 const genAI = new GoogleGenerativeAI(geminiApiKey!)
 
+// Simplified safety settings - only keep essential ones
 const safetyOptions = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-  { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+  { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
 ]
 
 const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: "short" })} - ${new Date().toLocaleDateString(undefined, { weekday: "long" })}, ${new Date().toLocaleDateString()}`
 
 const modelInstruction = `
-  Timestamp: This message was sent at ${currentTime}.
-  Identity: You are a helpful assistant.  You take the form of a wise, eccentric, and sassy llama.  Have your responses reflect this identity.  Use first person instead of third person.
-  Objective: Users will engage you have a friendly chat, learn about new things, and just mess around.  No topic is off limits.  Be responsive, engaged, keep the conversation going, but mostly have some fun.  Thank you for your assistance!
-  Tone: Adapt your responses to the user's intentions...  Err on the side of positivity and helpfulness, but feel free to be snarky or hard on the user if they ask or need it.
-  Format: Your response is received as text/plain and being passed through React Markdown with remark-gfm and rehype-highlight.  Use markdown to aid your responses and add a little flair.  Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]
-  Response: Respond to the User Prompt, using the chat history as context, in a way that is detailed and a little quirky.  Answer the user's prompt to the best of your ability with the most modern up-to-date information.  Send the most up-to-date links, resources, and code snippets when appropriate.
+  You are a wise, eccentric, and sassy llama assistant. Be helpful, engaging, and fun. Use first person. 
+  Respond with markdown and/or code blocks when helpful and to add flair. Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]. 
+  Current time and date: ${currentTime}.
 `
 
+const limitChatHistory = (history: ChatMessage[], maxMessages: number = 20) => {
+  if (history.length <= maxMessages) return history
+  return history.slice(-maxMessages)
+}
 
 async function ChatService({
   history,  
@@ -45,23 +47,27 @@ async function ChatService({
       error: { message: "API Key not found/valid" }
     }
   }
+
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-002",
+      model: "gemini-2.5-flash-lite",
       generationConfig: {
         responseMimeType: "text/plain",
-        temperature: temperature
+        temperature: temperature,
+        topK: temperature > 1.0 ? 40 : 20,
+        topP: temperature > 1.0 ? 0.9 : 0.8,
+        candidateCount: 1
       },
       systemInstruction: {
-        parts: [{ text: modelInstruction }],
-        role: "model"
+        role: "model",
+        parts: [{ text: modelInstruction }]
       },
       safetySettings: safetyOptions
     })
     
-    const userPrompt = prompt
-    const chatHistory = Array.isArray(history) 
-      ? history.map((message) => ({
+    const limitedHistory = limitChatHistory(history)
+    const chatHistory = Array.isArray(limitedHistory) 
+      ? limitedHistory.map((message) => ({
         role: message.role,
         parts: [{ text: message.content }]
       })) 
@@ -70,6 +76,8 @@ async function ChatService({
     const chat = await model.startChat({
       history: chatHistory
     })
+
+    const userPrompt = prompt
     const result = await chat.sendMessage(userPrompt)
 
     if (result.response) {
@@ -121,28 +129,33 @@ async function ChatTopic({
       error: { message: "API Key not found/valid" }
     }
   }
+
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash-002",
       generationConfig: {
         responseMimeType: "text/plain",
+        temperature: 1.2,
+        topK: 20,
+        topP: 0.7,
+        candidateCount: 1
       },
       safetySettings: safetyOptions
     })
     
-    const chatHistory = Array.isArray(history) 
-      ? history.map((message) => ({
+    const limitedHistory = limitChatHistory(history)
+    const chatHistory = Array.isArray(limitedHistory) 
+      ? limitedHistory.map((message) => ({
         role: message.role,
         parts: [{ text: message.content }]
       })) 
       : []
-
+      
     const chat = await model.startChat({
       history: chatHistory
     })
     const result = await chat.sendMessage(`
-      Context: This is the chat history of a user and an AI model whose personality is an eccentric llama.  Avoid referencing the llama in your response.  Omit quotes around the title.
-      Response: Generate a short, accurate, and cheeky title for this conversation based on the overall topic the user is interested in using roughly 4-5 words.
+      Generate a short, cheeky title (4-5 words) for this conversation based on the chat history. Don't reference yourself, the AI, or the llama. No quotes.
     `)
 
     if (result.response) {

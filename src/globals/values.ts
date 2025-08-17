@@ -5,9 +5,8 @@ const threadCategories = [
 ]
 
 const temperatureSettings = {
-  hot: 2.0,
-  normal: 1.0,
-  cold: 0.4
+  hot: 1.8,
+  cold: 0.6
 }
 
 const placeholderTopics = [
