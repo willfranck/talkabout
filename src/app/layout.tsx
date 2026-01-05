@@ -4,7 +4,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { SnackbarProvider } from "@providers/mui-snackbar-provider"
 import { SupabaseSessionProvider } from "@providers/session-provider"
-import { createClient } from "@utils/supabase/server"
 import { Kumbh_Sans } from "next/font/google"
 import theme from "@utils/mui-theme"
 import "./globals.css"
@@ -34,20 +33,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  let session = null
-  
-  try {
-    const supabase = createClient()
-    const { data, error } = await (await supabase).auth.getSession()
-
-    if (!error) {
-      session = data.session
-    }
-
-  } catch (error) {
-    console.log("Supabase can't be reached: ", error)
-  }
-
+  const session = null
 
   return (
     <html lang="en" suppressHydrationWarning>
