@@ -8,6 +8,107 @@
   box-sizing: border-box;
 }
 
+/*//// Base Styles */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  overscroll-behavior-x: none;
+  background: linear-gradient(110deg, rgba(18, 18, 18, 1) 10%, rgba(0, 96, 100, 0.1) 50%, rgba(18, 18, 18, 1) 90%);
+}
+
+body * {
+  white-space: pre-wrap;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: #4DD0E1;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+pre {
+  width: fit-content;
+  font-size: 0.825rem;
+  text-wrap: pretty;
+  border-radius: 10px;
+}
+
+code {
+  font-size: 0.825rem;
+  text-wrap: pretty;
+}
+
+.markdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.markdown-list-item {
+  display: inline;
+  white-space: normal;
+}
+
+.markdown-strong {
+  color: #4DD0E1;
+}
+
+.markdown-em {
+  color: #C5C8C6;
+  padding-right: 0.125rem;
+}
+
+.markdown-a {
+  color: #B2EBF2;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.hljs {
+  margin: 1rem 0;
+  border-radius: 10px;
+}
+
+.thinking {
+  animation: thinking 1.2s ease-out infinite;
+}
+
+.rounded-logo {
+  border-radius: 0 30% 0 30%;
+}
+
+@media screen and (max-width: 600px) {
+  pre,
+  code,
+  pre code {
+    font-size: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 964px) {
+  pre,
+  code,
+  pre code {
+    font-size: 0.675rem;
+  }
+}
+
 /*//// Animations */
 @keyframes fadeIn {
   from {
@@ -127,102 +228,5 @@
   }
   50% {
     opacity: 0.7;
-  }
-}
-
-/*//// Base Styles */
-html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  scroll-behavior: smooth;
-}
-
-body {
-  overscroll-behavior-x: none;
-  background: linear-gradient(110deg, rgba(18, 18, 18, 1) 10%, rgba(0, 96, 100, 0.1) 50%, rgba(18, 18, 18, 1) 90%);
-}
-
-body * {
-  white-space: pre-wrap;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-a {
-  color: #4DD0E1;
-}
-
-svg {
-  flex-shrink: 0;
-}
-
-pre {
-  width: fit-content;
-  font-size: 0.825rem;
-  text-wrap: pretty;
-  border-radius: 10px;
-}
-
-code {
-  font-size: 0.825rem;
-  text-wrap: pretty;
-}
-
-.markdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0.5rem;
-}
-
-.markdown-list-item {
-  display: inline;
-  white-space: normal;
-}
-
-.markdown-strong {
-  color: #4DD0E1;
-}
-
-.markdown-em {
-  color: #C5C8C6;
-  padding-right: 0.125rem;
-}
-
-.markdown-a {
-  color: #B2EBF2;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.hljs {
-  margin: 1rem 0;
-  border-radius: 10px;
-}
-
-.thinking {
-  animation: thinking 1.2s ease-out infinite;
-}
-
-.rounded-logo {
-  border-radius: 0 30% 0 30%;
-}
-
-@media screen and (max-width: 600px) {
-  pre,
-  code,
-  pre code {
-    font-size: 0.5rem;
-  }
-}
-
-@media screen and (max-width: 964px) {
-  pre,
-  code,
-  pre code {
-    font-size: 0.675rem;
   }
 }
