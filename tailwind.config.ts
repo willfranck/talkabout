@@ -18,13 +18,13 @@ const config: Config = {
       },
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)",
+        foreground: "var(--foreground)"
       },
       height: {
-        "page-content": "calc(100vh - 3.5rem)",
+        "page-content": "calc(100svh - 3.5rem)"
       },
       maxHeight: {
-        "page-content": "calc(100vh - 3.5rem)",
+        "page-content": "calc(100svh - 3.5rem)"
       },
     },
   },

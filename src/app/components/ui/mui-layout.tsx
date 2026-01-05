@@ -14,7 +14,8 @@ const PageLayout = ({
     <Container 
       component="main" 
       sx={{ 
-        padding: { xs: "0" }
+        padding: 0,
+        margin: 0
       }} 
       className="h-page-content"
     >
@@ -28,7 +29,9 @@ const PageLayout = ({
           gap: { xs: "0.75rem", lg: "2rem"},
           width: "100%",
           height: "100%",
+          maxHeight: "100%",
           overflowY: "auto",
+          overscrollBehavior: "contain",
           opacity: "0",
           animation: "fadeIn 240ms ease-out forwards"
         }}

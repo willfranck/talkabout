@@ -538,7 +538,7 @@ const ChatHistory = ({
           animation: "fadeIn 240ms ease-out forwards"
         }}>
           <Image 
-            src={"./images/Llama.webp"}
+            src="/images/Llama.webp"
             alt="Llama logo"
             width={128}
             height={128}
