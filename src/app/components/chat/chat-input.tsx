@@ -3,6 +3,7 @@ import { useState } from "react"
 import axios from "axios"
 import { useAppDispatch } from "@redux/hooks"
 import { useUser, useSnackbar } from "@hooks/global"
+import { generateID } from "@globals/functions"
 import { temperatureSettings } from "@globals/values"
 import { 
   addMessage, 
@@ -59,7 +60,7 @@ export const ChatInput = () => {
   const handleSubmit = async () => {
     if (selectedThread) {
       const userMessage: ChatMessage = { 
-        id: crypto.randomUUID(),
+        id: generateID(),
         threadId: selectedThread.id,
         role: "user", 
         content: userPrompt, 
@@ -109,7 +110,7 @@ export const ChatInput = () => {
         if (aiReply.data.content) {
           const content = aiReply.data.content
           const aiMessage: ChatMessage = {
-            id: crypto.randomUUID(),
+            id: generateID(),
             threadId: selectedThread.id,
             role: "model",
             content: content,

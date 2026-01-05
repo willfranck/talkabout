@@ -146,7 +146,7 @@ export const ChatPanel = () => {
 
       <Box sx={{
         width: "100%",
-        overflowY: "scroll",
+        overflowY: "auto",
       }}>
         <ChatHistoryTabs threads={sortedThreads(threads)} />
       </Box>

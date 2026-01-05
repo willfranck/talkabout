@@ -44,6 +44,18 @@ const chunk = <T>(array: T[], size: number): T[][] => {
   )
 }
 
+const generateID = () => {
+  if (crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  // Fallback for non-secure contexts
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0
+    const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
+
 //// Redux Functions
 interface SyncResult {
   actions: ReduxActions[]
@@ -152,7 +164,7 @@ const syncDbMessages = async (
 
 function createNewThread(dispatch: AppDispatch) {
   const newThread: ChatThread = {
-    id: crypto.randomUUID(),
+    id: generateID(),
     topic: randomTopic(),
     category: "active",
     created: new Date().toISOString(),
@@ -243,6 +255,7 @@ function removeTextByChar(text: string, setState: React.Dispatch<React.SetStateA
 
 export {
   syncDbMessages,
+  generateID,
   createNewThread,
   removeThread,
   selectThread,

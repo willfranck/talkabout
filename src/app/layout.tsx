@@ -43,7 +43,7 @@ export default async function RootLayout({
         <ReduxProvider>
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
-              <CssBaseline />
+              <CssBaseline enableColorScheme />
               <SnackbarProvider>
                 <SupabaseSessionProvider initialSession={session}>
                   <Header />

@@ -84,8 +84,9 @@ const Header = () => {
     <Link href={"/"}>
       <FlexBox sx={{ flexDirection: "column" }}>
         <Image 
-          src="/images/Llama.webp" 
-          alt="logo" 
+          src="/images/Llama.webp"
+          alt="Talkabout Logo - a llama"
+          priority
           width={40} 
           height={40} 
           className="w-7 sm:w-10 h-auto rounded-logo dark:invert"

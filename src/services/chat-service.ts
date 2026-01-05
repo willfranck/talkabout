@@ -132,7 +132,7 @@ async function ChatTopic({
 
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-002",
+      model: "gemini-2.5-flash-lite",
       generationConfig: {
         responseMimeType: "text/plain",
         temperature: 1.2,
