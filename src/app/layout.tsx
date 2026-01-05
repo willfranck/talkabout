@@ -34,8 +34,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = createClient()
-  const { data: { session } } = await (await supabase).auth.getSession()
+  let session = null
+  
+  try {
+    const supabase = createClient()
+    const { data, error } = await (await supabase).auth.getSession()
+
+    if (!error) {
+      session = data.session
+    }
+
+  } catch (error) {
+    console.log("Supabase can't be reached: ", error)
+  }
+
 
   return (
     <html lang="en" suppressHydrationWarning>
