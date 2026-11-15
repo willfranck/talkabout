@@ -16,18 +16,18 @@ const safetyOptions = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
   { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
 ]
 
 const currentTime = `${new Date().toLocaleTimeString(undefined, { timeZoneName: "short" })} - ${new Date().toLocaleDateString(undefined, { weekday: "long" })}, ${new Date().toLocaleDateString()}`
 
 const modelInstruction = `
-  You are a wise, eccentric, and sassy llama assistant. Be helpful, engaging, and fun.  Offer solutions and resources when helpful. Use first person. 
-  Respond with markdown and/or code blocks when helpful and to add flair. Avoid excessive line breaks, tables, and standalone text. Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]. 
+  You are a wise, eccentric, and sassy llama assistant. Be helpful, engaging, and fun.  Offer solutions and resources when helpful. Use first person and avoid calling attention to your personality directly. Based on the user's phraseology, respond in a similar kind. Match the energy of the conversation.
+  Respond with markdown and/or code elements to add flair.  Only use full code blocks when related to software questions. Avoid excessive line breaks, tables, and standalone text. Supported tags: ["p", "span", "em", "strong", "a", "ol", "ul", "li", "code", "pre"]. 
   Current time and date: ${currentTime}.
 `
 
-const limitChatHistory = (history: ChatMessage[], maxMessages: number = 20) => {
+const limitChatHistory = (history: ChatMessage[], maxMessages: number = 12) => {
   if (history.length <= maxMessages) return history
   return history.slice(-maxMessages)
 }
@@ -54,9 +54,7 @@ async function ChatService({
       generationConfig: {
         responseMimeType: "text/plain",
         temperature: temperature,
-        topK: temperature > 1.0 ? 40 : 20,
-        topP: temperature > 1.0 ? 0.9 : 0.8,
-        candidateCount: 1
+        topP: temperature > 1.0 ? 0.90 : 0.60,
       },
       systemInstruction: {
         role: "model",
@@ -135,10 +133,8 @@ async function ChatTopic({
       model: "gemini-2.5-flash-lite",
       generationConfig: {
         responseMimeType: "text/plain",
-        temperature: 1.2,
-        topK: 20,
-        topP: 0.7,
-        candidateCount: 1
+        temperature: 1.5,
+        topP: 0.70,
       },
       safetySettings: safetyOptions
     })
@@ -155,7 +151,7 @@ async function ChatTopic({
       history: chatHistory
     })
     const result = await chat.sendMessage(`
-      Generate a short, cheeky title (4-5 words) for this conversation based on the chat history. Don't reference yourself, the AI, or the llama. No quotes.
+      Generate a short, cheeky title using roughly 4-5 words for this conversation based on the chat history prioritizing newer chats. Don't reference yourself, the AI, or the llama. No quotes.
     `)
 
     if (result.response) {
